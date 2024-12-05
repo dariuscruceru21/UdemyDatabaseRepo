@@ -1,15 +1,27 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+// Database URL and credentials
+        String jdbcURL = "jdbc:postgresql://localhost:5432/Udemy"; // Replace with your DB URL
+        String username = "postgres"; // Replace with your DB username
+        String password = "Germania!10"; // Replace with your DB password
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        try {
+            // Connect to the database
+            System.out.println("Connecting to database...");
+            Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+            System.out.println("Connection successful!");
+
+            // Close the connection
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Connection failed!");
         }
     }
 }
