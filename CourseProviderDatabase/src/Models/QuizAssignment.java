@@ -24,4 +24,5 @@ public class QuizAssignment {
     public void setAssignmentId(Integer assignmentId) {
         this.assignmentId = assignmentId;
     }
+
 }

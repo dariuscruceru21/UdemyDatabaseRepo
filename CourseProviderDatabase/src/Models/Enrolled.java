@@ -21,6 +21,7 @@ public class Enrolled {
         return courseId;
     }
 
+
     public void setCourseId(Integer courseId) {
         this.courseId = courseId;
     }

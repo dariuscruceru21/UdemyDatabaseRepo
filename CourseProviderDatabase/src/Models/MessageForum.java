@@ -4,6 +4,7 @@ public class MessageForum {
     private Integer messageId;
     private Integer forumId;
 
+
     public MessageForum(Integer messageId, Integer forumId) {
         this.messageId = messageId;
         this.forumId = forumId;
