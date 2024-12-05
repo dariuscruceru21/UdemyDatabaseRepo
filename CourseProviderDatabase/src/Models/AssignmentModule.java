@@ -17,7 +17,6 @@ public class AssignmentModule {
         this.assignmentId = assignmentId;
     }
 
-
     public Integer getCourseId() {
         return courseId;
     }

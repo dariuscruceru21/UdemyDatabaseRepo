@@ -62,7 +62,6 @@ public class Message implements Identifiable {
         return this.messageID;
     }
 
-
     public void setMessage(String message) {
         this.message = message;
     }
