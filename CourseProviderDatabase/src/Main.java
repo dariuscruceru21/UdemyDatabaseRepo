@@ -1,6 +1,7 @@
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
+import Utils.Utils;
 
 
 import javax.xml.crypto.Data;
@@ -24,7 +25,7 @@ public class Main {
 //
 //        // Pass column names including 'userid'
          List<String> columnNames = Arrays.asList("courseID", "courseTitle", "description", "availableSpots", "startDate", "endDate","instructorId");
-         List<String> columnNames2 = Arrays.asList("userid","username","password","email","type");
+         List<String> columnNames2 = Arrays.asList("userID","userName","password","email","type");
          List<String> columnName3 = Arrays.asList("moduleID", "moduleTitle", "moduleContent");
 
          List<String> columnName4 = Arrays.asList("assignmentID", "description","dueDate","score");
@@ -35,8 +36,12 @@ public class Main {
 
         //System.out.println("courseId".toLowerCase());
 
+        Utils parameters = new Utils();
             //trebuie sa schimbam clasa user si sa facem separat tabele cu variabile pentru student admin instructor
-            DataBaseRepository<User> userDataBaseRepository = new DataBaseRepository<>("\"User\"",User.class,columnNames2);
+        Instructor instructor = new Instructor(2, "Marius", "paul123", "paul@gmail.com", "instructor");
+        List<String> columnNames5 = Arrays.asList("userID", "userName", "password", "email", "type");
+        DataBaseRepository<Instructor> instructorRepository = new DataBaseRepository<>("instructor", Instructor.class, parameters.getUsersParameters());
+        //instructorRepository.create(instructor);
 
 //
 //        // Create the student in the database
@@ -44,7 +49,9 @@ public class Main {
 //        System.out.println("Print");
 //        System.out.println(System.getenv("DB_PASSWORD"));
 
-        System.out.println(userDataBaseRepository.getAll());
+        System.out.println(System.getenv("DB_PASSWORD"));
+
+
 
 
 
