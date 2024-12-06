@@ -10,7 +10,7 @@ import java.util.List;
  * methods for managing assignments and enrolling students.
  */
 public class Module implements Identifiable {
-    private int moduleID;
+    private Integer moduleID;
     private String moduleTitle;
     private String moduleContent;
     private List<Integer> assignments = new ArrayList<>();
@@ -22,7 +22,7 @@ public class Module implements Identifiable {
      * @param moduleTitle   The title of the module.
      * @param moduleContent The content or description of the module.
      */
-    public Module(int moduleID, String moduleTitle, String moduleContent) {
+    public Module(Integer moduleID, String moduleTitle, String moduleContent) {
         this.moduleID = moduleID;
         this.moduleTitle = moduleTitle;
         this.moduleContent = moduleContent;

@@ -1,7 +1,5 @@
-import Models.Course;
-import Models.Instructor;
-import Models.Student;
-import Models.User;
+import Models.*;
+import Models.Module;
 import Repository.DataBaseRepository;
 
 
@@ -18,25 +16,38 @@ public class Main {
     public static void main(String[] args) {
 
 //        // Manually add the ID as part of the object creation
-         Instructor student = new Instructor(9, "Paul", "paul123", "paul@gmail.com", "instructor");
+         Instructor instructor = new Instructor(9, "Paul", "paul123", "paul@gmail.com", "instructor");
          Course course = new Course(2,"Analiza","hard",10,"2024-07-12","2024-10-11",9);
-//
-//        // Pass column names including 'userid'
+        Quiz quiz = new Quiz(3, "logaritm", "fain", 1);
+        Assignment assignment = new Assignment(3, "rezolva", "01-02-2020", 30);
+        Module module = new Module(3, "modul", "continut");
+
+        // Pass column names including 'userid'
          List<String> columnNames = Arrays.asList("courseID", "courseTitle", "description", "availableSpots", "startDate", "endDate","instructorId");
-        //List<String> columnNames2 = Arrays.asList("userid","username","password","email","type");
-         DataBaseRepository<Course> dataBaseRepository = new DataBaseRepository<>("course", Course.class, columnNames);
+         List<String> columnNames2 = Arrays.asList("userId","userName","password","email","type");
+         List<String> columnNames3 = Arrays.asList("quizId","title","contents","correctAnswer");
+        List<String> columnNames4 = Arrays.asList("assignmentID","description","dueDate","correctAnswer", "module");
+        List<String> columnNames5 = Arrays.asList("moduleID","moduleTitle","moduleContent");
 
 
-        //System.out.println("courseId".toLowerCase());
+        DataBaseRepository<Instructor> dataBaseRepository = new DataBaseRepository<>("\"User\"", Instructor.class, columnNames2);
+        DataBaseRepository<Quiz> dataBaseQuizRepository = new DataBaseRepository<>("quiz", Quiz.class, columnNames3);
+        DataBaseRepository<Assignment> dataBaseAssignmentRepository = new DataBaseRepository<>("assignment", Assignment.class, columnNames4);
+        DataBaseRepository<Module> dataBaseModuleRepository = new DataBaseRepository<>("module", Module.class, columnNames5);
+
+
 
 
 //
 //        // Create the student in the database
-//        dataBaseRepository.create(student);
-//        System.out.println("Print");
-//        System.out.println(System.getenv("DB_PASSWORD"));
+        //dataBaseRepository.create(instructor);
+        //dataBaseQuizRepository.create(quiz);
+        //dataBaseAssignmentRepository.create(assignment);
+        //dataBaseModuleRepository.create(module);
+        dataBaseModuleRepository.create(module);
 
-         System.out.println(dataBaseRepository.get(1));
+
+         //System.out.println(dataBaseRepository.get(1));
 
     }
 }
