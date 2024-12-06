@@ -100,7 +100,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
 
         try{
             connection = getConnection();
-            String idColumnName = tableName.toLowerCase() + "id";
+            String idColumnName = "user" + "id";
             String sql = "SELECT * FROM " + tableName + " WHERE " + idColumnName + " = ?";
             statement = connection.prepareStatement(sql);
             statement.setInt(1,id);

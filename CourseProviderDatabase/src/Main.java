@@ -40,7 +40,7 @@ public class Main {
             //trebuie sa schimbam clasa user si sa facem separat tabele cu variabile pentru student admin instructor
         Instructor instructor = new Instructor(2, "Marius", "paul123", "paul@gmail.com", "instructor");
         List<String> columnNames5 = Arrays.asList("userID", "userName", "password", "email", "type");
-        DataBaseRepository<Instructor> instructorRepository = new DataBaseRepository<>("instructor", Instructor.class, parameters.getUsersParameters());
+        DataBaseRepository<Instructor> instructorRepository = new DataBaseRepository<>("instructor", Instructor.class, columnNames5);
         //instructorRepository.create(instructor);
 
 //
@@ -49,7 +49,7 @@ public class Main {
 //        System.out.println("Print");
 //        System.out.println(System.getenv("DB_PASSWORD"));
 
-        System.out.println(System.getenv("DB_PASSWORD"));
+        System.out.println(instructorRepository.get(1));
 
 
 
