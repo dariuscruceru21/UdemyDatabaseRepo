@@ -6,9 +6,9 @@ package Models;
  */
 public abstract class User implements Identifiable {
     /** Unique identifier for the user */
-    private Integer userid;
+    private Integer userId;
     /** Username for user login */
-    private String username;
+    private String userName;
     /** User password */
     private String password;
     /** User email address */
@@ -23,14 +23,14 @@ public abstract class User implements Identifiable {
     /**
      * Constructs a User with the specified ID, username, password, and email.
      *
-     * @param userid    The unique ID of the user.
-     * @param username  The user's username.
+     * @param userId    The unique ID of the user.
+     * @param userName  The user's username.
      * @param password  The user's password.
      * @param email     The user's email address.
      */
-    User(Integer userid, String username, String password, String email, String type) {
-        this.userid = userid;
-        this.username = username;
+    User(Integer userId, String userName, String password, String email, String type) {
+        this.userId = userId;
+        this.userName = userName;
         this.password = password;
         this.email = email;
         this.type = type;
@@ -43,7 +43,7 @@ public abstract class User implements Identifiable {
      */
     @Override
     public Integer getId() {
-        return this.userid;
+        return this.userId;
     }
 
     /**
@@ -52,7 +52,7 @@ public abstract class User implements Identifiable {
      * @return The username.
      */
     public String getUsername() {
-        return this.username;
+        return this.userName;
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class User implements Identifiable {
      * @param userid The ID to set for the user.
      */
     public void setUserid(Integer userid) {
-        this.userid = userid;
+        this.userId = userid;
     }
 
     /**
@@ -88,7 +88,7 @@ public abstract class User implements Identifiable {
      * @param username The username to set for the user.
      */
     public void setUsername(String username) {
-        this.username = username;
+        this.userName = username;
     }
 
     /**
@@ -115,11 +115,11 @@ public abstract class User implements Identifiable {
      * @param newUserName The new username to set for the user.
      */
     public void setName(String newUserName) {
-        this.username = newUserName;
+        this.userName = newUserName;
     }
 
     @Override
     public void setId(Integer id) {
-        this.userid = id;
+        this.userId = id;
     }
 }

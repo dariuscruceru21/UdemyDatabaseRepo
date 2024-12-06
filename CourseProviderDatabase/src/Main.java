@@ -22,9 +22,9 @@ public class Main {
          Course course = new Course(2,"Analiza","hard",10,"2024-07-12","2024-10-11",9);
 //
 //        // Pass column names including 'userid'
-        List<String> columnNames = Arrays.asList("courseID", "courseTitle", "description", "availableSpots", "startDate", "endDate","instructorId");
+         List<String> columnNames = Arrays.asList("courseID", "courseTitle", "description", "availableSpots", "startDate", "endDate","instructorId");
         //List<String> columnNames2 = Arrays.asList("userid","username","password","email","type");
-        DataBaseRepository<Course> dataBaseRepository = new DataBaseRepository<>("course", Course.class, columnNames);
+         DataBaseRepository<Course> dataBaseRepository = new DataBaseRepository<>("course", Course.class, columnNames);
 
 
         //System.out.println("courseId".toLowerCase());
@@ -36,7 +36,7 @@ public class Main {
 //        System.out.println("Print");
 //        System.out.println(System.getenv("DB_PASSWORD"));
 
-        System.out.println(dataBaseRepository.get(1));
+         System.out.println(dataBaseRepository.get(1));
 
     }
 }
