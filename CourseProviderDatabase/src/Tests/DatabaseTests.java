@@ -27,7 +27,7 @@ public class DatabaseTests {
     @Order(1)
     void testCreate() {
         // Create a new student
-        Student student = new Student(null, "john_doe", "password123", "john@example.com", "student");
+        Student student = new Student(2, "john_doe", "password123", "john@example.com", "student");
         studentDataBaseRepository.create(student);
 
         // Verify student was created
@@ -36,6 +36,6 @@ public class DatabaseTests {
         assertEquals("john_doe", fetchedStudent.getUsername());
         assertEquals("john@example.com", fetchedStudent.getEmail());
     }
-
+    
 
 }

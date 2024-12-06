@@ -49,7 +49,8 @@ public class Main {
 //        System.out.println("Print");
 //        System.out.println(System.getenv("DB_PASSWORD"));
 
-        System.out.println(instructorRepository.get(1));
+        System.out.println(instructorRepository.getAll());
+        //DataBaseRepository
 
 
 

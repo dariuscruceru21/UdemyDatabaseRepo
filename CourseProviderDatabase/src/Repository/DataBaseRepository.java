@@ -253,7 +253,14 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
                 T obj = constructor.newInstance(args);
 
                 //Set the ID
-                String idColumnName = tableName.toLowerCase() + "id";
+                String idColumnName;
+                if (tableName.equalsIgnoreCase("admin") ||
+                        tableName.equalsIgnoreCase("instructor") ||
+                        tableName.equalsIgnoreCase("student")) {
+                    idColumnName = "userid"; // Use "userid" for these specific tables
+                } else {
+                    idColumnName = tableName.toLowerCase() + "id"; // Default logic
+                }
                 obj.setId(rs.getInt(idColumnName));
 
                 results.add(obj);
