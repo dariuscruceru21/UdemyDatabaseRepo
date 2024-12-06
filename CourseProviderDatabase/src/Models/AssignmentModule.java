@@ -2,11 +2,11 @@ package Models;
 
 public class AssignmentModule {
     private Integer assignmentId;
-    private Integer courseId;
+    private Integer moduleId;
 
-    public AssignmentModule(Integer assignmentId, Integer courseId) {
+    public AssignmentModule(Integer assignmentId, Integer moduleId) {
         this.assignmentId = assignmentId;
-        this.courseId = courseId;
+        this.moduleId = moduleId;
     }
 
     public Integer getAssignmentId() {
@@ -17,11 +17,11 @@ public class AssignmentModule {
         this.assignmentId = assignmentId;
     }
 
-    public Integer getCourseId() {
-        return courseId;
+    public Integer getModuleId() {
+        return moduleId;
     }
 
-    public void setCourseId(Integer courseId) {
-        this.courseId = courseId;
+    public void setModuleIdId(Integer moduleIdId) {
+        this.moduleId = moduleIdId;
     }
 }

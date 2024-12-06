@@ -190,7 +190,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         PreparedStatement statement = null;
         try{
             connection = getConnection();
-            String idColumnName = tableName.toLowerCase() + "id";
+            String idColumnName = "user" + "id";
             String sql = "DELETE FROM " + tableName.toLowerCase() + " WHERE " + idColumnName + " = ?";
 
             statement = connection.prepareStatement(sql);

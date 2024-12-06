@@ -17,12 +17,10 @@ public class Forum implements Identifiable {
      *
      * @param forumID The unique identifier for this forum.
      * @param topic   The main topic of the forum.
-     * @param topics  An array of topics related to the forum discussion.
      */
-    public Forum(int forumID, String topic, String[] topics) {
+    public Forum(int forumID, String topic) {
         this.forumID = forumID;
         this.topic = topic;
-        this.topics = topics;
     }
 
     public Integer getForumID() {

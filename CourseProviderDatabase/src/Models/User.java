@@ -6,7 +6,7 @@ package Models;
  */
 public abstract class User implements Identifiable {
     /** Unique identifier for the user */
-    private Integer userId;
+    private Integer userID;
     /** Username for user login */
     private String userName;
     /** User password */
@@ -23,13 +23,13 @@ public abstract class User implements Identifiable {
     /**
      * Constructs a User with the specified ID, username, password, and email.
      *
-     * @param userId    The unique ID of the user.
+     * @param userID    The unique ID of the user.
      * @param userName  The user's username.
      * @param password  The user's password.
      * @param email     The user's email address.
      */
-    User(Integer userId, String userName, String password, String email, String type) {
-        this.userId = userId;
+    User(Integer userID, String userName, String password, String email, String type) {
+        this.userID = userID;
         this.userName = userName;
         this.password = password;
         this.email = email;
@@ -43,7 +43,7 @@ public abstract class User implements Identifiable {
      */
     @Override
     public Integer getId() {
-        return this.userId;
+        return this.userID;
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class User implements Identifiable {
      * @param userid The ID to set for the user.
      */
     public void setUserid(Integer userid) {
-        this.userId = userid;
+        this.userID = userid;
     }
 
     /**
@@ -120,6 +120,6 @@ public abstract class User implements Identifiable {
 
     @Override
     public void setId(Integer id) {
-        this.userId = id;
+        this.userID = id;
     }
 }
