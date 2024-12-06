@@ -145,7 +145,14 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         try{
             connection = getConnection();
             StringBuilder sql = new StringBuilder("UPDATE " + tableName + " SET ");
-            String idColumnName = tableName.toLowerCase() + "id";
+            String idColumnName;
+            if (tableName.equalsIgnoreCase("admin") ||
+                    tableName.equalsIgnoreCase("instructor") ||
+                    tableName.equalsIgnoreCase("student")) {
+                idColumnName = "userid"; // Use "userid" for these specific tables
+            } else {
+                idColumnName = tableName.toLowerCase() + "id"; // Default logic
+            }
 
             for(int i = 0; i < columnNames.size(); i++){
                 if(!columnNames.get(i).equals(idColumnName)){
@@ -198,7 +205,14 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         PreparedStatement statement = null;
         try{
             connection = getConnection();
-            String idColumnName = "user" + "id";
+            String idColumnName;
+            if (tableName.equalsIgnoreCase("admin") ||
+                    tableName.equalsIgnoreCase("instructor") ||
+                    tableName.equalsIgnoreCase("student")) {
+                idColumnName = "userid"; // Use "userid" for these specific tables
+            } else {
+                idColumnName = tableName.toLowerCase() + "id"; // Default logic
+            }
             String sql = "DELETE FROM " + tableName.toLowerCase() + " WHERE " + idColumnName + " = ?";
 
             statement = connection.prepareStatement(sql);
