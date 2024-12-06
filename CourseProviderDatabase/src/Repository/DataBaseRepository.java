@@ -185,7 +185,27 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
 
     @Override
     public void delete(Integer id) {
-        // Implementation placeholder
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try{
+            connection = getConnection();
+            String idColumnName = tableName.toLowerCase() + "id";
+            String sql = "DELETE FROM " + tableName.toLowerCase() + " WHERE " + idColumnName + " = ?";
+
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1,id);
+
+            int affectedRows = statement.executeUpdate();
+            if(affectedRows == 0){
+                throw new SQLException("Deleeting object failed, no rows affected. ID may not exist");
+
+            }
+        } catch (SQLException e) {
+            System.err.println("Error deleteing object with id " + id);
+            e.printStackTrace();
+        }finally {
+            closeResources(connection, statement, null);
+        }
     }
 
     @Override

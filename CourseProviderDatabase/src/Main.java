@@ -36,7 +36,7 @@ public class Main {
 //        System.out.println("Print");
 //        System.out.println(System.getenv("DB_PASSWORD"));
 
-         dataBaseRepository.update(course);
+         dataBaseRepository.delete(2);
 
     }
 }
