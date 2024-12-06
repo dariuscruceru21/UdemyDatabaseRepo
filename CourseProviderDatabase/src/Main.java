@@ -35,6 +35,8 @@ public class Main {
 
         //System.out.println("courseId".toLowerCase());
 
+            //trebuie sa schimbam clasa user si sa facem separat tabele cu variabile pentru student admin instructor
+            DataBaseRepository<User> userDataBaseRepository = new DataBaseRepository<>("\"User\"",User.class,columnNames2);
 
 //
 //        // Create the student in the database
@@ -42,7 +44,7 @@ public class Main {
 //        System.out.println("Print");
 //        System.out.println(System.getenv("DB_PASSWORD"));
 
-        dataBaseRepository2.create(assignment);
+        System.out.println(userDataBaseRepository.getAll());
 
 
 
