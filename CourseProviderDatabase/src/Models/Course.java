@@ -124,4 +124,9 @@ public class Course implements Identifiable {
     public Integer getId() {
         return this.courseID;
     }
+
+    @Override
+    public void setId(Integer id) {
+        this.courseID = id;
+    }
 }

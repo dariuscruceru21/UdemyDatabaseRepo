@@ -65,4 +65,9 @@ public class Module implements Identifiable {
     public Integer getId() {
         return this.moduleID;
     }
+
+    @Override
+    public void setId(Integer id) {
+        this.moduleID = id;
+    }
 }

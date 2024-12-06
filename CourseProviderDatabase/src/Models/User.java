@@ -6,9 +6,9 @@ package Models;
  */
 public abstract class User implements Identifiable {
     /** Unique identifier for the user */
-    private Integer userID;
+    private Integer userid;
     /** Username for user login */
-    private String userName;
+    private String username;
     /** User password */
     private String password;
     /** User email address */
@@ -23,14 +23,14 @@ public abstract class User implements Identifiable {
     /**
      * Constructs a User with the specified ID, username, password, and email.
      *
-     * @param userID    The unique ID of the user.
-     * @param userName  The user's username.
+     * @param userid    The unique ID of the user.
+     * @param username  The user's username.
      * @param password  The user's password.
      * @param email     The user's email address.
      */
-    User(Integer userID, String userName, String password, String email, String type) {
-        this.userID = userID;
-        this.userName = userName;
+    User(Integer userid, String username, String password, String email, String type) {
+        this.userid = userid;
+        this.username = username;
         this.password = password;
         this.email = email;
         this.type = type;
@@ -43,7 +43,7 @@ public abstract class User implements Identifiable {
      */
     @Override
     public Integer getId() {
-        return this.userID;
+        return this.userid;
     }
 
     /**
@@ -51,8 +51,8 @@ public abstract class User implements Identifiable {
      *
      * @return The username.
      */
-    public String getUserName() {
-        return this.userName;
+    public String getUsername() {
+        return this.username;
     }
 
     /**
@@ -76,19 +76,19 @@ public abstract class User implements Identifiable {
     /**
      * Sets the unique identifier for the user.
      *
-     * @param userID The ID to set for the user.
+     * @param userid The ID to set for the user.
      */
-    public void setUserID(Integer userID) {
-        this.userID = userID;
+    public void setUserid(Integer userid) {
+        this.userid = userid;
     }
 
     /**
      * Sets the username for the user.
      *
-     * @param userName The username to set for the user.
+     * @param username The username to set for the user.
      */
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
@@ -115,6 +115,11 @@ public abstract class User implements Identifiable {
      * @param newUserName The new username to set for the user.
      */
     public void setName(String newUserName) {
-        this.userName = newUserName;
+        this.username = newUserName;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.userid = id;
     }
 }

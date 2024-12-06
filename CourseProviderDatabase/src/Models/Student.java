@@ -16,14 +16,14 @@ public class Student extends User {
     /**
      * Constructs a Student object with specified attributes.
      *
-     * @param userID         The unique ID of the student.
-     * @param userName       The username of the student.
+     * @param userid         The unique ID of the student.
+     * @param username       The username of the student.
      * @param password       The password for the student's account.
      * @param email          The student's email address.
 
      */
-    public Student(int userID, String userName, String password, String email,String type) {
-        super(userID, userName, password, email,type);
+    public Student(Integer userid, String username, String password, String email,String type) {
+        super(userid, username, password, email,type);
     }
 
 
