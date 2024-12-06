@@ -5,6 +5,7 @@ import Models.Identifiable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -210,7 +211,41 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
 
     @Override
     public List getAll() {
-        return List.of(); // Implementation placeholder
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        List<T> results = new ArrayList<>();
+
+        try{
+            connection = getConnection();
+            String sql = "SELECT * FROM " + tableName;
+            statement = connection.createStatement();
+            rs = statement.executeQuery(sql);
+
+            while(rs.next()){
+                Object[] args = new Object[columnNames.size()];
+                for(int i = 0; i < columnNames.size(); i++){
+                    String columnName = columnNames.get(i);
+                    args[i] = rs.getObject(columnName);
+                }
+                T obj = constructor.newInstance(args);
+
+                //Set the ID
+                String idColumnName = tableName.toLowerCase() + "id";
+                obj.setId(rs.getInt(idColumnName));
+
+                results.add(obj);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error reyrieving all objects from " + tableName);
+            e.printStackTrace();
+        }catch (ReflectiveOperationException e){
+            System.err.println("Error creating object instance");
+            e.printStackTrace();
+        }finally {
+            closeResources(connection,statement,rs);
+        }
+        return results;
     }
 
 
