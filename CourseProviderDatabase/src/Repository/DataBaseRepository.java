@@ -100,7 +100,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         try{
             connection = getConnection();
             String idColumnName = tableName.toLowerCase() + "id";
-            String sql = "SELECT * FROM " + tableName.toLowerCase() + " WHERE " + idColumnName + " = ?";
+            String sql = "SELECT * FROM " + tableName + " WHERE " + idColumnName + " = ?";
             statement = connection.prepareStatement(sql);
             statement.setInt(1,id);
 
@@ -130,8 +130,57 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
     }
 
     @Override
-    public void update(Identifiable obj) {
-        // Implementation placeholder
+    public void update(T obj) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try{
+            connection = getConnection();
+            StringBuilder sql = new StringBuilder("UPDATE " + tableName + " SET ");
+            String idColumnName = tableName.toLowerCase() + "id";
+
+            for(int i = 0; i < columnNames.size(); i++){
+                if(!columnNames.get(i).equals(idColumnName)){
+                    sql.append(columnNames.get(i)).append(" = ?");
+                    if(i < columnNames.size() - 1){
+                        sql.append(", ");
+                    }
+                }
+            }
+            sql.append(" WHERE ").append(idColumnName).append(" = ?");
+
+            statement = connection.prepareStatement(sql.toString());
+            int parameterIndex = 1;
+            for(String columnnName : columnNames){
+                if(!columnnName.equals(idColumnName)){
+                    String fieldName = toCamelCase(columnnName);
+                    Field field = findField(type,fieldName);
+                    if(field == null){
+                        throw new NoSuchFieldException(fieldName + " not found in class " + type.getName());
+                    }
+
+                    field.setAccessible(true);
+                    Object value = field.get(obj);
+
+                    if(value instanceof List) {
+                        Array sqlArray = connection.createArrayOf("text",((List<?>) value).toArray());
+                        statement.setArray(parameterIndex++, sqlArray);
+                    }else {
+                        statement.setObject(parameterIndex++, value);
+                    }
+                }
+            }
+            statement.setInt(parameterIndex, obj.getId());
+
+            int affectedRows = statement.executeUpdate();
+            if(affectedRows == 0){
+                throw new SQLException("Updating object failed, no rows affected.");
+
+            }
+        } catch (SQLException | IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }finally {
+            closeResources(connection,statement,null);
+        }
     }
 
     @Override
