@@ -129,4 +129,17 @@ public class Course implements Identifiable {
     public void setId(Integer id) {
         this.courseID = id;
     }
+
+    @Override
+    public String toString() {
+        return "Course{" +
+                "courseID=" + courseID +
+                ", courseTitle='" + courseTitle + '\'' +
+                ", description='" + description + '\'' +
+                ", availableSpots=" + availableSpots +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", instructorId=" + instructorId +
+                '}';
+    }
 }

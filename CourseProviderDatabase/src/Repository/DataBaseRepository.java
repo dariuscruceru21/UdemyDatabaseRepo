@@ -34,13 +34,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         this.constructor = getConstructor();
     }
 
-    private Constructor<T> getConstructor() {
-        return Arrays.stream(type.getDeclaredConstructors())
-                .filter(c -> c.getParameterCount() == columnNames.size()) // Match exact parameter count
-                .map(c -> (Constructor<T>) c)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No suitable constructor found"));
-    }
+
 
     @Override
     public void create(T obj) {
@@ -64,11 +58,11 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
             stmt = conn.prepareStatement(sql.toString());
             for (int i = 0; i < columnNames.size(); i++) {
                 String columnName = columnNames.get(i);
+                String fieldName = toCamelCase(columnName);
 
-                // Find the field in the class hierarchy
-                Field field = findField(type, columnName);
+                Field field = findField(type, fieldName);
                 if (field == null) {
-                    throw new NoSuchFieldException(columnName + " not found in class " + type.getName());
+                    throw new NoSuchFieldException(fieldName + " not found in class " + type.getName());
                 }
 
                 field.setAccessible(true);
@@ -94,22 +88,45 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         }
     }
 
-    private Field findField(Class<?> clazz, String fieldName) {
-        Class<?> current = clazz;
-        while (current != null) {
-            try {
-                return current.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException e) {
-                // Move to the superclass
-                current = current.getSuperclass();
-            }
-        }
-        return null; // Field not found
-    }
+
 
     @Override
     public T get(Integer id) {
-        return null; // Implementation placeholder
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        T result = null;
+
+        try{
+            connection = getConnection();
+            String idColumnName = tableName.toLowerCase() + "id";
+            String sql = "SELECT * FROM " + tableName.toLowerCase() + " WHERE " + idColumnName + " = ?";
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1,id);
+
+            rs = statement.executeQuery();
+
+            if(rs.next()){
+                Object[] args = new Object[columnNames.size()];
+                for(int i = 0 ; i < columnNames.size();i++){
+                    String columnName = columnNames.get(i);
+                    if(columnName.equals(idColumnName))
+                        args[i] = rs.getInt(columnName);
+                    else
+                        args[i] = rs.getObject(columnName);
+                }
+                result = constructor.newInstance(args);
+
+                result.setId(rs.getInt(idColumnName));
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error retrieving object with id " + id);
+            e.printStackTrace();
+        }finally {
+            closeResources(connection,statement, rs);
+        }
+        return result;
     }
 
     @Override
@@ -127,6 +144,28 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         return List.of(); // Implementation placeholder
     }
 
+
+    private Constructor<T> getConstructor() {
+        return Arrays.stream(type.getDeclaredConstructors())
+                .filter(c -> c.getParameterCount() == columnNames.size()) // Match exact parameter count
+                .map(c -> (Constructor<T>) c)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No suitable constructor found"));
+    }
+
+    private Field findField(Class<?> clazz, String fieldName) {
+        Class<?> current = clazz;
+        while (current != null) {
+            try {
+                return current.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                // Move to the superclass
+                current = current.getSuperclass();
+            }
+        }
+        return null; // Field not found
+    }
+
     protected void closeResources(Connection conn, Statement stmt, ResultSet rs) {
         try {
             if (rs != null) rs.close();
@@ -136,4 +175,15 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
             e.printStackTrace();
         }
     }
+
+    private String toCamelCase(String s) {
+        String[] parts = s.split("_");
+        StringBuilder camelCaseString = new StringBuilder(parts[0]);
+        for (int i = 1; i < parts.length; i++) {
+            camelCaseString.append(Character.toUpperCase(parts[i].charAt(0)))
+                    .append(parts[i].substring(1));
+        }
+        return camelCaseString.toString();
+    }
+
 }

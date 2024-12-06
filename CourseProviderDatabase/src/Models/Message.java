@@ -62,6 +62,9 @@ public class Message implements Identifiable {
         return this.messageID;
     }
 
+    @Override
+    public void setId(Integer newId){this.messageID = newId;}
+
     public void setMessage(String message) {
         this.message = message;
     }
