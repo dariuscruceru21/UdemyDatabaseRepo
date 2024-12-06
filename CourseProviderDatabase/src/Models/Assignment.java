@@ -76,4 +76,9 @@ public class Assignment implements Identifiable {
     public Integer getId() {
         return this.assignmentID;
     }
+
+    @Override
+    public void setId(Integer id) {
+        this.assignmentID = id;
+    }
 }

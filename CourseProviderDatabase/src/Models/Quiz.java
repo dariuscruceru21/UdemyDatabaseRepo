@@ -62,4 +62,9 @@ public class Quiz implements Identifiable {
     public Integer getId() {
         return this.quizId;
     }
+
+    @Override
+    public void setId(Integer id) {
+        this.quizId = id;
+    }
 }

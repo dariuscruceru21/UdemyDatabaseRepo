@@ -1,27 +1,28 @@
+import Models.Course;
+import Models.Student;
+import Models.User;
+import Repository.DataBaseRepository;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-// Database URL and credentials
-        String jdbcURL = "jdbc:postgresql://localhost:5432/Udemy"; // Replace with your DB URL
-        String username = "postgres"; // Replace with your DB username
-        String password = "Germania!10"; // Replace with your DB password
 
-        try {
-            // Connect to the database
-            System.out.println("Connecting to database...");
-            Connection connection = DriverManager.getConnection(jdbcURL, username, password);
-            System.out.println("Connection successful!");
+        // Manually add the ID as part of the object creation
+        Student student = new Student(8, "Alex", "alex123", "alexandru@gmail.com", "student");
 
-            // Close the connection
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Connection failed!");
-        }
+        // Pass column names including 'userid'
+        List<String> columnNames = Arrays.asList("userid", "username", "password", "email", "type");
+        DataBaseRepository<Student> dataBaseRepository = new DataBaseRepository<>("\"User\"", Student.class, columnNames);
+
+        // Create the student in the database
+        dataBaseRepository.create(student);
+
     }
 }

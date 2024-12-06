@@ -53,4 +53,9 @@ public class Forum implements Identifiable {
     public Integer getId() {
         return this.forumID;
     }
+
+    @Override
+    public void setId(Integer id) {
+        this.forumID = id;
+    }
 }
