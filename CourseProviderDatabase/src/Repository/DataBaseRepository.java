@@ -90,7 +90,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
     }
 
 
-
+    // de vazut ce sa facem cu numele la tabel la idcolumname
     @Override
     public T get(Integer id) {
         Connection connection = null;
@@ -100,7 +100,15 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
 
         try{
             connection = getConnection();
-            String idColumnName = "user" + "id";
+            // Determine the id column name based on the table name
+            String idColumnName;
+            if (tableName.equalsIgnoreCase("admin") ||
+                    tableName.equalsIgnoreCase("instructor") ||
+                    tableName.equalsIgnoreCase("student")) {
+                idColumnName = "userid"; // Use "userid" for these specific tables
+            } else {
+                idColumnName = tableName.toLowerCase() + "id"; // Default logic
+            }
             String sql = "SELECT * FROM " + tableName + " WHERE " + idColumnName + " = ?";
             statement = connection.prepareStatement(sql);
             statement.setInt(1,id);
