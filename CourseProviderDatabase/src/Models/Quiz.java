@@ -9,7 +9,7 @@ public class Quiz implements Identifiable {
     private Integer quizId;
     private String title;
     private String contents;
-    private Instructor correctAnswer;
+    private Integer correctAnswer;
 
     /**
      * Constructs a new Quiz with the specified ID, title, content, and correct answer.
@@ -19,7 +19,7 @@ public class Quiz implements Identifiable {
      * @param contents      The content or questions within the quiz.
      * @param correctAnswer The correct answer identifier for the quiz.
      */
-    public Quiz(Integer quizId, String title, String contents, Instructor correctAnswer) {
+    public Quiz(Integer quizId, String title, String contents, Integer correctAnswer) {
         this.quizId = quizId;
         this.title = title;
         this.contents = contents;
@@ -50,11 +50,11 @@ public class Quiz implements Identifiable {
         this.contents = contents;
     }
 
-    public Instructor getCorrectAnswer() {
+    public Integer getCorrectAnswer() {
         return correctAnswer;
     }
 
-    public void setCorrectAnswer(Instructor correctAnswer) {
+    public void setCorrectAnswer(Integer correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 
