@@ -7,22 +7,22 @@ package Models;
 public class Message implements Identifiable {
     private int messageID;
     private String message;
-    private User sender;
-    private User receiver;
+    private Integer senderId;
+    private Integer receiverId;
 
     /**
-     * Constructs a new Message with the specified ID, content, sender, and receiver.
+     * Constructs a new Message with the specified ID, content, senderId, and receiverId.
      *
      * @param messageID The unique identifier for this message.
      * @param message   The content of the message.
-     * @param sender    The user who sent the message.
-     * @param receiver  The user who is intended to receive the message.
+     * @param senderId    The user who sent the message.
+     * @param receiverId  The user who is intended to receive the message.
      */
-    public Message(int messageID, String message, User sender, User receiver) {
+    public Message(int messageID, String message, Integer senderId, Integer receiverId) {
         this.messageID = messageID;
         this.message = message;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
     }
 
     /**
@@ -39,8 +39,8 @@ public class Message implements Identifiable {
      *
      * @return The sender of the message as a User object.
      */
-    public User getSender() {
-        return this.sender;
+    public Integer getSenderId() {
+        return this.senderId;
     }
 
     /**
@@ -48,8 +48,8 @@ public class Message implements Identifiable {
      *
      * @return The receiver of the message as a User object.
      */
-    public User getReceiver() {
-        return this.receiver;
+    public Integer getReceiverId() {
+        return this.receiverId;
     }
 
     /**
@@ -69,12 +69,12 @@ public class Message implements Identifiable {
         this.message = message;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setSender(Integer sender) {
+        this.senderId = sender;
     }
 
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
+    public void setReceiver(Integer receiver) {
+        this.receiverId = receiver;
     }
 
 
@@ -89,8 +89,8 @@ public class Message implements Identifiable {
         return "Message{" +
                 "messageID=" + messageID +
                 ", message='" + message + '\'' +
-                ", sender=" + sender +
-                ", receiver=" + receiver +
+                ", senderId=" + senderId +
+                ", receiverId=" + receiverId +
                 '}';
     }
 }
