@@ -1,6 +1,6 @@
 package Models;
 
-public class Enrolled {
+public class Enrolled implements Identifiable {
     private Integer studentId;
     private Integer courseId;
 
@@ -9,17 +9,24 @@ public class Enrolled {
         this.courseId = courseId;
     }
 
-    public Integer getStudentId() {
-        return studentId;
+
+
+    @Override
+    public Integer getId() {
+        return this.studentId;
     }
 
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
+    @Override
+    public void setId(Integer id) {
+        this.studentId = id;
     }
 
     public Integer getCourseId() {
         return courseId;
     }
+
+
+
 
     public void setCourseId(Integer courseId) {
         this.courseId = courseId;

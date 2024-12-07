@@ -48,13 +48,6 @@ public class Course implements Identifiable {
         this.instructorId = instructor;
     }
 
-    public Integer getCourseID() {
-        return courseID;
-    }
-
-    public void setCourseID(Integer courseID) {
-        this.courseID = courseID;
-    }
 
     public String getCourseTitle() {
         return courseTitle;
