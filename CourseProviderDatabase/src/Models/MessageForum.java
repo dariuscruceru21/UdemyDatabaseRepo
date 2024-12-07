@@ -1,6 +1,6 @@
 package Models;
 
-public class MessageForum {
+public class MessageForum implements Identifiable {
     private Integer messageId;
     private Integer forumId;
 
@@ -9,19 +9,21 @@ public class MessageForum {
         this.forumId = forumId;
     }
 
-    public Integer getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(Integer messageId) {
-        this.messageId = messageId;
-    }
-
     public Integer getForumId() {
         return forumId;
     }
 
     public void setForumId(Integer forumId) {
         this.forumId = forumId;
+    }
+
+    @Override
+    public Integer getId() {
+        return messageId;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.messageId = id;
     }
 }

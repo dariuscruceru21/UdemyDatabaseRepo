@@ -1,6 +1,6 @@
 package Models;
 
-public class QuizAssignment {
+public class QuizAssignment implements Identifiable {
     private Integer quizId;
     private Integer assignmentId;
 
@@ -9,19 +9,21 @@ public class QuizAssignment {
         this.assignmentId = assignmentId;
     }
 
-    public Integer getQuizId() {
-        return quizId;
-    }
-
-    public void setQuizId(Integer quizId) {
-        this.quizId = quizId;
-    }
-
     public Integer getAssignmentId() {
         return assignmentId;
     }
 
     public void setAssignmentId(Integer assignmentId) {
         this.assignmentId = assignmentId;
+    }
+
+    @Override
+    public Integer getId() {
+        return quizId;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.quizId = id;
     }
 }

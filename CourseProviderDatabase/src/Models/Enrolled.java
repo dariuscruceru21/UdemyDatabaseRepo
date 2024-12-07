@@ -10,17 +10,6 @@ public class Enrolled implements Identifiable {
     }
 
 
-
-    @Override
-    public Integer getId() {
-        return this.studentId;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.studentId = id;
-    }
-
     public Integer getCourseId() {
         return courseId;
     }
@@ -30,6 +19,16 @@ public class Enrolled implements Identifiable {
 
     public void setCourseId(Integer courseId) {
         this.courseId = courseId;
+    }
+
+    @Override
+    public Integer getId() {
+        return this.studentId;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.studentId = id;
     }
 }
 

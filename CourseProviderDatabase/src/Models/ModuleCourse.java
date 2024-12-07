@@ -1,6 +1,6 @@
 package Models;
 
-public class ModuleCourse {
+public class ModuleCourse implements Identifiable {
     private Integer moduleId;
     private Integer courseId;
 
@@ -9,19 +9,21 @@ public class ModuleCourse {
         this.courseId = courseId;
     }
 
-    public Integer getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(Integer moduleId) {
-        this.moduleId = moduleId;
-    }
-
     public Integer getCourseId() {
         return courseId;
     }
 
     public void setCourseId(Integer courseId) {
         this.courseId = courseId;
+    }
+
+    @Override
+    public Integer getId() {
+        return moduleId;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.moduleId = id;
     }
 }

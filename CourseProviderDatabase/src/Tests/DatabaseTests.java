@@ -22,6 +22,12 @@ public class DatabaseTests {
     private DataBaseRepository<Quiz> quizDataBaseRepository = new DataBaseRepository<>("quiz",Quiz.class,utils.getQuizParameters());
     private DataBaseRepository<Forum> forumDataBaseRepository = new DataBaseRepository<>("forum", Forum.class,utils.getForumParameters());
     private DataBaseRepository<Message> messageDataBaseRepository = new DataBaseRepository<>("message",Message.class,utils.getMessageParamteres());
+    private DataBaseRepository<Enrolled> studentCourseDataBaseRepository = new DataBaseRepository<>("studentcourse",Enrolled.class,utils.getEnrolledParameters());
+    private DataBaseRepository<QuizAssignment> quizAssignmentDataBaseRepository = new DataBaseRepository<>("assignmentquiz",QuizAssignment.class,utils.getQuizAssignmentParameteres());
+    private DataBaseRepository<AssignmentModule> assignmentModuleDataBaseRepository = new DataBaseRepository<>("moduleassignment", AssignmentModule.class, utils.getModuleAssignmentParameteres());
+    private DataBaseRepository<ModuleCourse> moduleCourseDataBaseRepository = new DataBaseRepository<ModuleCourse>("coursemodule", ModuleCourse.class, utils.getCourseModuleParameters());
+    private DataBaseRepository<MessageForum> messageForumDataBaseRepository = new DataBaseRepository<MessageForum>("messageforum", MessageForum.class, utils.getMessageForumParameters());
+
 
     @Test
     @Order(1)
@@ -148,6 +154,63 @@ public class DatabaseTests {
         assertNotNull(fetchedForum);
         assertEquals("Programming Discussions", fetchedForum.getTopic());
     }
-    
 
+    @Test
+    @Order(10)
+    void testCreateEnrolled() {
+        // Create a new forum
+        Enrolled enrolled = new Enrolled(1, 101);
+        studentCourseDataBaseRepository.create(enrolled);
+
+        // Verify studentcourse was created
+        Enrolled fetchedEnrolled = studentCourseDataBaseRepository.get(1);
+        assertNotNull(fetchedEnrolled);
+        assertEquals(101, fetchedEnrolled.getCourseId());
+    }
+
+    @Test
+    @Order(11)
+    void testCreateQuizAssignment() {
+        // Create a new quizassignment
+        QuizAssignment quizAssignment = new QuizAssignment(201,301);
+        quizAssignmentDataBaseRepository.create(quizAssignment);
+
+        // Verify quizassignment was created
+        QuizAssignment fetchedQuizAssignment = quizAssignmentDataBaseRepository.get(301);
+        assertNotNull(fetchedQuizAssignment);
+        assertEquals(301, fetchedQuizAssignment.getAssignmentId());
+    }
+    
+    @Test
+    @Order(12)
+    void testCreateAssignmentModule() {
+        AssignmentModule assignmentModule = new AssignmentModule(301,101);
+        assignmentModuleDataBaseRepository.create(assignmentModule);
+
+        AssignmentModule fetchedAssignmentModule = assignmentModuleDataBaseRepository.get(101);
+        assertNotNull(fetchedAssignmentModule);
+        assertEquals(101, fetchedAssignmentModule.getModuleId());
+    }
+
+    @Test
+    @Order(13)
+    void testCreateCourseModule(){
+        ModuleCourse moduleCourse = new ModuleCourse(101,101);
+        moduleCourseDataBaseRepository.create(moduleCourse);
+
+        ModuleCourse fetchedModuleCourse = moduleCourseDataBaseRepository.get(101);
+        assertNotNull(fetchedModuleCourse);
+        assertEquals(101, fetchedModuleCourse.getCourseId());
+    }
+
+    @Test
+    @Order(14)
+    void testCreateMessageForum(){
+        MessageForum messageForum = new MessageForum(401,501);
+        messageForumDataBaseRepository.create(messageForum);
+
+        MessageForum fetchedMessageForum = messageForumDataBaseRepository.get(401);
+        assertNotNull(fetchedMessageForum);
+        assertEquals(501, fetchedMessageForum.getForumId());
+    }
 }
