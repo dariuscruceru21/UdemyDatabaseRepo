@@ -106,6 +106,16 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
                     tableName.equalsIgnoreCase("instructor") ||
                     tableName.equalsIgnoreCase("student")) {
                 idColumnName = "userid"; // Use "userid" for these specific tables
+            } else if (tableName.equalsIgnoreCase("assignmentquiz")) {
+                idColumnName = "assignmentid";
+            } else if (tableName.equalsIgnoreCase("coursemodule")) {
+                idColumnName = "courseid";
+            } else if (tableName.equalsIgnoreCase("messageforum")) {
+                idColumnName = "messageid";
+            } else if (tableName.equalsIgnoreCase("moduleassignment")) {
+                idColumnName = "moduleid";
+            } else if (tableName.equalsIgnoreCase("studentcourse")) {
+                idColumnName = "studentid";
             } else {
                 idColumnName = tableName.toLowerCase() + "id"; // Default logic
             }
@@ -150,6 +160,16 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
                     tableName.equalsIgnoreCase("instructor") ||
                     tableName.equalsIgnoreCase("student")) {
                 idColumnName = "userid"; // Use "userid" for these specific tables
+            } else if (tableName.equalsIgnoreCase("assignmentquiz")) {
+                idColumnName = "assignmentid";
+            } else if (tableName.equalsIgnoreCase("coursemodule")) {
+                idColumnName = "courseid";
+            } else if (tableName.equalsIgnoreCase("messageforum")) {
+                idColumnName = "messageid";
+            } else if (tableName.equalsIgnoreCase("moduleassignment")) {
+                idColumnName = "moduleid";
+            } else if (tableName.equalsIgnoreCase("studentcourse")) {
+                idColumnName = "studentid";
             } else {
                 idColumnName = tableName.toLowerCase() + "id"; // Default logic
             }
@@ -210,6 +230,16 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
                     tableName.equalsIgnoreCase("instructor") ||
                     tableName.equalsIgnoreCase("student")) {
                 idColumnName = "userid"; // Use "userid" for these specific tables
+            } else if (tableName.equalsIgnoreCase("assignmentquiz")) {
+                idColumnName = "assignmentid";
+            } else if (tableName.equalsIgnoreCase("coursemodule")) {
+                idColumnName = "courseid";
+            } else if (tableName.equalsIgnoreCase("messageforum")) {
+                idColumnName = "messageid";
+            } else if (tableName.equalsIgnoreCase("moduleassignment")) {
+                idColumnName = "moduleid";
+            } else if (tableName.equalsIgnoreCase("studentcourse")) {
+                idColumnName = "studentid";
             } else {
                 idColumnName = tableName.toLowerCase() + "id"; // Default logic
             }
@@ -258,6 +288,16 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
                         tableName.equalsIgnoreCase("instructor") ||
                         tableName.equalsIgnoreCase("student")) {
                     idColumnName = "userid"; // Use "userid" for these specific tables
+                } else if (tableName.equalsIgnoreCase("assignmentquiz")) {
+                    idColumnName = "assignmentid";
+                } else if (tableName.equalsIgnoreCase("coursemodule")) {
+                    idColumnName = "courseid";
+                } else if (tableName.equalsIgnoreCase("messageforum")) {
+                    idColumnName = "messageid";
+                } else if (tableName.equalsIgnoreCase("moduleassignment")) {
+                    idColumnName = "moduleid";
+                } else if (tableName.equalsIgnoreCase("studentcourse")) {
+                    idColumnName = "studentid";
                 } else {
                     idColumnName = tableName.toLowerCase() + "id"; // Default logic
                 }
