@@ -6,23 +6,23 @@ package Models;
  */
 public class Message implements Identifiable {
     private int messageID;
-    private String message;
-    private User sender;
-    private User receiver;
+    private String messagecontent;
+    private Integer senderid;
+    private Integer receiverid;
 
     /**
      * Constructs a new Message with the specified ID, content, sender, and receiver.
      *
      * @param messageID The unique identifier for this message.
-     * @param message   The content of the message.
-     * @param sender    The user who sent the message.
-     * @param receiver  The user who is intended to receive the message.
+     * @param messagecontent   The content of the message.
+     * @param senderid    The user who sent the message.
+     * @param receiverid  The user who is intended to receive the message.
      */
-    public Message(int messageID, String message, User sender, User receiver) {
+    public Message(int messageID, String messagecontent, Integer senderid, Integer receiverid) {
         this.messageID = messageID;
-        this.message = message;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.messagecontent = messagecontent;
+        this.senderid = senderid;
+        this.receiverid = receiverid;
     }
 
     /**
@@ -31,7 +31,7 @@ public class Message implements Identifiable {
      * @return A string containing the message content.
      */
     public String getMessage() {
-        return this.message;
+        return this.messagecontent;
     }
 
     /**
@@ -39,8 +39,8 @@ public class Message implements Identifiable {
      *
      * @return The sender of the message as a User object.
      */
-    public User getSender() {
-        return this.sender;
+    public Integer getSender() {
+        return this.senderid;
     }
 
     /**
@@ -48,8 +48,8 @@ public class Message implements Identifiable {
      *
      * @return The receiver of the message as a User object.
      */
-    public User getReceiver() {
-        return this.receiver;
+    public Integer getReceiver() {
+        return this.receiverid;
     }
 
     /**
@@ -65,16 +65,16 @@ public class Message implements Identifiable {
     @Override
     public void setId(Integer newId){this.messageID = newId;}
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String messagecontent) {
+        this.messagecontent = messagecontent;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setSender(Integer senderid) {
+        this.senderid = senderid;
     }
 
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
+    public void setReceiver(Integer receiverid) {
+        this.receiverid = receiverid;
     }
 
 
@@ -88,9 +88,9 @@ public class Message implements Identifiable {
     public String toString() {
         return "Message{" +
                 "messageID=" + messageID +
-                ", message='" + message + '\'' +
-                ", sender=" + sender +
-                ", receiver=" + receiver +
+                ", message='" + messagecontent + '\'' +
+                ", sender=" + senderid +
+                ", receiver=" + receiverid +
                 '}';
     }
 }

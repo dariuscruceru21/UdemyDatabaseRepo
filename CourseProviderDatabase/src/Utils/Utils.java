@@ -14,7 +14,7 @@ public class Utils {
     private final List<String> assignmentParameteres = Arrays.asList("assignmentID", "description", "dueDate", "score");
     private final List<String> quizParameters = Arrays.asList("quizId", "title", "contents", "correctAnswer");
     private final List<String> forumParameters = Arrays.asList("forumID","topic");
-    private final List<String> messageParamteres = Arrays.asList("messageID","message","sender","receiver");
+    private final List<String> messageParamteres = Arrays.asList("messageID","messagecontent","senderid","receiverid");
     private final List<String> enrolledParameters = Arrays.asList("studentId","courseId");
     private final List<String> quizAssignmentParameteres = Arrays.asList("quizId","assignmentId");
     private final List<String> moduleAssignmentParameteres = Arrays.asList("assignmentId","moduleId");

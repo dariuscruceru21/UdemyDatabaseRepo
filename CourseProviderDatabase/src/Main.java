@@ -42,15 +42,19 @@ public class Main {
         List<String> columnNames5 = Arrays.asList("userID", "userName", "password", "email", "type");
         DataBaseRepository<Instructor> instructorRepository = new DataBaseRepository<>("instructor", Instructor.class, columnNames5);
         //instructorRepository.create(instructor);
-
+        Utils utils = new Utils();
 //
 //        // Create the student in the database
 //        dataBaseRepository.create(student);
 //        System.out.println("Print");
 //        System.out.println(System.getenv("DB_PASSWORD"));
 
-        System.out.println(instructorRepository.getAll());
+        //System.out.println(instructorRepository.getAll());
+
+        Message message = new Message(1,"Salut sunt darius",1,1);
+        DataBaseRepository<Message> messageDataBaseRepository = new DataBaseRepository<>("message",Message.class,utils.getMessageParamteres());
         //DataBaseRepository
+        messageDataBaseRepository.create(message);
 
 
 
