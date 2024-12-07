@@ -9,9 +9,13 @@ public class Enrolled implements Identifiable {
         this.courseId = courseId;
     }
 
+
     public Integer getCourseId() {
         return courseId;
     }
+
+
+
 
     public void setCourseId(Integer courseId) {
         this.courseId = courseId;

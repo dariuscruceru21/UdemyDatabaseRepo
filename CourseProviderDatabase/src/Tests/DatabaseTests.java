@@ -47,11 +47,11 @@ public class DatabaseTests {
     @Order(2)
     void testCreateInstructor() {
         // Create a new instructor
-        Instructor instructor = new Instructor(2, "prof_smith", "password456", "prof_smith@example.com", "instructor");
+        Instructor instructor = new Instructor(4, "prof_smith", "password456", "prof_smith@example.com", "instructor");
         instructorDataBaseRepository.create(instructor);
 
         // Verify instructor was created
-        Instructor fetchedInstructor = instructorDataBaseRepository.get(2);
+        Instructor fetchedInstructor = instructorDataBaseRepository.get(4);
         assertNotNull(fetchedInstructor);
         assertEquals("prof_smith", fetchedInstructor.getUsername());
         assertEquals("prof_smith@example.com", fetchedInstructor.getEmail());
