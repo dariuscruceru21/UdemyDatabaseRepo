@@ -1,6 +1,7 @@
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
+import Service.CoursesUserService;
 import Utils.Utils;
 
 
@@ -54,7 +55,14 @@ public class Main {
         Message message = new Message(1,"Salut sunt darius",1,1);
         DataBaseRepository<Message> messageDataBaseRepository = new DataBaseRepository<>("message",Message.class,utils.getMessageParamteres());
         //DataBaseRepository
-        messageDataBaseRepository.create(message);
+//        messageDataBaseRepository.create(message);
+        DataBaseRepository<Course>courseDataBaseRepository = new DataBaseRepository<>("course",Course.class,utils.getCourseParameters());
+        DataBaseRepository<Student>studentDataBaseRepository = new DataBaseRepository<>("student",Student.class,utils.getUsersParameters());
+        DataBaseRepository<Instructor>instructorDataBaseRepository = new DataBaseRepository<>("instructor",Instructor.class,utils.getUsersParameters());
+        DataBaseRepository<Admin>adminDataBaseRepository = new DataBaseRepository<>("admin", Admin.class,utils.getUsersParameters());
+        DataBaseRepository<Enrolled>enrolledDataBaseRepository = new DataBaseRepository<>("studentcourse",Enrolled.class,utils.getEnrolledParameters());
+        CoursesUserService coursesUserService = new CoursesUserService(courseDataBaseRepository,studentDataBaseRepository,instructorDataBaseRepository,adminDataBaseRepository,enrolledDataBaseRepository);
+
 
 
 

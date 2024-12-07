@@ -122,4 +122,15 @@ public abstract class User implements Identifiable {
     public void setId(Integer id) {
         this.userID = id;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userID=" + userID +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }
