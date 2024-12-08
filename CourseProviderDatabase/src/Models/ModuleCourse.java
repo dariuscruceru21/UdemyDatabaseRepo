@@ -26,4 +26,12 @@ public class ModuleCourse implements Identifiable {
     public void setId(Integer id) {
         this.moduleId = id;
     }
+
+    @Override
+    public String toString() {
+        return "ModuleCourse{" +
+                "moduleId=" + moduleId +
+                ", courseId=" + courseId +
+                '}';
+    }
 }

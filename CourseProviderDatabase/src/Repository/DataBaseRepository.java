@@ -109,7 +109,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
             } else if (tableName.equalsIgnoreCase("assignmentquiz")) {
                 idColumnName = "assignmentid";
             } else if (tableName.equalsIgnoreCase("coursemodule")) {
-                idColumnName = "courseid";
+                idColumnName = "moduleid";
             } else if (tableName.equalsIgnoreCase("messageforum")) {
                 idColumnName = "messageid";
             } else if (tableName.equalsIgnoreCase("moduleassignment")) {
@@ -163,7 +163,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
             } else if (tableName.equalsIgnoreCase("assignmentquiz")) {
                 idColumnName = "assignmentid";
             } else if (tableName.equalsIgnoreCase("coursemodule")) {
-                idColumnName = "courseid";
+                idColumnName = "moduleid";
             } else if (tableName.equalsIgnoreCase("messageforum")) {
                 idColumnName = "messageid";
             } else if (tableName.equalsIgnoreCase("moduleassignment")) {
@@ -233,7 +233,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
             } else if (tableName.equalsIgnoreCase("assignmentquiz")) {
                 idColumnName = "assignmentid";
             } else if (tableName.equalsIgnoreCase("coursemodule")) {
-                idColumnName = "courseid";
+                idColumnName = "moduleid";
             } else if (tableName.equalsIgnoreCase("messageforum")) {
                 idColumnName = "messageid";
             } else if (tableName.equalsIgnoreCase("moduleassignment")) {
@@ -291,7 +291,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
                 } else if (tableName.equalsIgnoreCase("assignmentquiz")) {
                     idColumnName = "assignmentid";
                 } else if (tableName.equalsIgnoreCase("coursemodule")) {
-                    idColumnName = "courseid";
+                    idColumnName = "moduleid";
                 } else if (tableName.equalsIgnoreCase("messageforum")) {
                     idColumnName = "messageid";
                 } else if (tableName.equalsIgnoreCase("moduleassignment")) {

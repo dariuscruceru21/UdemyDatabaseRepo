@@ -51,6 +51,7 @@ public class AssignmentService {
         ModuleCourse moduleCourse = new ModuleCourse(moduleId,courseId);
         moduleCourseRepo.create(moduleCourse);
 
+
         // Update the course's list of modules
         List<Integer> courseModules = course.getModules();
         courseModules.add(moduleId);
@@ -129,28 +130,39 @@ public class AssignmentService {
      * @param courseId ID of the course.
      * @param moduleId The id of the module to remove.
      */
-    public void removeModuleFromCourse(Integer courseId, Integer moduleId) {
-        Course course = courseRepo.get(courseId);
+    public void removeModuleFromCourse(Integer moduleId,Integer courseId) {
+
+        Course course = courseRepo.get(moduleId);
         if (course == null)
             throw new IllegalArgumentException("Course with id " + courseId + " not found");
-
         Module module = moduleRepo.get(moduleId);
         if (module == null)
             throw new IllegalArgumentException("Module with id " + moduleId + " not found");
 
-        // Remove the entry from the connection table
-        List<ModuleCourse> moduleCourses = moduleCourseRepo.getAll();
-        ModuleCourse moduleCourse = moduleCourses.stream()
-                .filter(mc -> mc.getId().equals(moduleId) && mc.getCourseId().equals(courseId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Module is not part of the course"));
-        moduleCourseRepo.delete(moduleCourse.getId());
 
-        // Update the course's list of modules
-        List<Integer> courseModules = course.getModules();
-        courseModules.remove(moduleId);
-        course.setModules(courseModules);
-        courseRepo.update(course);
+        moduleCourseRepo.delete(moduleId);
+
+//        Course course = courseRepo.get(courseId);
+//        if (course == null)
+//            throw new IllegalArgumentException("Course with id " + courseId + " not found");
+//
+//        Module module = moduleRepo.get(moduleId);
+//        if (module == null)
+//            throw new IllegalArgumentException("Module with id " + moduleId + " not found");
+//
+//        // Remove the entry from the connection table
+//        List<ModuleCourse> moduleCourses = moduleCourseRepo.getAll();
+//        ModuleCourse moduleCourse = moduleCourses.stream()
+//                .filter(mc -> mc.getId().equals(moduleId) && mc.getCourseId().equals(courseId))
+//                .findFirst()
+//                .orElseThrow(() -> new IllegalArgumentException("Module is not part of the course"));
+//        moduleCourseRepo.delete(moduleCourse.getId());
+//
+//        // Update the course's list of modules
+//        List<Integer> courseModules = course.getModules();
+//        courseModules.remove(moduleId);
+//        course.setModules(courseModules);
+//        courseRepo.update(course);
     }
 
 
