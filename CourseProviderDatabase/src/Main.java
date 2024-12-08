@@ -23,7 +23,7 @@ public class Main {
          Instructor student = new Instructor(9, "Paul", "paul123", "paul@gmail.com", "instructor");
          Course course = new Course(2,"ALgebra","usor",10,"2024-07-12","2024-10-11",9);
          Module module = new Module(1,"Linked Lists","hard content");
-        Assignment assignment = new Assignment(1,"optional assignment", "2024-12-07",100);
+         Assignment assignment = new Assignment(1,"optional assignment", "2024-12-07",100);
 //
 //        // Pass column names including 'userid'
          List<String> columnNames = Arrays.asList("courseID", "courseTitle", "description", "availableSpots", "startDate", "endDate","instructorId");
@@ -88,9 +88,24 @@ public class Main {
         //coursesUserService.assignInstructor(3,101);
 
 //        System.out.println(coursesUserService.getInstructorsSortedByEnrollment());
-        assignmentService.addModuleToCourse(101,101);
-        System.out.println(courseDataBaseRepository.get(101).getModules());
+//        assignmentService.addModuleToCourse(101,101);
+//        System.out.println(courseDataBaseRepository.get(101).getModules());
 
+//        QuizAssignment quizAssignment = new QuizAssignment(201,301);
+//        DataBaseRepository<QuizAssignment> quizAssignmentDataBaseRepository = new DataBaseRepository<>("assignmentquiz",QuizAssignment.class,utils.getQuizAssignmentParameteres());
+//
+//
+//        //de ce nu salveaza in liste
+//
+//        //quizAssignmentDataBaseRepository.create(quizAssignment);
+//        //assignmentService.takeAssignmentQuiz(301);
+//        System.out.println(course.getEnrolledStudents());
+          //coursesUserService.enroll(2,2);
+        //coursesUserService.unenroll(2,2);
+        //System.out.println(courseDataBaseRepository.get(2).getEnrolledStudents());
+        System.out.println(coursesUserService.getEnrolledStudents(2));
+
+        //System.out.println(coursesUserService.getEnrolledStudents(2));
 
 
 

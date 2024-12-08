@@ -124,6 +124,7 @@ public class CoursesUserService {
         coursesStudents.add(studId);
         course.setEnrolledStudents(coursesStudents);
 
+
     }
 
     /**
