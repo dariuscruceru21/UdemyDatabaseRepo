@@ -68,7 +68,20 @@ public class Main {
         //studentDataBaseRepository.delete(2);
 
 
-        coursesUserService.unenroll(2,1);
+        //coursesUserService.removeStudent(4);
+
+        //coursesUserService.removeInstructor(2);
+
+        //coursesUserService.removeCourse(1);
+
+        //coursesUserService.assignInstructor(3,101);
+
+
+        //coursesUserService.removeAssignedInstructor(3,101);
+
+        //coursesUserService.assignInstructor(3,101);
+
+        System.out.println(coursesUserService.getInstructorsSortedByEnrollment());
 
 
 
