@@ -324,4 +324,67 @@ public class CoursesUserService {
     }
 
 
+    public List<Course> getAllCourses(){
+        return courseIRepository.getAll();
+    }
+
+    public  List<Student> getAllStudents(){
+        return studentIRepository.getAll();
+    }
+
+
+    public List<Instructor> getAllInstructors(){
+        return instructorIRepository.getAll();
+    }
+
+
+    public void unenroll(Integer studId, Integer courseId){
+
+        Student student = studentIRepository.get(studId);
+        if (student == null)
+            throw new IllegalArgumentException("Student with id " + studId + " does not exist");
+
+        Course course = courseIRepository.get(courseId);
+        if (course == null)
+            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+
+
+        // Check if the student is enrolled in the course
+        List<Enrolled> enrollments = enrolledIRepository.getAll();
+        boolean isEnrolled = enrollments.stream().anyMatch(e -> e.getId().equals(studId) && e.getCourseId().equals(courseId));
+
+        if (!isEnrolled)
+            throw new IllegalArgumentException("Student is not enrolled in this course");
+
+
+        //remove enrollment
+        Enrolled enrollementToRemove = enrollments.stream().filter(e -> e.getId().equals(studId) && e.getCourseId().equals(courseId))
+                .findFirst().orElseThrow(() -> new IllegalStateException("Enrollment not found"));
+        enrolledIRepository.delete(enrollementToRemove.getId());
+
+
+        //update course availability
+        course.setAvailableSpots(course.getAvailableSpots() + 1);
+        courseIRepository.update(course);
+
+        //Update the students list of enrolled classes
+        List<Integer> studentCourse = student.getCourses();
+        studentCourse.remove(courseId);
+        student.setCourses(studentCourse);
+
+        //update the course list of students
+        List<Integer> courseStudents = course.getEnrolledStudents();
+        courseStudents.remove(studId);
+        course.setEnrolledStudents(courseStudents);
+
+        studentIRepository.update(student);
+        courseIRepository.update(course);
+    }
+
+
+
+
+
+
+
 }

@@ -62,8 +62,13 @@ public class Main {
         DataBaseRepository<Admin>adminDataBaseRepository = new DataBaseRepository<>("admin", Admin.class,utils.getUsersParameters());
         DataBaseRepository<Enrolled>enrolledDataBaseRepository = new DataBaseRepository<>("studentcourse",Enrolled.class,utils.getEnrolledParameters());
         CoursesUserService coursesUserService = new CoursesUserService(courseDataBaseRepository,studentDataBaseRepository,instructorDataBaseRepository,adminDataBaseRepository,enrolledDataBaseRepository);
+        DataBaseRepository<Enrolled> studentCourseDataBaseRepository = new DataBaseRepository<>("studentcourse",Enrolled.class,utils.getEnrolledParameters());
+
+        //studentCourseDataBaseRepository.delete(2);
+        //studentDataBaseRepository.delete(2);
 
 
+        coursesUserService.unenroll(2,1);
 
 
 
