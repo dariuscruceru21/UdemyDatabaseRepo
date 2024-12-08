@@ -1,9 +1,7 @@
 package Service;
 
-import Models.Assignment;
-import Models.Course;
+import Models.*;
 import Models.Module;
-import Models.Quiz;
 import Repository.IRepository;
 
 import java.util.ArrayList;
@@ -15,34 +13,50 @@ public class AssignmentService {
     private final IRepository<Assignment> assignmentRepo;
     private final IRepository<Module> moduleRepo;
     private final IRepository<Course> courseRepo;
+    private final IRepository<ModuleCourse> moduleCourseRepo;
 
-    public AssignmentService(IRepository<Quiz> quizRepo, IRepository<Assignment> assignmentRepo, IRepository<Module> moduleRepo, IRepository<Course> courseRepo) {
+    public AssignmentService(IRepository<Quiz> quizRepo, IRepository<Assignment> assignmentRepo, IRepository<Module> moduleRepo, IRepository<Course> courseRepo,IRepository<ModuleCourse> moduleCourseRepo) {
         this.quizRepo = quizRepo;
         this.assignmentRepo = assignmentRepo;
         this.moduleRepo = moduleRepo;
         this.courseRepo = courseRepo;
+        this.moduleCourseRepo = moduleCourseRepo;
     }
 
     /**
      * Adds an module to a specific course.
      * @param courseId ID of the course.
-     * @param module The module to add.
+     * @param moduleId The module to add.
      */
-    public void addModuleToCourse(Integer courseId, Module module){
+    public void addModuleToCourse(Integer moduleId,Integer courseId) {
         Course course = courseRepo.get(courseId);
-        if(course != null){
+        if(course == null)
+            throw new IllegalArgumentException("Course with id " + courseId + " not found");
+        Module module = moduleRepo.get(moduleId);
+        if (module == null)
+            throw new IllegalArgumentException("Module with id " + moduleId + " not found");
 
-            if(moduleRepo.get(module.getId()) == null)
-                moduleRepo.create(module);
-            if (course.getModules().contains(module.getId()))
-                throw new IllegalArgumentException("Module with id " + module.getId() + " is already in the course.");
-            else {
-                course.getModules().add(module.getId());
-                courseRepo.update(course);
-            }
-        }else
-            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+        //check if the module is already in the course
+        List<ModuleCourse> moduleCourses = moduleCourseRepo.getAll();
+        boolean alreadyExist = moduleCourses.stream().anyMatch(e -> e.getId().equals(moduleId) && e.getCourseId().equals(courseId));
+
+        if(alreadyExist)
+            throw new IllegalArgumentException("Module with id " + moduleId + " already exists");
+
+        //create new moduleCourse entry
+        ModuleCourse moduleCourse = new ModuleCourse(moduleId,courseId);
+        moduleCourseRepo.create(moduleCourse);
+
+        // Update the course's list of modules
+        List<Integer> courseModules = course.getModules();
+        courseModules.add(moduleId);
+        course.setModules(courseModules);
+        courseRepo.update(course);
+
+
     }
+
+
 
     /**
      * Adds an assignment to a specific module.

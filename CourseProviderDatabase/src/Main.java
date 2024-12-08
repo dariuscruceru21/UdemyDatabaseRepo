@@ -1,6 +1,7 @@
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
+import Service.AssignmentService;
 import Service.CoursesUserService;
 import Utils.Utils;
 
@@ -63,6 +64,11 @@ public class Main {
         DataBaseRepository<Enrolled>enrolledDataBaseRepository = new DataBaseRepository<>("studentcourse",Enrolled.class,utils.getEnrolledParameters());
         CoursesUserService coursesUserService = new CoursesUserService(courseDataBaseRepository,studentDataBaseRepository,instructorDataBaseRepository,adminDataBaseRepository,enrolledDataBaseRepository);
         DataBaseRepository<Enrolled> studentCourseDataBaseRepository = new DataBaseRepository<>("studentcourse",Enrolled.class,utils.getEnrolledParameters());
+        DataBaseRepository<Quiz> quizDataBaseRepository = new DataBaseRepository<>("quiz",Quiz.class,utils.getQuizParameters());
+        DataBaseRepository<Assignment> assignmentDataBaseRepository = new DataBaseRepository<>("assignment",Assignment.class,utils.getAssignmentParameteres());
+        DataBaseRepository<Module> moduleDataBaseRepository = new DataBaseRepository<>("module",Module.class,utils.getModuleParameters());
+        DataBaseRepository<ModuleCourse>moduleCourseDataBaseRepository = new DataBaseRepository<>("coursemodule",ModuleCourse.class,utils.getCourseModuleParameters());
+        AssignmentService assignmentService = new AssignmentService(quizDataBaseRepository,assignmentDataBaseRepository,moduleDataBaseRepository,courseDataBaseRepository,moduleCourseDataBaseRepository);
 
         //studentCourseDataBaseRepository.delete(2);
         //studentDataBaseRepository.delete(2);
@@ -81,7 +87,9 @@ public class Main {
 
         //coursesUserService.assignInstructor(3,101);
 
-        System.out.println(coursesUserService.getInstructorsSortedByEnrollment());
+//        System.out.println(coursesUserService.getInstructorsSortedByEnrollment());
+        assignmentService.addModuleToCourse(101,101);
+        System.out.println(courseDataBaseRepository.get(101).getModules());
 
 
 
