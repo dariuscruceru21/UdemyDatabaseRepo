@@ -3,12 +3,14 @@ package Tests;
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
+import Service.CoursesUserService;
 import Utils.Utils;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DatabaseTests {
@@ -27,20 +29,21 @@ public class DatabaseTests {
     private DataBaseRepository<AssignmentModule> assignmentModuleDataBaseRepository = new DataBaseRepository<>("moduleassignment", AssignmentModule.class, utils.getModuleAssignmentParameteres());
     private DataBaseRepository<ModuleCourse> moduleCourseDataBaseRepository = new DataBaseRepository<ModuleCourse>("coursemodule", ModuleCourse.class, utils.getCourseModuleParameters());
     private DataBaseRepository<MessageForum> messageForumDataBaseRepository = new DataBaseRepository<MessageForum>("messageforum", MessageForum.class, utils.getMessageForumParameters());
+    private CoursesUserService coursesUserService = new CoursesUserService(courseDataBaseRepository,studentDataBaseRepository,instructorDataBaseRepository,adminDataBaseRepository,studentCourseDataBaseRepository);
 
 
     @Test
     @Order(1)
     void testCreateStudent() {
         // Create a new student
-        Student student = new Student(4, "john_doe", "password123", "john@example.com", "student");
+        Student student = new Student(2, "darius", "password123", "darius@example.com", "student");
         studentDataBaseRepository.create(student);
 
         // Verify student was created
-        Student fetchedStudent = studentDataBaseRepository.get(1);
+        Student fetchedStudent = studentDataBaseRepository.get(2);
         assertNotNull(fetchedStudent);
-        assertEquals("john_doe", fetchedStudent.getUsername());
-        assertEquals("john@example.com", fetchedStudent.getEmail());
+        assertEquals("darius", fetchedStudent.getUsername());
+        assertEquals("darius@example.com", fetchedStudent.getEmail());
     }
 
     @Test
@@ -213,4 +216,20 @@ public class DatabaseTests {
         assertNotNull(fetchedMessageForum);
         assertEquals(501, fetchedMessageForum.getForumId());
     }
+
+    @Test
+    @Order(15)
+    void testGetAllEnrolledStudents(){
+        List<Student>enrolled = coursesUserService.getEnrolledStudents(1);
+        assertNotNull(enrolled);
+    }
+
+    @Test
+    @Order(16)
+    void testGetAssignedInstructor(){
+        Instructor instructor = coursesUserService.getAssignedInstructor(1);
+        assertNotNull(instructor);
+    }
+
+
 }
