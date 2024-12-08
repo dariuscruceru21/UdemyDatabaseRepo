@@ -3,8 +3,9 @@ package Service;
 import Models.*;
 import Repository.IRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CoursesUserService {
@@ -40,13 +41,17 @@ public class CoursesUserService {
      * @return A list of students enrolled in the specified course.
      */
     public List<Student> getEnrolledStudents(Integer courseId) {
-        List<Enrolled> enrollments = enrolledIRepository.getAll();
+        Course course = courseIRepository.get(courseId);
+        if (course == null)
+            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
 
-        //extract student ids
+
+        List<Enrolled> enrollments = enrolledIRepository.getAll();
         List<Integer> enrolledStudentIds = enrollments.stream()
+                .filter(e -> e.getCourseId().equals(courseId))
                 .map(Enrolled::getId)
-                .distinct()
                 .collect(Collectors.toList());
+
 
         //Fetch student objects for each student
         List<Student> enrolledStudents = new ArrayList<>();
@@ -57,6 +62,7 @@ public class CoursesUserService {
         }
 
         return enrolledStudents;
+
 
     }
 
@@ -262,13 +268,14 @@ public class CoursesUserService {
             throw new IllegalArgumentException("Instructor with id " + instructorId + " does not exist");
         }
 
-        // Retrieve the course the instructor is teaching
-        Course course = courseIRepository.get(instructor.getId());
-        if (course != null) {
-            // Unassign the instructor from the course
-            course.setInstructorId(null);
-            courseIRepository.update(course);
-        }
+
+        List<Course> courses = courseIRepository.getAll();
+        for(Course c : courses)
+            if(c.getInstructorId() == instructorId){
+                c.setInstructorId(null);
+                courseIRepository.update(c);
+
+            }
 
         // Now, remove the instructor from the system
         instructorIRepository.delete(instructorId);
@@ -380,6 +387,199 @@ public class CoursesUserService {
         studentIRepository.update(student);
         courseIRepository.update(course);
     }
+
+
+    public void removeAssignedInstructor(Integer instructorId, Integer courseId){
+        //fetch the instructor
+        Instructor instructor = instructorIRepository.get(instructorId);
+        if (instructor == null)
+            throw new IllegalArgumentException("Instructor with id " + instructorId + " does not exist");
+
+        // Fetch the course from the repository
+        Course course = courseIRepository.get(courseId);
+        if (course == null)
+            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+
+        //check if the instructor is assigned to a course
+        if(course.getInstructorId() == null)
+            throw new IllegalArgumentException("Course already been unassigned");
+
+        //remove the course from the instructor list
+        List<Integer> assignedCourses = instructor.getCourses();
+        assignedCourses.remove(courseId);
+        instructor.setCourses(assignedCourses);
+
+        //unassign the instructor from the course
+        course.setInstructorId(null);
+
+        //update the instructor and course
+        instructorIRepository.update(instructor);
+        courseIRepository.update(course);
+
+        System.out.println("Instructor with id " + instructorId + " has been unassigned from thr course with id " + courseId);
+    }
+
+
+    public List<Course> getCoursesAStudentEnrolledIn(Integer studentId){
+        Student student = studentIRepository.get(studentId);
+        if(student == null)
+            throw new IllegalArgumentException("Student with id " + studentId + " does not exits");
+
+        List<Enrolled> enrollments = enrolledIRepository.getAll();
+        List<Integer> enrolledCourseIds = enrollments.stream()
+                .filter(e -> e.getId().equals(studentId))
+                .map(Enrolled::getId)
+                .collect(Collectors.toList());
+
+
+
+        //fetch the course object for each course
+        List<Course> enrolledCourses = new ArrayList<>();
+        for(Integer courseId : enrolledCourseIds){
+            Course course = courseIRepository.get(courseId);
+            if(course != null)
+                enrolledCourses.add(course);
+        }
+
+        return enrolledCourses;
+
+
+    }
+
+
+
+    public List<Course> getCoursesAInstructorTeaches(Integer instructorId){
+        List<Enrolled> enrollments = enrolledIRepository.getAll();
+
+        //extract course ids
+        List<Integer> enrolledCourseIds = enrollments.stream().map(Enrolled::getCourseId).distinct().collect(Collectors.toList());
+
+        //fetch the course object for each course
+        List<Course> enrolledCourses = new ArrayList<>();
+        for(Integer courseId : enrolledCourseIds){
+            Course course = courseIRepository.get(courseId);
+            if(course != null && course.getInstructorId().equals(instructorId))
+                enrolledCourses.add(course);
+        }
+
+        return enrolledCourses;
+    }
+
+    public Course getCourseInfor(Integer courseId){
+        Course course = courseIRepository.get(courseId);
+        if (course == null)
+            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+        return course;
+    }
+
+    public Student getStudentInfo(Integer studentId){
+        Student student = studentIRepository.get(studentId);
+        if (student == null)
+            throw new IllegalArgumentException("Student with id " + studentId + " does not exist");
+        return student;
+    }
+
+    public Instructor getInstructorInfo(Integer instructorId){
+        Instructor instructor = instructorIRepository.get(instructorId);
+        if (instructor == null)
+            throw new IllegalArgumentException("Instructor with id " + instructorId + " does not exist");
+        return instructor;
+    }
+
+    public void updateCourse(Course course){
+
+        if(courseIRepository.get(course.getId()) == null)
+            throw new IllegalArgumentException("Course with id " + course.getId() + " does not exist");
+        courseIRepository.update(course);
+    }
+
+    public void updateStudent(Student student){
+        if (studentIRepository.get(student.getId()) == null)
+            throw new IllegalArgumentException("Student with id " + student.getId() + " does not exist");
+        studentIRepository.update(student);
+    }
+
+    public void updateInstructor(Instructor instructor){
+        if (instructorIRepository.get(instructor.getId()) == null)
+            throw new IllegalArgumentException("Instructor with id " + instructor.getId() + " does not exist");
+        instructorIRepository.update(instructor);
+    }
+
+    public List<Course> getAllUnderOcupiedCourses(){
+        List<Course>courses = courseIRepository.getAll();
+        List<Course> underOcupiedCOurses = new ArrayList<>();
+        for(Course course : courses){
+            if (course.getEnrolledStudents().size() <= course.getAvailableSpots() * 0.2){
+                underOcupiedCOurses.add(course);
+            }
+        }
+        return underOcupiedCOurses;
+    }
+
+
+    //sorting in ascending order
+    public List<Instructor> sortAllInstructorsByNumberOfTeachingCourses(){
+        List<Instructor> instructors = instructorIRepository.getAll();
+        //sort the instructor by number of courses
+        instructors.sort((instructor1, instructor2) -> java.lang.Integer.compare(
+                instructor2.getCourses().size(), instructor1.getCourses().size()
+        ));
+        return instructors;
+    }
+
+
+    public List<Course> getAllCoursesThatEndBeforeADate(String date){
+        List<Course>courses = courseIRepository.getAll();
+        List<Course>coursesThatEndBeforeADate = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try{
+            Date inputDate = dateFormat.parse(date);
+
+            for(Course course : courses){
+                try {
+                    Date courseEndDate = dateFormat.parse(course.getEndDate());
+
+                    if(courseEndDate.before(inputDate)){
+                        coursesThatEndBeforeADate.add(course);
+                    }
+                }catch(ParseException e){
+                    System.err.println("Invalid end date format for course: " + course.getCourseTitle());
+                }
+            }
+        } catch (ParseException e) {
+            System.err.println("Invalid input date format. Please use the format yyyy-MM-dd.");
+        }
+        return coursesThatEndBeforeADate;
+    }
+
+    /**
+     * Retrieves a list of instructors sorted by the total number of students enrolled in the courses they teach.
+     *
+     * @return A list of instructors sorted by total enrollment in descending order.
+     */
+    public List<Instructor> getInstructorsSortedByEnrollment() {
+        List<Instructor> allInstructors = instructorIRepository.getAll();
+        List<Course> allCourses = courseIRepository.getAll();
+        List<Enrolled> allEnrollments = enrolledIRepository.getAll();
+
+        // Create a map of course ID to number of enrolled students
+        Map<Integer, Long> courseEnrollmentCounts = allEnrollments.stream()
+                .collect(Collectors.groupingBy(Enrolled::getCourseId, Collectors.counting()));
+
+        // Calculate total enrollment for each instructor
+        Map<Integer, Long> instructorEnrollmentCounts = allCourses.stream()
+                .collect(Collectors.groupingBy(
+                        Course::getInstructorId,
+                        Collectors.summingLong(course -> courseEnrollmentCounts.getOrDefault(course.getId(), 0L))
+                ));
+
+        // Sort instructors by total enrollment
+        return allInstructors.stream()
+                .sorted(Comparator.comparingLong((Instructor i) ->
+                        instructorEnrollmentCounts.getOrDefault(i.getId(), 0L)).reversed())
+                .collect(Collectors.toList());
+    }
+
 
 
 
