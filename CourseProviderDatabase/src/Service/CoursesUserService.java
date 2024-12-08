@@ -76,7 +76,7 @@ public class CoursesUserService {
         Course course = courseIRepository.get(courseId);
         Instructor instructor;
         if(course == null)
-            throw new Error("Course with id : " + course.getId() + " does not exist");
+            throw new Error("Course with id : " + courseId + " does not exist");
         instructor = instructorIRepository.get(course.getInstructorId());
         return instructor;
     }
