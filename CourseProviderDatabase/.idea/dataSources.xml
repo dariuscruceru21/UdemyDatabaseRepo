@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Udemy" uuid="5921224b-d3ca-41f9-ab9a-d424b42a8ea1">
+    <data-source source="LOCAL" name="UdemyStefan" uuid="bb5a0473-67bb-4ee2-91af-8a617fecc1fa">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
@@ -13,7 +13,7 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="UdemyStefan" uuid="bb5a0473-67bb-4ee2-91af-8a617fecc1fa">
+    <data-source source="LOCAL" name="Udemy" uuid="4530fcf0-1663-4e83-9c3e-77bd05da1c7d">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
