@@ -163,6 +163,37 @@ public class CoursesUserService {
         System.out.println("Instructor with id " + instructorId + " has been assigned to course with id " + courseId);
     }
 
+    public void unAssignInstructor(Integer instructorId, Integer courseId){
+        // Fetch the instructor from the repository
+        Instructor instructor = instructorIRepository.get(instructorId);
+        if (instructor == null)
+            throw new IllegalArgumentException("Instructor with id " + instructorId + " does not exist");
+
+        // Fetch the course from the repository
+        Course course = courseIRepository.get(courseId);
+        if (course == null)
+            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+
+        // Check if the instructor is assigned to the course
+        if (course.getInstructorId() == null && !course.getInstructorId().equals(instructorId)) {
+            throw new IllegalArgumentException("Instructor with id " + instructorId + " is not teaching this course");
+        }
+
+        //Remove the course from the list of courses an instructor teaches
+        List<Integer> assignedCourses = instructor.getCourses();
+        assignedCourses.remove(courseId);
+        instructor.setCourses(assignedCourses);
+
+        // Unassign the instructor from the course (overwriting any existing assignment)
+        course.setInstructorId(null);
+
+        // Update the instructor and course in the repository
+        instructorIRepository.update(instructor);
+        courseIRepository.update(course);
+
+        System.out.println("Instructor with id " + instructorId + " has been unassigned from course with id " + courseId);
+    }
+
     /**
      * Adds a new course to the repository.
      *
@@ -465,7 +496,7 @@ public class CoursesUserService {
         return enrolledCourses;
     }
 
-    public Course getCourseInfor(Integer courseId){
+    public Course getCourseInfo(Integer courseId){
         Course course = courseIRepository.get(courseId);
         if (course == null)
             throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
