@@ -14,13 +14,17 @@ public class AssignmentService {
     private final IRepository<Module> moduleRepo;
     private final IRepository<Course> courseRepo;
     private final IRepository<ModuleCourse> moduleCourseRepo;
+    private final IRepository<AssignmentModule> assignmentModuleRepo;
+    private final IRepository<QuizAssignment> assignmentQuizRepo;
 
-    public AssignmentService(IRepository<Quiz> quizRepo, IRepository<Assignment> assignmentRepo, IRepository<Module> moduleRepo, IRepository<Course> courseRepo,IRepository<ModuleCourse> moduleCourseRepo) {
+    public AssignmentService(IRepository<Quiz> quizRepo, IRepository<Assignment> assignmentRepo, IRepository<Module> moduleRepo, IRepository<Course> courseRepo, IRepository<ModuleCourse> moduleCourseRepo, IRepository<AssignmentModule> assignmentModuleRepo, IRepository<QuizAssignment> assignmentQuizRepo) {
         this.quizRepo = quizRepo;
         this.assignmentRepo = assignmentRepo;
         this.moduleRepo = moduleRepo;
         this.courseRepo = courseRepo;
         this.moduleCourseRepo = moduleCourseRepo;
+        this.assignmentModuleRepo = assignmentModuleRepo;
+        this.assignmentQuizRepo = assignmentQuizRepo;
     }
 
     /**
@@ -61,44 +65,63 @@ public class AssignmentService {
     /**
      * Adds an assignment to a specific module.
      * @param moduleId ID of the module.
-     * @param assignment The assignment to add.
+     * @param assignmentId The id of the assignment to add.
      */
-    public void addAssignmentToModule(Integer moduleId, Assignment assignment){
+    public void addAssignmentToModule(Integer moduleId, Integer assignmentId){
         Module module = moduleRepo.get(moduleId);
-        if(module != null){
+        if(module == null)
+            throw new IllegalArgumentException("Module with id " + moduleId + " not found");
+        Assignment assignment = assignmentRepo.get(moduleId);
+        if (assignment == null)
+            throw new IllegalArgumentException("Assignment with id " + assignmentId + " not found");
 
-            if(assignmentRepo.get(assignment.getId()) == null)
-                assignmentRepo.create(assignment);
-            if (module.getAssignments().contains(assignment.getId()))
-                throw new IllegalArgumentException("Assignment with id " + assignment.getId() + " is already in the module.");
-            else {
-                module.getAssignments().add(assignment.getId());
-                moduleRepo.update(module);
-            }
-        }else {
-            throw new IllegalArgumentException("Module with id " + moduleId + " does not exist");
-        }
+        //check if the assignment is already in the module
+        List<AssignmentModule> assignmentModules = assignmentModuleRepo.getAll();
+        boolean alreadyExist = assignmentModules.stream().anyMatch(e -> e.getId().equals(assignmentId) && e.getModuleId().equals(moduleId));
+
+        if(alreadyExist)
+            throw new IllegalArgumentException("Assignment with id " + assignmentId + " already exists");
+
+        //create new assignmentModule entry
+        AssignmentModule assignmentModule = new AssignmentModule(assignmentId,moduleId);
+        assignmentModuleRepo.create(assignmentModule);
+
+        // Update the modules's list of assignments
+        List<Integer> moduleAssignments = module.getAssignments();
+        moduleAssignments.add(moduleId);
+        module.setAssignments(moduleAssignments);
+        moduleRepo.update(module);
     }
 
     /**
      * Adds a quiz to a specific assignment.
      * @param assignmentId ID of the assignment.
-     * @param quiz The quiz to add.
+     * @param quizId The id of the quiz to add.
      */
-    public void addQuizToAssignment(Integer assignmentId, Quiz quiz){
+    public void addQuizToAssignment(Integer assignmentId, Integer quizId){
         Assignment assignment = assignmentRepo.get(assignmentId);
-        if(assignment != null){
+        if(assignment == null)
+            throw new IllegalArgumentException("Assignment with id " + assignmentId + " not found");
+        Quiz quiz = quizRepo.get(quizId);
+        if (quiz == null)
+            throw new IllegalArgumentException("Quiz with id " + quizId + " not found");
 
-            if(quizRepo.get(quiz.getId()) == null)
-                quizRepo.create(quiz);
-            if (assignment.getQuizzes().contains(quiz.getId()))
-                throw new IllegalArgumentException("Quiz with id " + quiz.getId() + " is already in the assignment.");
-            else {
-                assignment.getQuizzes().add(quiz.getId());
-                assignmentRepo.update(assignment);
-            }
-        }else
-            throw new IllegalArgumentException("Assignment with id " + assignmentId + " does not exist");
+        //check if the quiz is already in the assignment
+        List<QuizAssignment> quizAssignments = assignmentQuizRepo.getAll();
+        boolean alreadyExist = quizAssignments.stream().anyMatch(e -> e.getId().equals(quizId) && e.getAssignmentId().equals(assignmentId));
+
+        if(alreadyExist)
+            throw new IllegalArgumentException("Quiz with id " + quizId + " already exists");
+
+        //create new assignmentQuiz entry
+        QuizAssignment quizAssignment = new QuizAssignment(quizId,assignmentId);
+        assignmentQuizRepo.create(quizAssignment);
+
+        // Update the assignments's list of quizes
+        List<Integer> assignmentQuizes = assignment.getQuizzes();
+        assignmentQuizes.add(quizId);
+        assignment.setQuizzes(assignmentQuizes);
+        assignmentRepo.update(assignment);
     }
 
     /**
@@ -106,51 +129,90 @@ public class AssignmentService {
      * @param courseId ID of the course.
      * @param moduleId The id of the module to remove.
      */
-    public void removeModuleFromCourse(Integer courseId, Integer moduleId){
-        Course course =courseRepo.get(courseId);
-        Module moduleToRemove = moduleRepo.get(moduleId);
-        if(course != null && moduleToRemove != null){
-            course.getModules().remove(moduleToRemove.getId());
-            courseRepo.update(course);
-        }else if (course == null && moduleToRemove != null) {
-            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
-        } else
-            throw new IllegalArgumentException("Module with id " + moduleId + " does not exist");
+    public void removeModuleFromCourse(Integer courseId, Integer moduleId) {
+        Course course = courseRepo.get(courseId);
+        if (course == null)
+            throw new IllegalArgumentException("Course with id " + courseId + " not found");
+
+        Module module = moduleRepo.get(moduleId);
+        if (module == null)
+            throw new IllegalArgumentException("Module with id " + moduleId + " not found");
+
+        // Remove the entry from the connection table
+        List<ModuleCourse> moduleCourses = moduleCourseRepo.getAll();
+        ModuleCourse moduleCourse = moduleCourses.stream()
+                .filter(mc -> mc.getId().equals(moduleId) && mc.getCourseId().equals(courseId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Module is not part of the course"));
+        moduleCourseRepo.delete(moduleCourse.getId());
+
+        // Update the course's list of modules
+        List<Integer> courseModules = course.getModules();
+        courseModules.remove(moduleId);
+        course.setModules(courseModules);
+        courseRepo.update(course);
     }
 
+
     /**
-     * Removes a assignment from a specific module.
+     * Removes an assignment from a specific module.
      * @param moduleId ID of the module.
      * @param assignmentId The id of the assignment to remove.
      */
-    public void removeAssignmentFromModule(Integer moduleId, Integer assignmentId){
-        Module module =moduleRepo.get(moduleId);
-        Assignment assignmentToRemove = assignmentRepo.get(assignmentId);
-        if(module != null && assignmentToRemove != null){
-            module.getAssignments().remove(assignmentToRemove.getId());
-            moduleRepo.update(module);
-        }else if (module == null &&  assignmentToRemove != null) {
-            throw new IllegalArgumentException("Module with id " + moduleId + " does not exist");
-        } else
-            throw new IllegalArgumentException("Assignment with id " + assignmentId + " does not exist");
+    public void removeAssignmentFromModule(Integer moduleId, Integer assignmentId) {
+        Module module = moduleRepo.get(moduleId);
+        if (module == null)
+            throw new IllegalArgumentException("Module with id " + moduleId + " not found");
+
+        Assignment assignment = assignmentRepo.get(assignmentId);
+        if (assignment == null)
+            throw new IllegalArgumentException("Assignment with id " + assignmentId + " not found");
+
+        // Remove the entry from the connection table
+        List<AssignmentModule> assignmentModules = assignmentModuleRepo.getAll();
+        AssignmentModule assignmentModule = assignmentModules.stream()
+                .filter(am -> am.getId().equals(assignmentId) && am.getModuleId().equals(moduleId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Assignment is not part of the module"));
+        assignmentModuleRepo.delete(assignmentModule.getId());
+
+        // Update the module's list of assignments
+        List<Integer> moduleAssignments = module.getAssignments();
+        moduleAssignments.remove(assignmentId);
+        module.setAssignments(moduleAssignments);
+        moduleRepo.update(module);
     }
+
 
     /**
      * Removes a quiz from a specific assignment.
      * @param assignmentId ID of the assignment.
      * @param quizId The id of the quiz to remove.
      */
-    public void removeQuizFromAssignment(Integer assignmentId, Integer quizId){
+    public void removeQuizFromAssignment(Integer assignmentId, Integer quizId) {
         Assignment assignment = assignmentRepo.get(assignmentId);
-        Quiz quizToRemove = quizRepo.get(quizId);
-        if(assignment != null && quizToRemove != null){
-            assignment.getQuizzes().remove(quizToRemove.getId());
-            assignmentRepo.update(assignment);
-        }else if (assignment == null &&  quizToRemove != null) {
-            throw new IllegalArgumentException("Assignment with id " + assignmentId + " does not exist");
-        } else
-            throw new IllegalArgumentException("Quiz with id " + quizId + " does not exist");
+        if (assignment == null)
+            throw new IllegalArgumentException("Assignment with id " + assignmentId + " not found");
+
+        Quiz quiz = quizRepo.get(quizId);
+        if (quiz == null)
+            throw new IllegalArgumentException("Quiz with id " + quizId + " not found");
+
+        // Remove the entry from the connection table
+        List<QuizAssignment> quizAssignments = assignmentQuizRepo.getAll();
+        QuizAssignment quizAssignment = quizAssignments.stream()
+                .filter(qa -> qa.getId().equals(quizId) && qa.getAssignmentId().equals(assignmentId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Quiz is not part of the assignment"));
+        assignmentQuizRepo.delete(quizAssignment.getId());
+
+        // Update the assignment's list of quizzes
+        List<Integer> assignmentQuizzes = assignment.getQuizzes();
+        assignmentQuizzes.remove(quizId);
+        assignment.setQuizzes(assignmentQuizzes);
+        assignmentRepo.update(assignment);
     }
+
 
     /**
      * This method allows a student to take a quiz associated with an assignment.
