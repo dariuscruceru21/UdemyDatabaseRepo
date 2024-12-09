@@ -1,12 +1,23 @@
 package Ui;
 
+import Controller.AssignmentController;
+import Controller.CourseUserController;
 import Models.*;
+import Models.Module;
 import Service.AuthenticationService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Ui {
     private final AuthenticationService authService = new AuthenticationService();
+    private final AssignmentController assignmentController;
+    private final CourseUserController courseUserController;
+
+    public Ui(AssignmentController assignmentController, CourseUserController courseUserController) {
+        this.assignmentController = assignmentController;
+        this.courseUserController = courseUserController;
+    }
 
     public void start() {
         System.out.println("Welcome to the Education Management System!");
@@ -32,7 +43,7 @@ public class Ui {
         }
     }
 
-    private User login() {
+    public User login() {
         Scanner scanner = new Scanner(System.in);
         User user = null;
 
@@ -52,7 +63,7 @@ public class Ui {
         return user;
     }
 
-    private void studentMenu(Student student) {
+    public void studentMenu(Student student) {
         System.out.println("Student Menu:");
         System.out.println("1. View Enrolled Courses");
         System.out.println("2. View Assignments");
@@ -61,23 +72,291 @@ public class Ui {
         // Implement further functionality for students
     }
 
-    private void adminMenu(Admin admin) {
-        System.out.println("Admin Menu:");
-        System.out.println("1. Manage Users");
-        System.out.println("2. Manage Courses");
-        System.out.println("3. View Reports");
-        System.out.println("4. Logout");
-
-        // Implement further functionality for admins
-    }
-
-    private void instructorMenu(Instructor instructor) {
+    public void instructorMenu(Instructor instructor) {
         System.out.println("Instructor Menu:");
-        System.out.println("1. Manage Modules");
+        System.out.println("1. Courses");
         System.out.println("2. Assign Grades");
         System.out.println("3. View Assignments");
         System.out.println("4. Logout");
 
         // Implement further functionality for instructors
+    }
+
+    public void adminMenu(Admin admin) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n--- Admin Menu ---");
+            //Course handling
+            System.out.println("1. View All Courses");
+            System.out.println("2. Add a Course");
+            System.out.println("3. Remove a Course");
+            //Assign/Unassign
+            System.out.println("4. Assign Instructor to Course");
+            System.out.println("5. Unassign Instructor from Course");
+            //Student handling
+            System.out.println("6. View all Students");
+            System.out.println("7. Add Student");
+            System.out.println("8. Remove Student");
+            //Instructor handling
+            System.out.println("9. View all Instructors");
+            System.out.println("10. Add Instructor");
+            System.out.println("11. Remove Instructor");
+            //Module handling
+            System.out.println("12. View all Modules from a Course");
+            System.out.println("13. Add Module to Course");
+            System.out.println("14. Remove Module from Course");
+            //Assignment handling
+            System.out.println("15. View all Assignments from a module");
+            System.out.println("16. Add Assignment to Module");
+            System.out.println("17. Remove Assignment from Module");
+            //Quiz handling
+            System.out.println("18. View All Quiz's from a Assignment");
+            System.out.println("19. Add Quiz to Assignment");
+            System.out.println("20. Remove Quiz from Assignment");
+            System.out.println("21. Logout");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1 -> viewAllCourses();
+                case 2 -> addCourse();
+                case 3 -> removeCourse();
+                case 4 -> assignInstructorToCourse();
+                case 5 -> unassignInstructorFromCourse();
+                case 6 -> viewAllStudents();
+                case 7 -> addStudent();
+                case 8 -> removeStudent();
+                case 9 -> viewAllInstructors();
+                case 10 -> addInstructor();
+                case 11 -> removeInstructor();
+                case 12 -> viewModulesFromCourse();
+                case 13 -> addModuleToCourse();
+                case 14 -> removeModuleFromCourse();
+                case 15 -> viewAssignmentsFromModule();
+                case 16 -> addAssignmentToModule();
+                case 17 -> removeAssignmentFromModule();
+                case 18 -> viewQuizFromAssignment();
+                case 19 -> addQuizToAssignment();
+                case 20 -> removeQuizFromAssignment();
+                case 21 -> System.out.println("Logging out...");
+                default -> System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 21);
+    }
+
+
+    public void viewAllCourses() {
+        List<Course> courses = courseUserController.getAllCourses();
+        System.out.println("Available Courses:");
+        courses.forEach(course -> System.out.println(course.getId() + ": " + course.getCourseTitle()));
+    }
+
+    public void addCourse() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Course ID: ");
+        Integer courseID = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Course Title: ");
+        String courseName = scanner.nextLine();
+        System.out.println("Enter Course Description: ");
+        String courseDescription = scanner.nextLine();
+        System.out.println("Enter available spots: ");
+        Integer availableSpots = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter start date: ");
+        String startDate = scanner.nextLine();
+        System.out.println("Enter end date: ");
+        String endDate = scanner.nextLine();
+        System.out.println("Enter the id of the instructor: ");
+        Integer id = scanner.nextInt();
+        scanner.nextLine();
+        Course course = new Course(courseID, courseName, courseDescription, availableSpots, startDate, endDate, id);
+        System.out.println(courseUserController.addCourse(course));
+    }
+
+    public void removeCourse() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Course ID to remove: ");
+        int courseId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(courseUserController.removeCourse(courseId));
+    }
+
+    public void assignInstructorToCourse() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Instructor ID: ");
+        int instructorId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Course ID: ");
+        int courseId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(courseUserController.assignInstructorToCourse(instructorId, courseId));
+    }
+
+    public void unassignInstructorFromCourse() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Instructor ID: ");
+        int instructorId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Course ID: ");
+        int courseId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(courseUserController.unassignInstructorFromCourse(instructorId, courseId));
+    }
+
+    public void viewAllStudents() {
+        List<Student> students = courseUserController.getAllStudents();
+        System.out.println("Students:");
+        students.forEach(student -> System.out.println(student.getId() + ": " + student.getUsername()));
+    }
+
+    public void addStudent() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Student ID: ");
+        Integer studentID = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Student Name: ");
+        String studentName = scanner.nextLine();
+        System.out.println("Enter Student password: ");
+        String studentPassword = scanner.nextLine();
+        System.out.println("Enter Student Email: ");
+        String studentEmail = scanner.nextLine();
+        Student student = new Student(studentID, studentName, studentPassword, studentEmail, "Student");
+        System.out.println(courseUserController.addStudent(student));
+    }
+
+    public void removeStudent() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Student ID to remove: ");
+        int studentId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(courseUserController.removeStudent(studentId));
+    }
+
+    public void viewAllInstructors() {
+        List<Instructor> instructors = courseUserController.getAllInstructors();
+        System.out.println("Instructors:");
+        instructors.forEach(instructor -> System.out.println(instructor.getId() + ": " + instructor.getUsername()));
+    }
+
+    public void addInstructor() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Instructor ID: ");
+        Integer instructorID = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Instructor Name: ");
+        String instructorName = scanner.nextLine();
+        System.out.println("Enter Instructor password: ");
+        String instructorPassword = scanner.nextLine();
+        System.out.print("Enter Instructor Email: ");
+        String instructorEmail = scanner.nextLine();
+        Instructor instructor = new Instructor(instructorID, instructorName, instructorPassword, instructorEmail, "Instructor");
+        System.out.println(courseUserController.addInstructor(instructor));
+    }
+
+    public void removeInstructor() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Instructor ID to remove: ");
+        int instructorId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(courseUserController.removeInstructor(instructorId));
+    }
+
+    public void viewModulesFromCourse() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Course ID: ");
+        int courseId = scanner.nextInt();
+        scanner.nextLine();
+        List<Module> modules = assignmentController.getModulesFromCourse(courseId);
+        System.out.println("Modules from course with ID " + courseId + ":" );
+        modules.forEach(module -> System.out.println(module.getId() + ": " + module.getModuleTitle()));
+    }
+
+    public void addModuleToCourse() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Course ID: ");
+        int courseId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Module ID: ");
+        int moduleId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(assignmentController.addModuleToCourse(courseId, moduleId));
+    }
+
+    public void removeModuleFromCourse() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Course ID: ");
+        int courseId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Module ID to remove: ");
+        int moduleId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(assignmentController.removeModuleFromCourse(courseId, moduleId));
+    }
+
+    public void viewAssignmentsFromModule() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Module ID: ");
+        int moduleId = scanner.nextInt();
+        scanner.nextLine();
+        List<Assignment> assignments = assignmentController.getAssignmentsFromModule(moduleId);
+        System.out.println("Assignments from module with ID " + moduleId + ":");
+        assignments.forEach(assignment -> System.out.println(assignment.getId() + ": " + assignment.getDescription()));
+    }
+
+    public void addAssignmentToModule() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Module ID: ");
+        int moduleId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Assignment ID: ");
+        int assignmentId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(assignmentController.addAssignmentToModule(moduleId, assignmentId));
+    }
+
+    public void removeAssignmentFromModule() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Module ID: ");
+        int moduleId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Assignment ID to remove: ");
+        int assignmentId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(assignmentController.removeAssignmentFromModule(moduleId, assignmentId));
+    }
+
+    public void viewQuizFromAssignment() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Assignment ID: ");
+        int assignmentId = scanner.nextInt();
+        scanner.nextLine();
+        List<Quiz> quizzes = assignmentController.getQuizFromAssignment(assignmentId);
+        System.out.println("Quizzes from assignment with ID " + assignmentId + ":");
+        quizzes.forEach(quiz -> System.out.println(quiz.getId() + ": " + quiz.getTitle()));
+    }
+
+    public void addQuizToAssignment() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Assignment ID: ");
+        int assignmentId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Quiz ID: ");
+        int quizId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(assignmentController.addQuizToAssignment(assignmentId, quizId));
+    }
+
+    public void removeQuizFromAssignment() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter Assignment ID: ");
+        int assignmentId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Quiz ID to remove: ");
+        int quizId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(assignmentController.removeQuizFromAssignment(assignmentId, quizId));
     }
 }
