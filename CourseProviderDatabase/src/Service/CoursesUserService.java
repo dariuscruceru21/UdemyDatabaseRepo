@@ -223,6 +223,15 @@ public class CoursesUserService {
     }
 
     /**
+     * Adds a new admin to the repository.
+     *
+     * @param admin The instructor to add.
+     */
+    public void addAdmin(Admin admin) {
+        adminIRepository.create(admin);
+    }
+
+    /**
      * Removes a course from the system.
      *
      * Before removing the course, the following steps are performed:
@@ -362,6 +371,20 @@ public class CoursesUserService {
         System.out.println("Student with id " + studentId + " has been successfully removed");
     }
 
+    /**
+     * Removes a admin from the repository.
+     *
+     * @param adminId The id of the admin to remove.
+     */
+    public void removeAdmin(Integer adminId) {
+        Admin admin = adminIRepository.get(adminId);
+        if (admin == null) {
+            throw new IllegalArgumentException("Admin with id " + adminId + " does not exist");
+        }
+        adminIRepository.delete(adminId);
+        System.out.println("Admin with id " + adminId + " has been successfully removed");
+    }
+
 
     public List<Course> getAllCourses(){
         return courseIRepository.getAll();
@@ -374,6 +397,10 @@ public class CoursesUserService {
 
     public List<Instructor> getAllInstructors(){
         return instructorIRepository.getAll();
+    }
+
+    public List<Admin> getAllAdmins(){
+        return adminIRepository.getAll();
     }
 
 

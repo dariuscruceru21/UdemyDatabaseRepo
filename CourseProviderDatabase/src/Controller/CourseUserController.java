@@ -1,5 +1,6 @@
 package Controller;
 
+import Models.Admin;
 import Models.Course;
 import Models.Instructor;
 import Models.Student;
@@ -99,6 +100,16 @@ public class CourseUserController {
     }
 
     /**
+     * Adds a new admin to the system.
+     * @param admin The instructor to add.
+     * @return A success message after adding the instructor.
+     */
+    public String addAdmin(Admin admin) {
+        service.addAdmin(admin);
+        return "Admin added successfully.";
+    }
+
+    /**
      * Removes a course and unenrolls all students from it.
      * @param courseId The ID of the course to remove.
      * @return A success message after removing the course.
@@ -132,6 +143,16 @@ public class CourseUserController {
     }
 
     /**
+     * Removes an admin.
+     * @param adminId The ID of the admin to remove.
+     * @return A success message after removing the admin.
+     */
+    public String removeAdmin(Integer adminId) {
+        service.removeAdmin(adminId);
+        return "Admin removed successfully.";
+    }
+
+    /**
      * Retrieves a list of all courses in the system.
      * @return A list of all courses.
      */
@@ -153,6 +174,14 @@ public class CourseUserController {
      */
     public List<Instructor> getAllInstructors() {
         return service.getAllInstructors();
+    }
+
+    /**
+     * Retrieves a list of all admins in the system.
+     * @return A list of all admins.
+     */
+    public List<Admin> getAllAdmins() {
+        return service.getAllAdmins();
     }
 
     /**
