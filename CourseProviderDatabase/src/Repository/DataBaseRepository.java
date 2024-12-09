@@ -241,7 +241,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
             } else if (tableName.equalsIgnoreCase("studentcourse")) {
                 idColumnName = "studentid";
             } else {
-                idColumnName = tableName.toLowerCase() + "id"; // Default logic
+                idColumnName = tableName.toLowerCase() + "id";// Default logic
             }
             String sql = "DELETE FROM " + tableName.toLowerCase() + " WHERE " + idColumnName + " = ?";
 
