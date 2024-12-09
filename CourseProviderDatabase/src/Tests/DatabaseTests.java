@@ -1,5 +1,6 @@
 package Tests;
 
+import Exceptions.EntityNotFoundException;
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
@@ -220,14 +221,24 @@ public class DatabaseTests {
     @Test
     @Order(15)
     void testGetAllEnrolledStudents(){
-        List<Student>enrolled = coursesUserService.getEnrolledStudents(1);
+        List<Student>enrolled = null;
+        try {
+            enrolled = coursesUserService.getEnrolledStudents(1);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         assertNotNull(enrolled);
     }
 
     @Test
     @Order(16)
     void testGetAssignedInstructor(){
-        Instructor instructor = coursesUserService.getAssignedInstructor(1);
+        Instructor instructor = null;
+        try {
+            instructor = coursesUserService.getAssignedInstructor(1);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         assertNotNull(instructor);
     }
 

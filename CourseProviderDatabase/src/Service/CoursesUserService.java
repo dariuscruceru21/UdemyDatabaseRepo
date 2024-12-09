@@ -1,5 +1,6 @@
 package Service;
 
+import Exceptions.EntityNotFoundException;
 import Models.*;
 import Repository.IRepository;
 
@@ -40,10 +41,10 @@ public class CoursesUserService {
      * @param courseId The ID of the course.
      * @return A list of students enrolled in the specified course.
      */
-    public List<Student> getEnrolledStudents(Integer courseId) {
+    public List<Student> getEnrolledStudents(Integer courseId) throws EntityNotFoundException {
         Course course = courseIRepository.get(courseId);
         if (course == null)
-            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+            throw new EntityNotFoundException(courseId);
 
 
         List<Enrolled> enrollments = enrolledIRepository.getAll();
@@ -72,11 +73,11 @@ public class CoursesUserService {
      * @param courseId The ID of the course.
      * @return A list of students enrolled in the specified course.
      */
-    public Instructor getAssignedInstructor(Integer courseId){
+    public Instructor getAssignedInstructor(Integer courseId)throws EntityNotFoundException {
         Course course = courseIRepository.get(courseId);
         Instructor instructor;
         if(course == null)
-            throw new Error("Course with id : " + courseId + " does not exist");
+            throw new EntityNotFoundException(courseId);
         instructor = instructorIRepository.get(course.getInstructorId());
         return instructor;
     }
@@ -87,14 +88,14 @@ public class CoursesUserService {
      * @param studId   The ID of the student to enroll.
      * @param courseId The ID of the course.
      */
-    public void enroll(Integer studId, Integer courseId){
+    public void enroll(Integer studId, Integer courseId)throws EntityNotFoundException {
         Student student = studentIRepository.get(studId);
         if(student == null)
-            throw new IllegalArgumentException("Student with id " + studId + " does not exist");
+            throw new EntityNotFoundException(studId);
 
         Course course = courseIRepository.get(courseId);
         if(course == null)
-            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+            throw new EntityNotFoundException(courseId);
 
         if (course.getAvailableSpots() <= getEnrolledStudents(courseId).size())
             throw new IllegalArgumentException("Course is already at full capacity");
@@ -133,16 +134,16 @@ public class CoursesUserService {
      * @param instructorId The ID of the student to enroll.
      * @param courseId     The ID of the course.
      */
-    public void assignInstructor(Integer instructorId, Integer courseId) {
+    public void assignInstructor(Integer instructorId, Integer courseId)throws EntityNotFoundException {
         // Fetch the instructor from the repository
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
-            throw new IllegalArgumentException("Instructor with id " + instructorId + " does not exist");
+            throw new EntityNotFoundException(instructorId);
 
         // Fetch the course from the repository
         Course course = courseIRepository.get(courseId);
         if (course == null)
-            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+            throw new EntityNotFoundException(courseId);
 
         // Check if the instructor is already assigned to the course
         if (course.getInstructorId() != null && course.getInstructorId().equals(instructorId)) {
@@ -164,16 +165,16 @@ public class CoursesUserService {
         System.out.println("Instructor with id " + instructorId + " has been assigned to course with id " + courseId);
     }
 
-    public void unAssignInstructor(Integer instructorId, Integer courseId){
+    public void unAssignInstructor(Integer instructorId, Integer courseId)throws EntityNotFoundException {
         // Fetch the instructor from the repository
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
-            throw new IllegalArgumentException("Instructor with id " + instructorId + " does not exist");
+            throw new EntityNotFoundException(instructorId);
 
         // Fetch the course from the repository
         Course course = courseIRepository.get(courseId);
         if (course == null)
-            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+            throw new EntityNotFoundException(courseId);
 
         // Check if the instructor is assigned to the course
         if (course.getInstructorId() == null && !course.getInstructorId().equals(instructorId)) {
@@ -241,11 +242,11 @@ public class CoursesUserService {
      * @param courseId The ID of the course to be removed.
      * @throws IllegalArgumentException if the course with the given ID does not exist.
      */
-    public void removeCourse(Integer courseId) {
+    public void removeCourse(Integer courseId) throws EntityNotFoundException {
         // Check if course exists
         Course course = courseIRepository.get(courseId);
         if (course == null) {
-            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+            throw new EntityNotFoundException(courseId);
         }
 
         // Before deleting, ensure that there are no students or instructors assigned to this course.
@@ -302,11 +303,11 @@ public class CoursesUserService {
      * @param instructorId The ID of the instructor to be removed.
      * @throws IllegalArgumentException if the instructor with the given ID does not exist.
      */
-    public void removeInstructor(Integer instructorId) {
+    public void removeInstructor(Integer instructorId) throws EntityNotFoundException {
         // Retrieve the instructor to ensure they exist
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null) {
-            throw new IllegalArgumentException("Instructor with id " + instructorId + " does not exist");
+            throw new EntityNotFoundException(instructorId);
         }
 
 
@@ -333,11 +334,11 @@ public class CoursesUserService {
      * @param studentId The ID of the student to be removed.
      * @throws IllegalArgumentException if the student with the given ID does not exist.
      */
-    public void removeStudent(Integer studentId) {
+    public void removeStudent(Integer studentId) throws EntityNotFoundException {
         // Retrieve the student to ensure they exist
         Student student = studentIRepository.get(studentId);
         if (student == null) {
-            throw new IllegalArgumentException("Student with id " + studentId + " does not exist");
+            throw new EntityNotFoundException(studentId);
         }
 
         // Retrieve all enrollments for the student
@@ -376,10 +377,10 @@ public class CoursesUserService {
      *
      * @param adminId The id of the admin to remove.
      */
-    public void removeAdmin(Integer adminId) {
+    public void removeAdmin(Integer adminId) throws EntityNotFoundException {
         Admin admin = adminIRepository.get(adminId);
         if (admin == null) {
-            throw new IllegalArgumentException("Admin with id " + adminId + " does not exist");
+            throw new EntityNotFoundException(adminId);
         }
         adminIRepository.delete(adminId);
         System.out.println("Admin with id " + adminId + " has been successfully removed");
@@ -404,15 +405,15 @@ public class CoursesUserService {
     }
 
 
-    public void unenroll(Integer studId, Integer courseId) {
+    public void unenroll(Integer studId, Integer courseId) throws EntityNotFoundException {
 
         Student student = studentIRepository.get(studId);
         if (student == null)
-            throw new IllegalArgumentException("Student with id " + studId + " does not exist");
+            throw new EntityNotFoundException(studId);
 
         Course course = courseIRepository.get(courseId);
         if (course == null)
-            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+            throw new EntityNotFoundException(courseId);
 
         // Check if the student is enrolled in the course
         List<Enrolled> enrollments = enrolledIRepository.getAll();
@@ -459,16 +460,16 @@ public class CoursesUserService {
 
 
 
-    public void removeAssignedInstructor(Integer instructorId, Integer courseId){
+    public void removeAssignedInstructor(Integer instructorId, Integer courseId) throws EntityNotFoundException {
         //fetch the instructor
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
-            throw new IllegalArgumentException("Instructor with id " + instructorId + " does not exist");
+            throw new EntityNotFoundException(instructorId);
 
         // Fetch the course from the repository
         Course course = courseIRepository.get(courseId);
         if (course == null)
-            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+            throw new EntityNotFoundException(courseId);
 
         //check if the instructor is assigned to a course
         if(course.getInstructorId() == null)
@@ -490,10 +491,10 @@ public class CoursesUserService {
     }
 
 
-    public List<Course> getCoursesAStudentEnrolledIn(Integer studentId){
+    public List<Course> getCoursesAStudentEnrolledIn(Integer studentId) throws EntityNotFoundException {
         Student student = studentIRepository.get(studentId);
         if(student == null)
-            throw new IllegalArgumentException("Student with id " + studentId + " does not exits");
+            throw new EntityNotFoundException(studentId);
 
         List<Enrolled> allEnrollments = enrolledIRepository.getAll();
 
@@ -529,43 +530,43 @@ public class CoursesUserService {
         return enrolledCourses;
     }
 
-    public Course getCourseInfo(Integer courseId){
+    public Course getCourseInfo(Integer courseId)throws EntityNotFoundException{
         Course course = courseIRepository.get(courseId);
         if (course == null)
-            throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
+            throw new EntityNotFoundException(courseId);
         return course;
     }
 
-    public Student getStudentInfo(Integer studentId){
+    public Student getStudentInfo(Integer studentId)throws EntityNotFoundException{
         Student student = studentIRepository.get(studentId);
         if (student == null)
-            throw new IllegalArgumentException("Student with id " + studentId + " does not exist");
+            throw new EntityNotFoundException(studentId);
         return student;
     }
 
-    public Instructor getInstructorInfo(Integer instructorId){
+    public Instructor getInstructorInfo(Integer instructorId)throws EntityNotFoundException{
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
-            throw new IllegalArgumentException("Instructor with id " + instructorId + " does not exist");
+            throw new EntityNotFoundException(instructorId);
         return instructor;
     }
 
-    public void updateCourse(Course course){
+    public void updateCourse(Course course)throws EntityNotFoundException{
 
         if(courseIRepository.get(course.getId()) == null)
-            throw new IllegalArgumentException("Course with id " + course.getId() + " does not exist");
+            throw new EntityNotFoundException(course.getId());
         courseIRepository.update(course);
     }
 
-    public void updateStudent(Student student){
+    public void updateStudent(Student student)throws EntityNotFoundException{
         if (studentIRepository.get(student.getId()) == null)
-            throw new IllegalArgumentException("Student with id " + student.getId() + " does not exist");
+            throw new EntityNotFoundException(student.getId());
         studentIRepository.update(student);
     }
 
-    public void updateInstructor(Instructor instructor){
+    public void updateInstructor(Instructor instructor)throws EntityNotFoundException{
         if (instructorIRepository.get(instructor.getId()) == null)
-            throw new IllegalArgumentException("Instructor with id " + instructor.getId() + " does not exist");
+            throw new EntityNotFoundException(instructor.getId());
         instructorIRepository.update(instructor);
     }
 

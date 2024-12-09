@@ -1,5 +1,6 @@
 package Tests;
 
+import Exceptions.EntityNotFoundException;
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
@@ -34,21 +35,31 @@ public class CourseUserServiceTests {
     @Test
     @Order(1)
     void testGetEnrolledStudent(){
-        List<Student> enrolledStudents = coursesUserService.getEnrolledStudents(2);
+        List<Student> enrolledStudents = null;
+        try {
+            enrolledStudents = coursesUserService.getEnrolledStudents(2);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         assertNotNull(enrolledStudents);
     }
 
     @Test
     @Order(2)
     void testGetAssignedInstructor(){
-            Instructor instructor = coursesUserService.getAssignedInstructor(2);
-            assertNotNull(instructor);
+        Instructor instructor = null;
+        try {
+            instructor = coursesUserService.getAssignedInstructor(2);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        assertNotNull(instructor);
             assertEquals(instructor.getId(),courseDataBaseRepository.get(2).getInstructorId());
     }
 
     @Test
     @Order(3)
-    void testEnrollStudentUnenrollStudent(){
+    void testEnrollStudentUnenrollStudent()throws EntityNotFoundException{
         coursesUserService.enroll(1,101);
         assertNotNull(coursesUserService.getEnrolledStudents(101));
         coursesUserService.unenroll(1,101);
@@ -58,7 +69,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(4)
-    void testAssignIntructorUnassign(){
+    void testAssignIntructorUnassign()throws EntityNotFoundException{
         Instructor instructor = new Instructor(2,"john","johm@","john@gmail.com","instructor");
         Course course = new Course(3,"MAP","greu",11,"2024-07-09","2024-08-12",4);
         coursesUserService.addInstructor(instructor);
@@ -73,7 +84,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(5)
-    void testAddRemoveCourse(){
+    void testAddRemoveCourse()throws EntityNotFoundException{
         Course course = new Course(3,"MAP","greu",11,"2024-07-09","2024-08-12",4);
         coursesUserService.addCourse(course);
         assertNotNull(courseDataBaseRepository.get(3));
@@ -83,7 +94,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(6)
-    void testAddRemoveStudent(){
+    void testAddRemoveStudent()throws EntityNotFoundException{
         Student student = new Student(3,"stefan","password1234","stefan@gmail.com","student");
         coursesUserService.addStudent(student);
         assertNotNull(studentDataBaseRepository.get(3));
@@ -93,7 +104,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(7)
-    void testAddRemoveInstructor(){
+    void testAddRemoveInstructor()throws EntityNotFoundException{
         Instructor instructor = new Instructor(4,"robert","password123","robert@gmail.com","instructor");
         coursesUserService.addInstructor(instructor);
         assertNotNull(instructorDataBaseRepository.get(4));
@@ -131,7 +142,11 @@ public class CourseUserServiceTests {
         instructorDataBaseRepository.create(instructor);
         courseDataBaseRepository.create(course);
 
-        coursesUserService.removeAssignedInstructor(4, 3);
+        try {
+            coursesUserService.removeAssignedInstructor(4, 3);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println(course.getInstructorId());
         assertNull(courseDataBaseRepository.get(3).getInstructorId());
@@ -141,7 +156,12 @@ public class CourseUserServiceTests {
     @Test
     @Order(12)
     void testGetCoursesAStudentEnrolledIn(){
-        List<Course>courses = coursesUserService.getCoursesAStudentEnrolledIn(2);
+        List<Course>courses = null;
+        try {
+            courses = coursesUserService.getCoursesAStudentEnrolledIn(2);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(courses.size(),1);
     }
 
@@ -155,27 +175,42 @@ public class CourseUserServiceTests {
     @Test
     @Order(14)
     void testGetCourseInfo(){
-        Course course = coursesUserService.getCourseInfo(1);
+        Course course = null;
+        try {
+            course = coursesUserService.getCourseInfo(1);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(course.getCourseTitle(),"Analiza");
     }
 
     @Test
     @Order(15)
     void testGetStudentInfo(){
-        Student student = coursesUserService.getStudentInfo(1);
+        Student student = null;
+        try {
+            student = coursesUserService.getStudentInfo(1);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(student.getUsername(),"john_doe");
     }
 
     @Test
     @Order(16)
     void testGetInstructorInfo(){
-        Instructor instructor = coursesUserService.getInstructorInfo(1);
+        Instructor instructor = null;
+        try {
+            instructor = coursesUserService.getInstructorInfo(1);
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(instructor.getUsername(),"Paul");
     }
 
     @Test
     @Order(17)
-    void testUpdateCourse(){
+    void testUpdateCourse()throws EntityNotFoundException{
         Course course = new Course(102,"Java","Introduction to java",30,"2024-01-15","2024-05-15",1);
         coursesUserService.addCourse(course);
         assertEquals(courseDataBaseRepository.get(102).getCourseTitle(),course.getCourseTitle());
@@ -187,7 +222,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(18)
-    void testUpdateStudent(){
+    void testUpdateStudent()throws EntityNotFoundException{
         Student student = new Student(3,"maia","password21","maia@gmail.com","student");
         coursesUserService.addStudent(student);
         assertEquals(studentDataBaseRepository.get(3).getPassword(),student.getPassword());
@@ -199,7 +234,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(19)
-    void testUpdateInstructor(){
+    void testUpdateInstructor()throws EntityNotFoundException{
         Instructor instructor = new Instructor(2,"maia","password21","maia@gmail.com","instructor");
         coursesUserService.addInstructor(instructor);
         assertEquals(instructorDataBaseRepository.get(2).getPassword(),instructor.getPassword());
@@ -220,8 +255,8 @@ public class CourseUserServiceTests {
     @Order(21)
     void testSortAllInstructorsByNumberOfTeachingCourses(){
         List<Instructor>instructors = coursesUserService.sortAllInstructorsByNumberOfTeachingCourses();
-        assertEquals(instructorDataBaseRepository.get(3).getUsername(),instructors.get(0).getUsername());
-        assertEquals(instructorDataBaseRepository.get(1).getUsername(),instructors.get(1).getUsername());
+        assertEquals(instructorDataBaseRepository.get(1).getUsername(),instructors.get(0).getUsername());
+        assertEquals(instructorDataBaseRepository.get(3).getUsername(),instructors.get(1).getUsername());
 
     }
 

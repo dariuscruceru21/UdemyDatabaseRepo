@@ -1,5 +1,6 @@
 package Controller;
 
+import Exceptions.EntityNotFoundException;
 import Models.Admin;
 import Models.Course;
 import Models.Instructor;
@@ -20,7 +21,7 @@ public class CourseUserController {
      * @param courseId The ID of the course.
      * @return A list of students enrolled in the course.
      */
-    public List<Student> getEnrolledStudents(Integer courseId) {
+    public List<Student> getEnrolledStudents(Integer courseId) throws EntityNotFoundException {
         return service.getEnrolledStudents(courseId);
     }
 
@@ -114,7 +115,7 @@ public class CourseUserController {
      * @param courseId The ID of the course to remove.
      * @return A success message after removing the course.
      */
-    public String removeCourse(Integer courseId) {
+    public String removeCourse(Integer courseId) throws EntityNotFoundException {
         service.removeCourse(courseId);
         return "Course removed successfully.";
     }
@@ -124,7 +125,7 @@ public class CourseUserController {
      * @param studentId The ID of the student to remove.
      * @return A success message after removing the student.
      */
-    public String removeStudent(Integer studentId) {
+    public String removeStudent(Integer studentId) throws EntityNotFoundException {
         service.removeStudent(studentId);
         return "Student removed successfully.";
     }
@@ -134,7 +135,7 @@ public class CourseUserController {
      * @param instructorId The ID of the instructor to remove.
      * @return A success message after removing the instructor.
      */
-    public String removeInstructor(Integer instructorId) {
+    public String removeInstructor(Integer instructorId) throws EntityNotFoundException {
         if (service.getCourseInfo(instructorId) != null) {
             service.unAssignInstructor(instructorId, service.getCourseInfo(instructorId).getId());
         }
@@ -147,7 +148,7 @@ public class CourseUserController {
      * @param adminId The ID of the admin to remove.
      * @return A success message after removing the admin.
      */
-    public String removeAdmin(Integer adminId) {
+    public String removeAdmin(Integer adminId) throws EntityNotFoundException {
         service.removeAdmin(adminId);
         return "Admin removed successfully.";
     }
@@ -190,7 +191,7 @@ public class CourseUserController {
      * @param courseId The ID of the course.
      * @return A success message if unenrollment is successful.
      */
-    public String unenrollStudentFromCourse(Integer studentId, Integer courseId) {
+    public String unenrollStudentFromCourse(Integer studentId, Integer courseId) throws EntityNotFoundException {
         service.unenroll(studentId, courseId);
         return "Student unenrolled successfully.";
     }
@@ -200,7 +201,7 @@ public class CourseUserController {
      * @param studentId The ID of the student.
      * @return A list of courses the student is enrolled in.
      */
-    public List<Course> getCoursesByStudent(Integer studentId) {
+    public List<Course> getCoursesByStudent(Integer studentId) throws EntityNotFoundException {
         return service.getCoursesAStudentEnrolledIn(studentId);
     }
 
@@ -218,7 +219,7 @@ public class CourseUserController {
      * @param courseId The ID of the course.
      * @return The course object containing detailed information.
      */
-    public Course getCourseInfo(Integer courseId) {
+    public Course getCourseInfo(Integer courseId) throws EntityNotFoundException {
         return service.getCourseInfo(courseId);
     }
 
@@ -227,7 +228,7 @@ public class CourseUserController {
      * @param studentId The ID of the student.
      * @return The student object containing detailed information.
      */
-    public Student getStudentInfo(Integer studentId) {
+    public Student getStudentInfo(Integer studentId) throws EntityNotFoundException {
         return service.getStudentInfo(studentId);
     }
 
@@ -236,7 +237,7 @@ public class CourseUserController {
      * @param instructorId The ID of the instructor.
      * @return The instructor object containing detailed information.
      */
-    public Instructor getInstructorInfo(Integer instructorId) {
+    public Instructor getInstructorInfo(Integer instructorId) throws EntityNotFoundException {
         return service.getInstructorInfo(instructorId);
     }
 
@@ -245,7 +246,7 @@ public class CourseUserController {
      * @param student The student object with updated information.
      * @return A success message if the update is successful.
      */
-    public String updateStudent(Student student) {
+    public String updateStudent(Student student) throws EntityNotFoundException {
         try {
             service.updateStudent(student);
             return "Student updated successfully.";
@@ -255,7 +256,7 @@ public class CourseUserController {
     }
 
 
-    public String updateCourse(Course course){
+    public String updateCourse(Course course)throws EntityNotFoundException {
         try {
             service.updateCourse(course);
             return "Course updated successfully.";
@@ -269,7 +270,7 @@ public class CourseUserController {
      * @param instructor The instructor object with updated information.
      * @return A success message if the update is successful.
      */
-    public String updateInstructor(Instructor instructor) {
+    public String updateInstructor(Instructor instructor) throws EntityNotFoundException {
         try {
             service.updateInstructor(instructor);
             return "Instructor updated successfully.";
@@ -283,7 +284,7 @@ public class CourseUserController {
      * @param courseId The ID of the course.
      * @return The instructor assigned to the course.
      */
-    public Instructor getAssignedInstructor(java.lang.Integer courseId) {
+    public Instructor getAssignedInstructor(java.lang.Integer courseId) throws EntityNotFoundException {
         return service.getAssignedInstructor(courseId);
     }
 
