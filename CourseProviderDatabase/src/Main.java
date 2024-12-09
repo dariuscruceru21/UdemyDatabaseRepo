@@ -2,6 +2,7 @@ import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
 import Service.AssignmentService;
+import Service.AuthenticationService;
 import Service.CoursesUserService;
 import Utils.Utils;
 
@@ -125,7 +126,10 @@ public class Main {
         //coursesUserService.assignInstructor(1,101);
         //coursesUserService.assignInstructor(1,1);
         //coursesUserService.removeInstructor(2);
-        System.out.println(coursesUserService.sortAllInstructorsByNumberOfTeachingCourses());
+        //System.out.println(coursesUserService.sortAllInstructorsByNumberOfTeachingCourses());
+        AuthenticationService authenticationService = new AuthenticationService();
+        User user = authenticationService.authenticate("admin_user","adminpass");
+        System.out.println(user);
 
 
 
