@@ -1,3 +1,5 @@
+import Controller.AssignmentController;
+import Controller.CourseUserController;
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
@@ -109,7 +111,7 @@ public class Main {
         //System.out.println(courseDataBaseRepository.get(2).getEnrolledStudents());
         //System.out.println(coursesUserService.getEnrolledStudents(2));
 
-        //AssignmentService assignmentService = new AssignmentService(quizDataBaseRepository,assignmentDataBaseRepository,moduleDataBaseRepository,courseDataBaseRepository,moduleCourseDataBaseRepository,assignmentModuleDataBaseRepository,quizAssignmentDataBaseRepository);
+        AssignmentService assignmentService = new AssignmentService(quizDataBaseRepository,assignmentDataBaseRepository,moduleDataBaseRepository,courseDataBaseRepository,moduleCourseDataBaseRepository,assignmentModuleDataBaseRepository,quizAssignmentDataBaseRepository);
 
         //System.out.println(coursesUserService.getEnrolledStudents(2));
 
@@ -128,12 +130,21 @@ public class Main {
         //coursesUserService.assignInstructor(1,1);
         //coursesUserService.removeInstructor(2);
         //System.out.println(coursesUserService.sortAllInstructorsByNumberOfTeachingCourses());
-        AuthenticationService authenticationService = new AuthenticationService();
+        //AuthenticationService authenticationService = new AuthenticationService();
         //User user = authenticationService.authenticate("admin_user","adminpass");
         //System.out.println(user);
 
-        Ui ui = new Ui();
+//        Ui ui = new Ui();
+//        ui.start();
+
+        CourseUserController courseUserController = new CourseUserController(coursesUserService);
+        AssignmentController assignmentController = new AssignmentController(assignmentService);
+
+        Ui ui = new Ui(assignmentController,courseUserController);
         ui.start();
+        //System.out.println(coursesUserService.getCoursesAStudentEnrolledIn(2));
+        //coursesUserService.unenroll(2,101);
+
 
 
 

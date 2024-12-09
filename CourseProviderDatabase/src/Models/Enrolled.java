@@ -30,6 +30,14 @@ public class Enrolled implements Identifiable {
     public void setId(Integer id) {
         this.studentId = id;
     }
+
+    @Override
+    public String toString() {
+        return "Enrolled{" +
+                "studentId=" + studentId +
+                ", courseId=" + courseId +
+                '}';
+    }
 }
 
 

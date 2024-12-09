@@ -64,6 +64,39 @@ public class Ui {
     }
 
     public void studentMenu(Student student) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do{
+            System.out.println("\n--- Student Menu ---");
+            System.out.println("1. View All Courses");
+            System.out.println("2. View all Instructors");
+            System.out.println("3. Enroll Into a Course");
+            System.out.println("4. Unenroll from a Course");
+            System.out.println("5. View Courses I am enrolled in");
+            System.out.println("6. Get Info about a Course");
+            System.out.println("7. Get Info about an Instructor");
+            System.out.println("8. Preview under ocupied Courses");
+            System.out.println("9. Preview courses that end before a given date");
+            System.out.println("10. Logout");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            switch (choice){
+                case 1 -> viewAllCourses();
+                case 2 -> viewAllInstructors();
+                case 3 -> enroll();
+                case 4 -> unenroll();
+                case 5 -> viewCoursesAStudentIsEnrolledIn();
+                case 6 -> viewCourseInfo();
+                case 7 -> viewInstructorInfo();
+                case 8 -> System.out.println(courseUserController.getAllUnderOccupiedCourses());
+                case 9 -> previewCoursesThatEndBeforeADate();
+                case 10 -> System.out.println("Logging out...");
+                default -> System.out.println("Invalid choice. Please try again.");
+
+            }
+        }while (choice != 10);
+
         System.out.println("Student Menu:");
         System.out.println("1. View Enrolled Courses");
         System.out.println("2. View Assignments");
@@ -145,6 +178,9 @@ public class Ui {
             }
         } while (choice != 21);
     }
+
+
+
 
 
     public void viewAllCourses() {
@@ -359,4 +395,62 @@ public class Ui {
         scanner.nextLine();
         System.out.println(assignmentController.removeQuizFromAssignment(assignmentId, quizId));
     }
+
+    public void enroll(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter you're ID: ");
+        int userId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter the course id you want to enroll in: ");
+        int courseId = scanner.nextInt();
+        scanner.nextLine();
+        courseUserController.enrollStudentInCourse(userId, courseId);
+    }
+
+
+    public void unenroll(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter you're ID: ");
+        int userId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter the course id you want to unenroll from: ");
+        int courseId = scanner.nextInt();
+        scanner.nextLine();
+        courseUserController.unenrollStudentFromCourse(userId, courseId);
+
+    }
+
+    public void viewCoursesAStudentIsEnrolledIn(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter you're ID: ");
+        int userId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(courseUserController.getCoursesByStudent(userId));
+    }
+
+    public void viewCourseInfo(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the course id you want to view information about: ");
+        int courseId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(courseUserController.getCourseInfo(courseId));
+    }
+
+    public void viewInstructorInfo(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the instructor id you want to view information about: ");
+        int instructorId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(courseUserController.getInstructorInfo(instructorId));
+    }
+
+    public void previewCoursesThatEndBeforeADate(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the date to see the courses that end before the given date(YYYY-MM-DD: ");
+        String date = scanner.nextLine();
+        scanner.nextLine();
+        System.out.println(courseUserController.getAllCoursesThatEndBeforeADate(date));
+    }
+
+
 }

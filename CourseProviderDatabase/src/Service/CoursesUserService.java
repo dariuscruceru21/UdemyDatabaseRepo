@@ -404,7 +404,7 @@ public class CoursesUserService {
     }
 
 
-    public void unenroll(Integer studId, Integer courseId){
+    public void unenroll(Integer studId, Integer courseId) {
 
         Student student = studentIRepository.get(studId);
         if (student == null)
@@ -414,38 +414,49 @@ public class CoursesUserService {
         if (course == null)
             throw new IllegalArgumentException("Course with id " + courseId + " does not exist");
 
-
         // Check if the student is enrolled in the course
         List<Enrolled> enrollments = enrolledIRepository.getAll();
-        boolean isEnrolled = enrollments.stream().anyMatch(e -> e.getId().equals(studId) && e.getCourseId().equals(courseId));
+        boolean isEnrolled = enrollments.stream()
+                .anyMatch(e -> e.getId().equals(studId) && e.getCourseId().equals(courseId));
 
         if (!isEnrolled)
             throw new IllegalArgumentException("Student is not enrolled in this course");
 
+        List<Enrolled>enrollmentsThatDonMatch  = new ArrayList<>();
+        for(Enrolled enrollment : enrollments)
+            if (enrollment.getId() == studId && enrollment.getCourseId() != courseId)
+                enrollmentsThatDonMatch.add(enrollment);
 
-        //remove enrollment
-        Enrolled enrollementToRemove = enrollments.stream().filter(e -> e.getId().equals(studId) && e.getCourseId().equals(courseId))
-                .findFirst().orElseThrow(() -> new IllegalStateException("Enrollment not found"));
-        enrolledIRepository.delete(enrollementToRemove.getId());
 
+        // Find and remove the specific enrollment
+        for (Enrolled enrollment : enrollments) {
+            if (enrollment.getId().equals(studId) && enrollment.getCourseId().equals(courseId)) {
+                enrolledIRepository.delete(enrollment.getId());
+                break; // Exit the loop after removing the target enrollment
+            }
+        }
 
-        //update course availability
+        for(Enrolled enrollment : enrollmentsThatDonMatch)
+            enrolledIRepository.create(enrollment);
+
+        // Update course availability
         course.setAvailableSpots(course.getAvailableSpots() + 1);
-        courseIRepository.update(course);
 
-        //Update the students list of enrolled classes
-        List<Integer> studentCourse = student.getCourses();
-        studentCourse.remove(courseId);
-        student.setCourses(studentCourse);
+        // Update the student's list of enrolled courses (use a copy)
+        List<Integer> studentCourses = new ArrayList<>(student.getCourses());
+        studentCourses.remove(courseId);
+        student.setCourses(studentCourses); // Set the modified list back to the student
 
-        //update the course list of students
-        List<Integer> courseStudents = course.getEnrolledStudents();
+        // Update the course's list of enrolled students (use a copy)
+        List<Integer> courseStudents = new ArrayList<>(course.getEnrolledStudents());
         courseStudents.remove(studId);
-        course.setEnrolledStudents(courseStudents);
+        course.setEnrolledStudents(courseStudents); // Set the modified list back to the course
 
+        // Save the updated student and course objects
         studentIRepository.update(student);
         courseIRepository.update(course);
     }
+
 
 
     public void removeAssignedInstructor(Integer instructorId, Integer courseId){
@@ -484,23 +495,17 @@ public class CoursesUserService {
         if(student == null)
             throw new IllegalArgumentException("Student with id " + studentId + " does not exits");
 
-        List<Enrolled> enrollments = enrolledIRepository.getAll();
-        List<Integer> enrolledCourseIds = enrollments.stream()
+        List<Enrolled> allEnrollments = enrolledIRepository.getAll();
+
+        List<Integer> studentCourseIds = allEnrollments.stream()
                 .filter(e -> e.getId().equals(studentId))
-                .map(Enrolled::getId)
+                .map(Enrolled::getCourseId)
                 .collect(Collectors.toList());
 
+        return studentCourseIds.stream()
+                .map(courseIRepository::get)
+                .collect(Collectors.toList());
 
-
-        //fetch the course object for each course
-        List<Course> enrolledCourses = new ArrayList<>();
-        for(Integer courseId : enrolledCourseIds){
-            Course course = courseIRepository.get(courseId);
-            if(course != null)
-                enrolledCourses.add(course);
-        }
-
-        return enrolledCourses;
 
 
     }
