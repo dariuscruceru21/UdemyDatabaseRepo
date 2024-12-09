@@ -4,6 +4,7 @@ import Repository.DataBaseRepository;
 import Service.AssignmentService;
 import Service.AuthenticationService;
 import Service.CoursesUserService;
+import Ui.Ui;
 import Utils.Utils;
 
 
@@ -108,7 +109,7 @@ public class Main {
         //System.out.println(courseDataBaseRepository.get(2).getEnrolledStudents());
         //System.out.println(coursesUserService.getEnrolledStudents(2));
 
-        AssignmentService assignmentService = new AssignmentService(quizDataBaseRepository,assignmentDataBaseRepository,moduleDataBaseRepository,courseDataBaseRepository,moduleCourseDataBaseRepository,assignmentModuleDataBaseRepository,quizAssignmentDataBaseRepository);
+        //AssignmentService assignmentService = new AssignmentService(quizDataBaseRepository,assignmentDataBaseRepository,moduleDataBaseRepository,courseDataBaseRepository,moduleCourseDataBaseRepository,assignmentModuleDataBaseRepository,quizAssignmentDataBaseRepository);
 
         //System.out.println(coursesUserService.getEnrolledStudents(2));
 
@@ -128,8 +129,11 @@ public class Main {
         //coursesUserService.removeInstructor(2);
         //System.out.println(coursesUserService.sortAllInstructorsByNumberOfTeachingCourses());
         AuthenticationService authenticationService = new AuthenticationService();
-        User user = authenticationService.authenticate("admin_user","adminpass");
-        System.out.println(user);
+        //User user = authenticationService.authenticate("admin_user","adminpass");
+        //System.out.println(user);
+
+        Ui ui = new Ui();
+        ui.start();
 
 
 
