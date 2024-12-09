@@ -114,8 +114,18 @@ public class Main {
         //assignmentService.addModuleToCourse(1,101);
 
         //aici nu stiu de ce dar sunt inversate !!!!!!!!!
-        assignmentService.addModuleToCourse(1,101);
+        //assignmentService.addModuleToCourse(1,101);
         //assignmentService.removeModuleFromCourse(1,101);
+        //coursesUserService.removeStudent(3);
+        //coursesUserService.removeAssignedInstructor(4,3);
+        //coursesUserService.removeCourse(3);
+        //coursesUserService.removeInstructor(4);
+        //coursesUserService.removeStudent(3);
+        //coursesUserService.assignInstructor(4,101);
+        //coursesUserService.assignInstructor(1,101);
+        //coursesUserService.assignInstructor(1,1);
+        //coursesUserService.removeInstructor(2);
+        System.out.println(coursesUserService.sortAllInstructorsByNumberOfTeachingCourses());
 
 
 
