@@ -97,10 +97,6 @@ public class Ui {
             }
         }while (choice != 10);
 
-        System.out.println("Student Menu:");
-        System.out.println("1. View Enrolled Courses");
-        System.out.println("2. View Assignments");
-        System.out.println("3. Logout");
 
         // Implement further functionality for students
     }
