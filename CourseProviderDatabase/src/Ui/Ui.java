@@ -2,6 +2,7 @@ package Ui;
 
 import Controller.AssignmentController;
 import Controller.CourseUserController;
+import Exceptions.EntityNotFoundException;
 import Models.*;
 import Models.Module;
 import Service.AuthenticationService;
@@ -19,7 +20,7 @@ public class Ui {
         this.courseUserController = courseUserController;
     }
 
-    public void start() {
+    public void start() throws EntityNotFoundException {
         System.out.println("Welcome to the Education Management System!");
 
         // Login Process
@@ -63,7 +64,7 @@ public class Ui {
         return user;
     }
 
-    public void studentMenu(Student student) {
+    public void studentMenu(Student student) throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -111,7 +112,7 @@ public class Ui {
         // Implement further functionality for instructors
     }
 
-    public void adminMenu(Admin admin) {
+    public void adminMenu(Admin admin) throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -208,7 +209,7 @@ public class Ui {
         System.out.println(courseUserController.addCourse(course));
     }
 
-    public void removeCourse() {
+    public void removeCourse() throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Course ID to remove: ");
         int courseId = scanner.nextInt();
@@ -259,7 +260,7 @@ public class Ui {
         System.out.println(courseUserController.addStudent(student));
     }
 
-    public void removeStudent() {
+    public void removeStudent() throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Student ID to remove: ");
         int studentId = scanner.nextInt();
@@ -288,7 +289,7 @@ public class Ui {
         System.out.println(courseUserController.addInstructor(instructor));
     }
 
-    public void removeInstructor() {
+    public void removeInstructor() throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Instructor ID to remove: ");
         int instructorId = scanner.nextInt();
@@ -404,7 +405,7 @@ public class Ui {
     }
 
 
-    public void unenroll(){
+    public void unenroll() throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter you're ID: ");
         int userId = scanner.nextInt();
@@ -416,7 +417,7 @@ public class Ui {
 
     }
 
-    public void viewCoursesAStudentIsEnrolledIn(){
+    public void viewCoursesAStudentIsEnrolledIn() throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter you're ID: ");
         int userId = scanner.nextInt();
@@ -424,7 +425,7 @@ public class Ui {
         System.out.println(courseUserController.getCoursesByStudent(userId));
     }
 
-    public void viewCourseInfo(){
+    public void viewCourseInfo() throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the course id you want to view information about: ");
         int courseId = scanner.nextInt();
@@ -432,7 +433,7 @@ public class Ui {
         System.out.println(courseUserController.getCourseInfo(courseId));
     }
 
-    public void viewInstructorInfo(){
+    public void viewInstructorInfo() throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the instructor id you want to view information about: ");
         int instructorId = scanner.nextInt();

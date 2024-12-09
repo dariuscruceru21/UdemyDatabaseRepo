@@ -1,5 +1,6 @@
 import Controller.AssignmentController;
 import Controller.CourseUserController;
+import Exceptions.EntityNotFoundException;
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
@@ -141,7 +142,11 @@ public class Main {
         AssignmentController assignmentController = new AssignmentController(assignmentService);
 
         Ui ui = new Ui(assignmentController,courseUserController);
-        ui.start();
+        try {
+            ui.start();
+        } catch (EntityNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         //System.out.println(coursesUserService.getCoursesAStudentEnrolledIn(2));
         //coursesUserService.unenroll(2,101);
 
