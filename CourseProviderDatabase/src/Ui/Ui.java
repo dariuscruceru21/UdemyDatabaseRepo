@@ -517,7 +517,7 @@ public class Ui {
         System.out.println(assignmentController.addModuleToCourse(courseId, moduleId));
     }
 
-    public void removeModuleFromCourse() {
+    public void removeModuleFromCourse() throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Course ID: ");
         int courseId = scanner.nextInt();
@@ -549,7 +549,7 @@ public class Ui {
         System.out.println(assignmentController.addAssignmentToModule(moduleId, assignmentId));
     }
 
-    public void removeAssignmentFromModule() {
+    public void removeAssignmentFromModule() throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Module ID: ");
         int moduleId = scanner.nextInt();
@@ -581,7 +581,7 @@ public class Ui {
         System.out.println(assignmentController.addQuizToAssignment(assignmentId, quizId));
     }
 
-    public void removeQuizFromAssignment() {
+    public void removeQuizFromAssignment() throws EntityNotFoundException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Assignment ID: ");
         int assignmentId = scanner.nextInt();

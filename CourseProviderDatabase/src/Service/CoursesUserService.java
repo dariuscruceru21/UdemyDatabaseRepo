@@ -514,15 +514,11 @@ public class CoursesUserService {
 
 
     public List<Course> getCoursesAInstructorTeaches(Integer instructorId){
-        List<Enrolled> enrollments = enrolledIRepository.getAll();
 
-        //extract course ids
-        List<Integer> enrolledCourseIds = enrollments.stream().map(Enrolled::getCourseId).distinct().collect(Collectors.toList());
 
-        //fetch the course object for each course
+        List<Course>courses = courseIRepository.getAll();
         List<Course> enrolledCourses = new ArrayList<>();
-        for(Integer courseId : enrolledCourseIds){
-            Course course = courseIRepository.get(courseId);
+        for(Course  course : courses){
             if(course != null && course.getInstructorId().equals(instructorId))
                 enrolledCourses.add(course);
         }

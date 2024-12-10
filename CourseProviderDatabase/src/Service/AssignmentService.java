@@ -1,5 +1,6 @@
 package Service;
 
+import Exceptions.EntityNotFoundException;
 import Models.*;
 import Models.Module;
 import Repository.IRepository;
@@ -7,6 +8,7 @@ import Repository.IRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class AssignmentService {
     private final IRepository<Quiz> quizRepo;
@@ -63,6 +65,8 @@ public class AssignmentService {
 
 
 
+
+
     /**
      * Adds an assignment to a specific module.
      * @param moduleId ID of the module.
@@ -72,24 +76,24 @@ public class AssignmentService {
         Module module = moduleRepo.get(moduleId);
         if(module == null)
             throw new IllegalArgumentException("Module with id " + moduleId + " not found");
-        Assignment assignment = assignmentRepo.get(moduleId);
+        Assignment assignment = assignmentRepo.get(assignmentId);
         if (assignment == null)
             throw new IllegalArgumentException("Assignment with id " + assignmentId + " not found");
 
         //check if the assignment is already in the module
         List<AssignmentModule> assignmentModules = assignmentModuleRepo.getAll();
-        boolean alreadyExist = assignmentModules.stream().anyMatch(e -> e.getId().equals(assignmentId) && e.getModuleId().equals(moduleId));
+        boolean alreadyExist = assignmentModules.stream().anyMatch(e -> e.getId().equals(moduleId) && e.getAssignmentId().equals(assignmentId));
 
         if(alreadyExist)
             throw new IllegalArgumentException("Assignment with id " + assignmentId + " already exists");
 
         //create new assignmentModule entry
-        AssignmentModule assignmentModule = new AssignmentModule(assignmentId,moduleId);
+        AssignmentModule assignmentModule = new AssignmentModule(moduleId,assignmentId);
         assignmentModuleRepo.create(assignmentModule);
 
         // Update the modules's list of assignments
         List<Integer> moduleAssignments = module.getAssignments();
-        moduleAssignments.add(moduleId);
+        moduleAssignments.add(assignmentId);
         module.setAssignments(moduleAssignments);
         moduleRepo.update(module);
     }
@@ -109,13 +113,13 @@ public class AssignmentService {
 
         //check if the quiz is already in the assignment
         List<QuizAssignment> quizAssignments = assignmentQuizRepo.getAll();
-        boolean alreadyExist = quizAssignments.stream().anyMatch(e -> e.getId().equals(quizId) && e.getAssignmentId().equals(assignmentId));
+        boolean alreadyExist = quizAssignments.stream().anyMatch(e -> e.getId().equals(assignmentId) && e.getQuizId().equals(quizId));
 
         if(alreadyExist)
             throw new IllegalArgumentException("Quiz with id " + quizId + " already exists");
 
         //create new assignmentQuiz entry
-        QuizAssignment quizAssignment = new QuizAssignment(quizId,assignmentId);
+        QuizAssignment quizAssignment = new QuizAssignment(assignmentId, quizId);
         assignmentQuizRepo.create(quizAssignment);
 
         // Update the assignments's list of quizes
@@ -130,39 +134,44 @@ public class AssignmentService {
      * @param courseId ID of the course.
      * @param moduleId The id of the module to remove.
      */
-    public void removeModuleFromCourse(Integer moduleId,Integer courseId) {
+    public void removeModuleFromCourse(Integer moduleId,Integer courseId) throws EntityNotFoundException{
 
-        Course course = courseRepo.get(moduleId);
+        Course course = courseRepo.get(courseId);
         if (course == null)
-            throw new IllegalArgumentException("Course with id " + courseId + " not found");
+            throw new EntityNotFoundException(courseId);
         Module module = moduleRepo.get(moduleId);
         if (module == null)
-            throw new IllegalArgumentException("Module with id " + moduleId + " not found");
+            throw new EntityNotFoundException(moduleId);
+
+        List<ModuleCourse> moduleCourses = moduleCourseRepo.getAll();
+
+        List<ModuleCourse> moduleCoursesThatDOntMatch = new ArrayList<>();
+        for(ModuleCourse moduleCourse : moduleCourses){
+            if(moduleCourse.getId().equals(moduleId) && moduleCourse.getCourseId() != courseId)
+                moduleCoursesThatDOntMatch.add(moduleCourse);
+        }
+
+        //find and remove searched entry
+        for(ModuleCourse moduleCourse : moduleCourses){
+            if (moduleCourse.getId().equals(moduleId) && moduleCourse.getCourseId().equals(courseId)){
+                moduleCourseRepo.delete(moduleCourse.getId());
+                break;
+            }
+        }
 
 
-        moduleCourseRepo.delete(moduleId);
+        for(ModuleCourse moduleCourse : moduleCoursesThatDOntMatch){
+            moduleCourseRepo.create(moduleCourse);
+        }
 
-//        Course course = courseRepo.get(courseId);
-//        if (course == null)
-//            throw new IllegalArgumentException("Course with id " + courseId + " not found");
-//
-//        Module module = moduleRepo.get(moduleId);
-//        if (module == null)
-//            throw new IllegalArgumentException("Module with id " + moduleId + " not found");
-//
-//        // Remove the entry from the connection table
-//        List<ModuleCourse> moduleCourses = moduleCourseRepo.getAll();
-//        ModuleCourse moduleCourse = moduleCourses.stream()
-//                .filter(mc -> mc.getId().equals(moduleId) && mc.getCourseId().equals(courseId))
-//                .findFirst()
-//                .orElseThrow(() -> new IllegalArgumentException("Module is not part of the course"));
-//        moduleCourseRepo.delete(moduleCourse.getId());
-//
-//        // Update the course's list of modules
-//        List<Integer> courseModules = course.getModules();
-//        courseModules.remove(moduleId);
-//        course.setModules(courseModules);
-//        courseRepo.update(course);
+        //update lists
+        List<Integer> moduleCourse = course.getModules();
+        moduleCourse.remove(moduleId);
+        course.setModules(moduleCourse);
+        courseRepo.update(course);
+
+
+
     }
 
 
@@ -171,29 +180,44 @@ public class AssignmentService {
      * @param moduleId ID of the module.
      * @param assignmentId The id of the assignment to remove.
      */
-    public void removeAssignmentFromModule(Integer moduleId, Integer assignmentId) {
+    public void removeAssignmentFromModule(Integer moduleId, Integer assignmentId) throws EntityNotFoundException{
         Module module = moduleRepo.get(moduleId);
         if (module == null)
-            throw new IllegalArgumentException("Module with id " + moduleId + " not found");
+            throw new EntityNotFoundException(moduleId);
 
         Assignment assignment = assignmentRepo.get(assignmentId);
         if (assignment == null)
-            throw new IllegalArgumentException("Assignment with id " + assignmentId + " not found");
+            throw new EntityNotFoundException(assignmentId);
 
-        // Remove the entry from the connection table
-        List<AssignmentModule> assignmentModules = assignmentModuleRepo.getAll();
-        AssignmentModule assignmentModule = assignmentModules.stream()
-                .filter(am -> am.getId().equals(assignmentId) && am.getModuleId().equals(moduleId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Assignment is not part of the module"));
-        assignmentModuleRepo.delete(assignmentModule.getId());
+        List<AssignmentModule> moduleAssignments = assignmentModuleRepo.getAll();
 
-        // Update the module's list of assignments
-        List<Integer> moduleAssignments = module.getAssignments();
-        moduleAssignments.remove(assignmentId);
-        module.setAssignments(moduleAssignments);
+        List<AssignmentModule> assignmentModulesThatDontMatch = new ArrayList<>();
+        for (AssignmentModule assignmentModule : moduleAssignments) {
+            if (assignmentModule.getId().equals(moduleId) && assignmentModule.getAssignmentId() != assignmentId)
+                assignmentModulesThatDontMatch.add(assignmentModule);
+        }
+
+        //find and remove specific entry
+        for (AssignmentModule assignmentModule : moduleAssignments) {
+            if (assignmentModule.getId().equals(moduleId) && assignmentModule.getAssignmentId().equals(assignmentId)) {
+                assignmentModuleRepo.delete(assignmentModule.getId());
+                break;
+            }
+        }
+
+        for(AssignmentModule assignmentModule : assignmentModulesThatDontMatch)
+            assignmentModuleRepo.create(assignmentModule);
+
+        //update lists
+        List<Integer> assignmentModule = module.getAssignments();
+        assignmentModule.remove(assignmentId);
+        module.setAssignments(assignmentModule);
         moduleRepo.update(module);
     }
+
+
+
+
 
 
     /**
@@ -201,22 +225,35 @@ public class AssignmentService {
      * @param assignmentId ID of the assignment.
      * @param quizId The id of the quiz to remove.
      */
-    public void removeQuizFromAssignment(Integer assignmentId, Integer quizId) {
+    public void removeQuizFromAssignment(Integer assignmentId, Integer quizId) throws EntityNotFoundException{
         Assignment assignment = assignmentRepo.get(assignmentId);
         if (assignment == null)
-            throw new IllegalArgumentException("Assignment with id " + assignmentId + " not found");
+            throw new EntityNotFoundException(assignmentId);
 
         Quiz quiz = quizRepo.get(quizId);
         if (quiz == null)
-            throw new IllegalArgumentException("Quiz with id " + quizId + " not found");
+            throw new EntityNotFoundException(quizId);
 
-        // Remove the entry from the connection table
+
         List<QuizAssignment> quizAssignments = assignmentQuizRepo.getAll();
-        QuizAssignment quizAssignment = quizAssignments.stream()
-                .filter(qa -> qa.getId().equals(quizId) && qa.getAssignmentId().equals(assignmentId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Quiz is not part of the assignment"));
-        assignmentQuizRepo.delete(quizAssignment.getId());
+
+        List<QuizAssignment> quizAssignmentsThatDontMatch = new ArrayList<>();
+        for (QuizAssignment quizAssignment : quizAssignments)
+            if(quizAssignment.getId().equals(assignmentId) && !quizAssignment.getQuizId().equals(quizId))
+                quizAssignmentsThatDontMatch.add(quizAssignment);
+
+
+        //find and remove the specific entry
+        for(QuizAssignment quizAssignment : quizAssignments)
+            if(quizAssignment.getId().equals(assignmentId)  && quizAssignment.getQuizId().equals(quizId)) {
+                assignmentQuizRepo.delete(quizAssignment.getId());
+                break;
+            }
+
+        System.out.println(quizAssignmentsThatDontMatch);
+        for(QuizAssignment quizAssignment : quizAssignmentsThatDontMatch)
+            assignmentQuizRepo.create(quizAssignment);
+
 
         // Update the assignment's list of quizzes
         List<Integer> assignmentQuizzes = assignment.getQuizzes();
@@ -280,18 +317,28 @@ public class AssignmentService {
      * @param courseId The ID of the course whose modules are to be fetched.
      * @return A list of modules associated with the specified course.
      */
-    public List<Module> getModulesFromCourse(Integer courseId){
+    public List<Module> getModulesFromCourse(Integer courseId)throws EntityNotFoundException{
         // Get the course object by its ID
         Course course = courseRepo.get(courseId);
+        if (course == null)
+            throw new EntityNotFoundException(courseId);
 
-        // Return the list of modules associated with the course
-        List<Integer> moduleIds = course.getModules();
+        List<ModuleCourse> moduleCourses = moduleCourseRepo.getAll();
+        List<Integer> moduleCourssesIds = moduleCourses.stream()
+                .filter(e -> e.getCourseId().equals(courseId))
+                .map(ModuleCourse::getId)
+                .collect(Collectors.toList());
+
+        //fetch Modules
         List<Module> modules = new ArrayList<>();
-        for (Integer moduleId : moduleIds) {
+        for(Integer moduleId : moduleCourssesIds){
             Module module = moduleRepo.get(moduleId);
-            modules.add(module);
+            if (module != null)
+                modules.add(module);
         }
+
         return modules;
+
     }
 
     /**
@@ -301,18 +348,28 @@ public class AssignmentService {
      * @param moduleId The ID of the module whose assignments are to be fetched.
      * @return A list of assignments associated with the specified module.
      */
-    public List<Assignment> getAssignmentsFromModule(Integer moduleId){
+    public List<Assignment> getAssignmentsFromModule(Integer moduleId)throws EntityNotFoundException{
         // Get the module object by its ID
         Module module = moduleRepo.get(moduleId);
+        if(module == null)
+            throw new EntityNotFoundException(moduleId);
 
-        // Return the list of assignments associated with the module
-        List<Integer> assignmentIds = module.getAssignments();
-        List<Assignment> assignments = new ArrayList<>();
-        for (Integer assignmentId : assignmentIds) {
+        List<AssignmentModule> assignmentModules = assignmentModuleRepo.getAll();
+        List<Integer> moduleAssignmentsIds = assignmentModules.stream()
+                .filter(e -> e.getId().equals(moduleId))
+                .map(AssignmentModule::getAssignmentId)
+                .collect(Collectors.toList());
+
+        //fetch the assignments
+        List<Assignment> assignments= new ArrayList<>();
+        for(Integer assignmentId : moduleAssignmentsIds){
             Assignment assignment = assignmentRepo.get(assignmentId);
-            assignments.add(assignment);
+            if(assignment != null)
+                assignments.add(assignment);
         }
+
         return assignments;
+
     }
 
     /**
@@ -322,16 +379,22 @@ public class AssignmentService {
      * @param assignmentId The ID of the assignment whose quizzes are to be fetched.
      * @return A list of quizzes associated with the specified assignment.
      */
-    public List<Quiz> getQuizFromAssignment(Integer assignmentId){
-        // Get the assignment object by its ID
+    public List<Quiz> getQuizFromAssignment(Integer assignmentId)throws EntityNotFoundException{
         Assignment assignment = assignmentRepo.get(assignmentId);
+        if (assignment == null)
+            throw new EntityNotFoundException(assignmentId);
+        List<QuizAssignment> quizAssignments = assignmentQuizRepo.getAll();
+        List<Integer>quizAssignmentsIds = quizAssignments.stream()
+                .filter(e -> e.getId().equals(assignmentId))
+                .map(QuizAssignment::getQuizId)
+                .collect(Collectors.toList());
 
-        // Return the list of quizzes associated with the assignment
-        List<Integer> quizIds = assignment.getQuizzes();
+        //fetch all quizes
         List<Quiz> quizzes = new ArrayList<>();
-        for (Integer quizId : quizIds) {
+        for(Integer quizId : quizAssignmentsIds){
             Quiz quiz = quizRepo.get(quizId);
-            quizzes.add(quiz);
+            if (quiz != null)
+                quizzes.add(quiz);
         }
         return quizzes;
     }
