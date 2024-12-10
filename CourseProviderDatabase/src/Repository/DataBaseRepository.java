@@ -1,5 +1,6 @@
 package Repository;
 
+import Exceptions.DataBaseException;
 import Models.Identifiable;
 
 import java.lang.reflect.Constructor;
@@ -83,7 +84,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
             }
 
         } catch (SQLException | IllegalAccessException | NoSuchFieldException e) {
-            e.printStackTrace();
+            throw DataBaseException.handleSQLException((SQLException) e, "inserting into " + tableName);
         } finally {
             closeResources(conn, stmt, null);
         }
@@ -140,8 +141,8 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
             }
 
         } catch (Exception e) {
-            System.err.println("Error retrieving object with id " + id);
             e.printStackTrace();
+            DataBaseException.handleSQLException((SQLException) e, "getting from " + tableName);
         }finally {
             closeResources(connection,statement, rs);
         }
@@ -214,6 +215,7 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
             }
         } catch (SQLException | IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
+            DataBaseException.handleSQLException((SQLException) e, "updating into " + tableName);
         }finally {
             closeResources(connection,statement,null);
         }
@@ -254,8 +256,8 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
 
             }
         } catch (SQLException e) {
-            System.err.println("Error deleteing object with id " + id);
             e.printStackTrace();
+            throw DataBaseException.handleSQLException((SQLException) e, "deleting object from " + tableName+ " failed");
         }finally {
             closeResources(connection, statement, null);
         }
@@ -306,8 +308,8 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
                 results.add(obj);
             }
         } catch (SQLException e) {
-            System.err.println("Error reyrieving all objects from " + tableName);
             e.printStackTrace();
+            DataBaseException.handleSQLException((SQLException) e, "getAll objects failed");
         }catch (ReflectiveOperationException e){
             System.err.println("Error creating object instance");
             e.printStackTrace();
