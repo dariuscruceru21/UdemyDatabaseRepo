@@ -7,19 +7,21 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Utilities class to get all of the columns of the table.
+ */
 public class Utils {
     private final List<String> usersParameters = Arrays.asList("userID","userName","password","email","type");
     private final List<String> courseParameters = Arrays.asList("courseID", "courseTitle", "description", "availableSpots", "startDate", "endDate","instructorId");
     private final List<String> moduleParameters = Arrays.asList("moduleID", "moduleTitle", "moduleContent");
     private final List<String> assignmentParameteres = Arrays.asList("assignmentID", "description", "dueDate", "score");
     private final List<String> quizParameters = Arrays.asList("quizId", "title", "contents", "correctAnswer");
-    private final List<String> forumParameters = Arrays.asList("forumID","topic");
     private final List<String> messageParamteres = Arrays.asList("messageID","messagecontent","senderid","receiverid");
     private final List<String> enrolledParameters = Arrays.asList("studentId","courseId");
     private final List<String> quizAssignmentParameteres = Arrays.asList("assignmentId","quizId");
     private final List<String> moduleAssignmentParameteres = Arrays.asList("moduleId","assignmentId");
     private final List<String> courseModuleParameters = Arrays.asList("moduleId","courseId");
-    private final List<String> messageForumParameters = Arrays.asList("messageId","forumId");
+
 
     public Utils(){};
 
@@ -43,10 +45,6 @@ public class Utils {
         return quizParameters;
     }
 
-    public List<String> getForumParameters() {
-        return forumParameters;
-    }
-
     public List<String> getMessageParamteres() {
         return messageParamteres;
     }
@@ -65,5 +63,5 @@ public class Utils {
 
     public List<String> getCourseModuleParameters() {return courseModuleParameters;}
 
-    public List<String> getMessageForumParameters() {return messageForumParameters;}
+
 }

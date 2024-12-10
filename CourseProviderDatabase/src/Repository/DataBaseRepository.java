@@ -10,6 +10,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A generic repository class that interacts with a database to perform CRUD (Create, Read, Update, Delete)
+ * operations for entities that implement the {@link Identifiable} interface.
+ *
+ * @param <T> the type of the entity that is stored and retrieved
+ */
 public class DataBaseRepository<T extends Identifiable> implements IRepository<T> {
     private static final String URL = System.getenv("DB_URL");
     private static final String USER = System.getenv("DB_USER");
@@ -29,6 +35,13 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
+    /**
+     * Constructs a {@link DataBaseRepository} with the given table name, entity type, and column names.
+     *
+     * @param tableName    The name of the table in the database.
+     * @param type         The class type of the entity being stored.
+     * @param columnNames  The list of column names in the table.
+     */
     public DataBaseRepository(String tableName, Class<T> type, List<String> columnNames) {
         this.type = type;
         this.tableName = tableName;
@@ -37,7 +50,12 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
     }
 
 
-
+    /**
+     * Creates a new record in the database by inserting the entity.
+     *
+     * @param obj The entity to be created in the database.
+     * @throws DataBaseException If an error occurs during the database operation.
+     */
     @Override
     public void create(T obj) {
         Connection conn = null;
@@ -91,7 +109,13 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
     }
 
 
-    // de vazut ce sa facem cu numele la tabel la idcolumname
+    /**
+     * Retrieves an entity from the database by its ID.
+     *
+     * @param id The ID of the entity to retrieve.
+     * @return The entity if found, or null if not found.
+     * @throws DataBaseException If an error occurs during the database operation.
+     */
     @Override
     public T get(Integer id) {
         Connection connection = null;
@@ -149,6 +173,12 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         return result;
     }
 
+    /**
+     * Updates an existing entity in the database.
+     *
+     * @param obj The entity with updated values.
+     * @throws DataBaseException If an error occurs during the database operation.
+     */
     @Override
     public void update(T obj) {
         Connection connection = null;
@@ -221,6 +251,12 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         }
     }
 
+    /**
+     * Deletes an entity from the database by its ID.
+     *
+     * @param id The ID of the entity to delete.
+     * @throws DataBaseException If an error occurs during the database operation.
+     */
     @Override
     public void delete(Integer id) {
         Connection connection = null;
@@ -262,7 +298,12 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
             closeResources(connection, statement, null);
         }
     }
-
+    /**
+     * Retrieves all entities from the database.
+     *
+     * @return A list of all entities.
+     * @throws DataBaseException If an error occurs during the database operation.
+     */
     @Override
     public List getAll() {
         Connection connection = null;
@@ -320,6 +361,12 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
     }
 
 
+    /**
+     * Returns the constructor for the entity type that matches the number of columns.
+     *
+     * @return The constructor for the entity type.
+     * @throws IllegalArgumentException If no suitable constructor is found.
+     */
     private Constructor<T> getConstructor() {
         return Arrays.stream(type.getDeclaredConstructors())
                 .filter(c -> c.getParameterCount() == columnNames.size()) // Match exact parameter count
@@ -328,6 +375,13 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
                 .orElseThrow(() -> new IllegalArgumentException("No suitable constructor found"));
     }
 
+    /**
+     * Finds a field by its name in the class or its superclasses.
+     *
+     * @param clazz     The class to search for the field.
+     * @param fieldName The name of the field.
+     * @return The field if found, otherwise null.
+     */
     private Field findField(Class<?> clazz, String fieldName) {
         Class<?> current = clazz;
         while (current != null) {
@@ -341,6 +395,13 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         return null; // Field not found
     }
 
+    /**
+     * Closes the database resources such as connection, statement, and result set.
+     *
+     * @param conn The database connection to close.
+     * @param stmt The statement to close.
+     * @param rs   The result set to close.
+     */
     protected void closeResources(Connection conn, Statement stmt, ResultSet rs) {
         try {
             if (rs != null) rs.close();
@@ -351,6 +412,12 @@ public class DataBaseRepository<T extends Identifiable> implements IRepository<T
         }
     }
 
+    /**
+     * Converts a string in snake_case to camelCase.
+     *
+     * @param s The string to convert.
+     * @return The camelCase version of the string.
+     */
     private String toCamelCase(String s) {
         String[] parts = s.split("_");
         StringBuilder camelCaseString = new StringBuilder(parts[0]);

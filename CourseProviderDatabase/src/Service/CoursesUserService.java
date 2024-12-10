@@ -167,6 +167,12 @@ public class CoursesUserService {
         System.out.println("Instructor with id " + instructorId + " has been assigned to course with id " + courseId);
     }
 
+    /**
+     * Unassigns a instructor from course, the instructor of the course will be set to null.
+     *
+     * @param instructorId The ID of the student to enroll.
+     * @param courseId     The ID of the course.
+     */
     public void unAssignInstructor(Integer instructorId, Integer courseId)throws EntityNotFoundException,BusinessException {
         // Fetch the instructor from the repository
         Instructor instructor = instructorIRepository.get(instructorId);
@@ -417,25 +423,51 @@ public class CoursesUserService {
         System.out.println("Admin with id " + adminId + " has been successfully removed");
     }
 
-
+    /**
+     * Retrieves all courses from the repository.
+     *
+     * @return a list of all courses.
+     */
     public List<Course> getAllCourses(){
         return courseIRepository.getAll();
     }
 
+    /**
+     * Retrieves all students from the repository.
+     *
+     * @return a list of all students.
+     */
     public  List<Student> getAllStudents(){
         return studentIRepository.getAll();
     }
 
 
+    /**
+     * Retrieves all instructors from the repository.
+     *
+     * @return a list of all instructors.
+     */
     public List<Instructor> getAllInstructors(){
         return instructorIRepository.getAll();
     }
 
+    /**
+     * Retrieves all admins from the repository.
+     *
+     * @return a list of all admins.
+     */
     public List<Admin> getAllAdmins(){
         return adminIRepository.getAll();
     }
 
-
+    /**
+     * Unenrolls a student from a course.
+     *
+     * @param studId the ID of the student to unenroll.
+     * @param courseId the ID of the course the student is unenrolling from.
+     * @throws EntityNotFoundException if the student or course does not exist.
+     * @throws BusinessException if the student is not enrolled in the specified course.
+     */
     public void unenroll(Integer studId, Integer courseId) throws EntityNotFoundException,BusinessException {
 
         Student student = studentIRepository.get(studId);
@@ -490,7 +522,14 @@ public class CoursesUserService {
     }
 
 
-
+    /**
+     * Removes the assigned Instructo
+     *
+     * @param instructorId the ID of the instructor to remove.
+     * @param courseId the ID of the course the instructor is assigned to.
+     * @throws EntityNotFoundException if the instructor or course does not exist.
+     * @throws BusinessException if the instructor was already unassigned.
+     */
     public void removeAssignedInstructor(Integer instructorId, Integer courseId) throws EntityNotFoundException,BusinessException {
         //fetch the instructor
         Instructor instructor = instructorIRepository.get(instructorId);
@@ -522,6 +561,13 @@ public class CoursesUserService {
     }
 
 
+    /**
+     * Retrieves all courses that a student is enrolled in.
+     *
+     * @param studentId the ID of the student.
+     * @return a list of courses the student is enrolled in.
+     * @throws EntityNotFoundException if no student is found with the given ID.
+     */
     public List<Course> getCoursesAStudentEnrolledIn(Integer studentId) throws EntityNotFoundException {
         Student student = studentIRepository.get(studentId);
         if(student == null)
@@ -544,6 +590,12 @@ public class CoursesUserService {
 
 
 
+    /**
+     * Retrieves all courses taught by a specific instructor.
+     *
+     * @param instructorId the ID of the instructor.
+     * @return a list of courses the instructor teaches.
+     */
     public List<Course> getCoursesAInstructorTeaches(Integer instructorId){
 
 
@@ -557,6 +609,13 @@ public class CoursesUserService {
         return enrolledCourses;
     }
 
+    /**
+     * Retrieves detailed information about a course.
+     *
+     * @param courseId the ID of the course.
+     * @return the course information.
+     * @throws EntityNotFoundException if no course is found with the given ID.
+     */
     public Course getCourseInfo(Integer courseId)throws EntityNotFoundException{
         Course course = courseIRepository.get(courseId);
         if (course == null)
@@ -564,6 +623,13 @@ public class CoursesUserService {
         return course;
     }
 
+    /**
+     * Retrieves detailed information about a student.
+     *
+     * @param studentId the ID of the student.
+     * @return the student information.
+     * @throws EntityNotFoundException if no student is found with the given ID.
+     */
     public Student getStudentInfo(Integer studentId)throws EntityNotFoundException{
         Student student = studentIRepository.get(studentId);
         if (student == null)
@@ -571,6 +637,13 @@ public class CoursesUserService {
         return student;
     }
 
+    /**
+     * Retrieves detailed information about an instructor.
+     *
+     * @param instructorId the ID of the instructor.
+     * @return the instructor information.
+     * @throws EntityNotFoundException if no instructor is found with the given ID.
+     */
     public Instructor getInstructorInfo(Integer instructorId)throws EntityNotFoundException{
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
@@ -578,6 +651,12 @@ public class CoursesUserService {
         return instructor;
     }
 
+    /**
+     * Updates the details of a course.
+     *
+     * @param course the updated course object.
+     * @throws EntityNotFoundException if no course is found with the given ID.
+     */
     public void updateCourse(Course course)throws EntityNotFoundException{
 
         if(courseIRepository.get(course.getId()) == null)
@@ -585,18 +664,35 @@ public class CoursesUserService {
         courseIRepository.update(course);
     }
 
+    /**
+     * Updates the details of a student.
+     *
+     * @param student the updated student object.
+     * @throws EntityNotFoundException if no student is found with the given ID.
+     */
     public void updateStudent(Student student)throws EntityNotFoundException{
         if (studentIRepository.get(student.getId()) == null)
             throw new EntityNotFoundException(student.getId());
         studentIRepository.update(student);
     }
 
+    /**
+     * Updates the details of an instructor.
+     *
+     * @param instructor the updated instructor object.
+     * @throws EntityNotFoundException if no instructor is found with the given ID.
+     */
     public void updateInstructor(Instructor instructor)throws EntityNotFoundException{
         if (instructorIRepository.get(instructor.getId()) == null)
             throw new EntityNotFoundException(instructor.getId());
         instructorIRepository.update(instructor);
     }
 
+    /**
+     * Retrieves all courses that have fewer than 20% of their spots filled.
+     *
+     * @return a list of under-occupied courses.
+     */
     public List<Course> getAllUnderOcupiedCourses(){
         List<Course>courses = courseIRepository.getAll();
         List<Course> underOcupiedCourses = new ArrayList<>();
@@ -609,7 +705,11 @@ public class CoursesUserService {
     }
 
 
-    //sorting in ascending order
+    /**
+     * Sorts all instructors by the number of courses they are teaching in descending order.
+     *
+     * @return a sorted list of instructors.
+     */
     public List<Instructor> sortAllInstructorsByNumberOfTeachingCourses(){
         List<Instructor> instructors = instructorIRepository.getAll();
         //sort the instructor by number of courses
@@ -619,7 +719,13 @@ public class CoursesUserService {
         return instructors;
     }
 
-
+    /**
+     * Retrieves all courses that end before a specified date.
+     *
+     * @param date the date to compare course end dates against.
+     * @return a list of courses that end before the specified date.
+     * @throws ParseException if the date format is incorrect.
+     */
     public List<Course> getAllCoursesThatEndBeforeADate(String date){
         List<Course>courses = courseIRepository.getAll();
         List<Course>coursesThatEndBeforeADate = new ArrayList<>();
