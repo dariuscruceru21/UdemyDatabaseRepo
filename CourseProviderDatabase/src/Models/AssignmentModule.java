@@ -1,29 +1,31 @@
 package Models;
 
 public class AssignmentModule implements Identifiable {
-    private Integer assignmentId;
     private Integer moduleId;
+    private Integer assignmentId;
 
-    public AssignmentModule(Integer assignmentId, Integer moduleId) {
-        this.assignmentId = assignmentId;
+
+    public AssignmentModule(Integer moduleId,Integer assignmentId) {
         this.moduleId = moduleId;
+        this.assignmentId = assignmentId;
+
     }
 
-    public Integer getModuleId() {
-        return moduleId;
+    public Integer getAssignmentId() {
+        return assignmentId;
     }
 
-    public void setModuleIdId(Integer moduleIdId) {
-        this.moduleId = moduleIdId;
+    public void setAssignmentId(Integer moduleIdId) {
+        this.assignmentId = assignmentId;
     }
 
     @Override
     public Integer getId() {
-        return assignmentId;
+        return moduleId;
     }
 
     @Override
     public void setId(Integer id) {
-        this.assignmentId = id;
+        this.moduleId = id;
     }
 }

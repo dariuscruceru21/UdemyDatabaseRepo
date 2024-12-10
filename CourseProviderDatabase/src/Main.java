@@ -26,7 +26,7 @@ public class Main {
 
 //        // Manually add the ID as part of the object creation
          Instructor student = new Instructor(9, "Paul", "paul123", "paul@gmail.com", "instructor");
-         Course course = new Course(2,"ALgebra","usor",10,"2024-07-12","2024-10-11",9);
+         Course course = new Course(2,"ALgebra","usor",10,"2024-07-12","2024-10-11",2);
          Module module = new Module(1,"Linked Lists","hard content");
          Assignment assignment = new Assignment(1,"optional assignment", "2024-12-07",100);
 //
@@ -74,8 +74,8 @@ public class Main {
         DataBaseRepository<Module> moduleDataBaseRepository = new DataBaseRepository<>("module",Module.class,utils.getModuleParameters());
         DataBaseRepository<ModuleCourse>moduleCourseDataBaseRepository = new DataBaseRepository<>("coursemodule",ModuleCourse.class,utils.getCourseModuleParameters());
         DataBaseRepository<AssignmentModule> assignmentModuleDataBaseRepository = new DataBaseRepository<>("moduleassignment",AssignmentModule.class,utils.getModuleAssignmentParameteres());
-        DataBaseRepository<QuizAssignment>quizAssignmentDataBaseRepository = new DataBaseRepository<>("assignmentquizz",QuizAssignment.class,utils.getQuizAssignmentParameteres());
-        //AssignmentService assignmentService = new AssignmentService(quizDataBaseRepository,assignmentDataBaseRepository,moduleDataBaseRepository,courseDataBaseRepository,moduleCourseDataBaseRepository);
+        DataBaseRepository<QuizAssignment>quizAssignmentDataBaseRepository = new DataBaseRepository<>("assignmentquiz",QuizAssignment.class,utils.getQuizAssignmentParameteres());
+        //AssignmentService assignmentService = new AssignmentService(quizDataBaseRepository,assignmentDataBaseRepository,moduleDataBaseRepository,courseDataBaseRepository,moduleCourseDataBaseRepository,assignmentModuleDataBaseRepository,quizAssignmentDataBaseRepository);
 
         //studentCourseDataBaseRepository.delete(2);
         //studentDataBaseRepository.delete(2);
@@ -141,14 +141,42 @@ public class Main {
         CourseUserController courseUserController = new CourseUserController(coursesUserService);
         AssignmentController assignmentController = new AssignmentController(assignmentService);
 
-        Ui ui = new Ui(assignmentController,courseUserController);
-        try {
-            ui.start();
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+//        Ui ui = new Ui(assignmentController,courseUserController);
+//        try {
+//            ui.start();
+//        } catch (EntityNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
         //System.out.println(coursesUserService.getCoursesAStudentEnrolledIn(2));
         //coursesUserService.unenroll(2,101);
+
+
+        //assignmentService.addModuleToCourse(101,3);
+//        try {
+//            assignmentService.removeQuizFromAssignment(1,201);
+//        } catch (EntityNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+        //assignmentDataBaseRepository.delete(201);
+        //assignmentModuleDataBaseRepository.delete(202);
+        //moduleDataBaseRepository.delete(202);
+
+        //moduleCourseDataBaseRepository.delete(201);
+        //moduleDataBaseRepository.delete(206);
+        //assignmentModuleDataBaseRepository.delete(207);
+        //moduleDataBaseRepository.delete(207);
+        //assignmentDataBaseRepository.delete(305);
+        //assignmentDataBaseRepository.delete(306);
+        coursesUserService.addCourse(course);
+
+
+
+
+
+
+
+
+
 
 
 

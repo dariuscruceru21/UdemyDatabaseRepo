@@ -1,29 +1,39 @@
 package Models;
 
 public class QuizAssignment implements Identifiable {
-    private Integer quizId;
     private Integer assignmentId;
+    private Integer quizId;
 
-    public QuizAssignment(Integer quizId, Integer assignmentId) {
+
+    public QuizAssignment( Integer assignmentId, Integer quizId) {
+        this.assignmentId = assignmentId;
         this.quizId = quizId;
-        this.assignmentId = assignmentId;
+
     }
 
-    public Integer getAssignmentId() {
-        return assignmentId;
+    public Integer getQuizId() {
+        return quizId;
     }
 
-    public void setAssignmentId(Integer assignmentId) {
-        this.assignmentId = assignmentId;
+    public void setQuizId(Integer quizId) {
+        this.quizId= quizId;
     }
 
     @Override
     public Integer getId() {
-        return quizId;
+        return assignmentId;
     }
 
     @Override
     public void setId(Integer id) {
-        this.quizId = id;
+        this.assignmentId = id;
+    }
+
+    @Override
+    public String toString() {
+        return "QuizAssignment{" +
+                "quizId=" + quizId +
+                ", assignmentId=" + assignmentId +
+                '}';
     }
 }

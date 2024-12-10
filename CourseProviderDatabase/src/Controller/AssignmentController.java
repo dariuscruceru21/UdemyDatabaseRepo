@@ -1,6 +1,7 @@
 package Controller;
 import java.util.List;
 
+import Exceptions.EntityNotFoundException;
 import Models.Assignment;
 import Models.Module;
 import Models.Quiz;
@@ -64,7 +65,7 @@ public class AssignmentController {
      * @param moduleId The ID of the module to remove.
      * @return Success message if removed, or error message if failed.
      */
-    public String removeModuleFromCourse(Integer courseId, Integer moduleId) {
+    public String removeModuleFromCourse(Integer courseId, Integer moduleId) throws EntityNotFoundException {
         try {
             assignmentService.removeModuleFromCourse(courseId, moduleId);
             return "Module removed from course successfully.";
@@ -79,7 +80,7 @@ public class AssignmentController {
      * @param assignmentId The ID of the assignment to remove.
      * @return Success message if removed, or error message if failed.
      */
-    public String removeAssignmentFromModule(Integer moduleId, Integer assignmentId) {
+    public String removeAssignmentFromModule(Integer moduleId, Integer assignmentId) throws EntityNotFoundException {
         try {
             assignmentService.removeAssignmentFromModule(moduleId, assignmentId);
             return "Assignment removed from module successfully.";
@@ -94,7 +95,7 @@ public class AssignmentController {
      * @param quizId The ID of the quiz to remove.
      * @return Success message if removed, or error message if failed.
      */
-    public String removeQuizFromAssignment(Integer assignmentId, Integer quizId) {
+    public String removeQuizFromAssignment(Integer assignmentId, Integer quizId) throws EntityNotFoundException {
         try {
             assignmentService.removeQuizFromAssignment(assignmentId, quizId);
             return "Quiz removed from assignment successfully.";
