@@ -1,6 +1,8 @@
 package Service;
 
+import Exceptions.BusinessException;
 import Exceptions.EntityNotFoundException;
+import Exceptions.ValidationException;
 import Models.*;
 import Repository.IRepository;
 
@@ -88,7 +90,7 @@ public class CoursesUserService {
      * @param studId   The ID of the student to enroll.
      * @param courseId The ID of the course.
      */
-    public void enroll(Integer studId, Integer courseId)throws EntityNotFoundException {
+    public void enroll(Integer studId, Integer courseId)throws EntityNotFoundException, BusinessException {
         Student student = studentIRepository.get(studId);
         if(student == null)
             throw new EntityNotFoundException(studId);
@@ -98,7 +100,7 @@ public class CoursesUserService {
             throw new EntityNotFoundException(courseId);
 
         if (course.getAvailableSpots() <= getEnrolledStudents(courseId).size())
-            throw new IllegalArgumentException("Course is already at full capacity");
+            throw new BusinessException("Course is already at full capacity");
 
         //check if the student is already enrolled
         List<Enrolled> enrollments = enrolledIRepository.getAll();
@@ -134,7 +136,7 @@ public class CoursesUserService {
      * @param instructorId The ID of the student to enroll.
      * @param courseId     The ID of the course.
      */
-    public void assignInstructor(Integer instructorId, Integer courseId)throws EntityNotFoundException {
+    public void assignInstructor(Integer instructorId, Integer courseId)throws EntityNotFoundException,BusinessException {
         // Fetch the instructor from the repository
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
@@ -147,7 +149,7 @@ public class CoursesUserService {
 
         // Check if the instructor is already assigned to the course
         if (course.getInstructorId() != null && course.getInstructorId().equals(instructorId)) {
-            throw new IllegalArgumentException("Instructor with id " + instructorId + " is already teaching this course");
+            throw new BusinessException("Instructor with id " + instructorId + " is already teaching this course");
         }
 
         //Add the course to the list of courses an instructor teaches
@@ -165,7 +167,7 @@ public class CoursesUserService {
         System.out.println("Instructor with id " + instructorId + " has been assigned to course with id " + courseId);
     }
 
-    public void unAssignInstructor(Integer instructorId, Integer courseId)throws EntityNotFoundException {
+    public void unAssignInstructor(Integer instructorId, Integer courseId)throws EntityNotFoundException,BusinessException {
         // Fetch the instructor from the repository
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
@@ -178,7 +180,7 @@ public class CoursesUserService {
 
         // Check if the instructor is assigned to the course
         if (course.getInstructorId() == null && !course.getInstructorId().equals(instructorId)) {
-            throw new IllegalArgumentException("Instructor with id " + instructorId + " is not teaching this course");
+            throw new BusinessException("Instructor with id " + instructorId + " is not teaching this course");
         }
 
         //Remove the course from the list of courses an instructor teaches
@@ -201,8 +203,16 @@ public class CoursesUserService {
      *
      * @param course The course to add.
      */
-    public void addCourse(Course course) {
-        courseIRepository.create(course);
+    public void addCourse(Course course) throws ValidationException {
+            try{
+                ValidationException.validateId(course.getId());
+
+                courseIRepository.create(course);
+
+            }catch (ValidationException e) {
+                System.err.println("Failed to add course: " + e.getMessage());
+            }
+
     }
 
     /**
@@ -211,7 +221,14 @@ public class CoursesUserService {
      * @param student The student to add.
      */
     public void addStudent(Student student) {
-        studentIRepository.create(student);
+        try{
+            ValidationException.validateId(student.getId());
+            ValidationException.validateEmail(student.getEmail());
+            studentIRepository.create(student);
+        }catch (ValidationException e) {
+            System.err.println("Failed to add student: " + e.getMessage());
+        }
+
     }
 
     /**
@@ -220,7 +237,14 @@ public class CoursesUserService {
      * @param instructor The instructor to add.
      */
     public void addInstructor(Instructor instructor) {
-        instructorIRepository.create(instructor);
+        try{
+            ValidationException.validateId(instructor.getId());
+            ValidationException.validateEmail(instructor.getEmail());
+            instructorIRepository.create(instructor);
+        }catch (ValidationException e) {
+            System.err.println("Failed to add instructor: " + e.getMessage());
+        }
+
     }
 
     /**
@@ -229,7 +253,14 @@ public class CoursesUserService {
      * @param admin The instructor to add.
      */
     public void addAdmin(Admin admin) {
-        adminIRepository.create(admin);
+       try{
+           ValidationException.validateId(admin.getId());
+           ValidationException.validateEmail(admin.getEmail());
+           adminIRepository.create(admin);
+       }catch (ValidationException e) {
+           System.err.println("Failed to add admin: " + e.getMessage());
+       }
+
     }
 
     /**
@@ -405,7 +436,7 @@ public class CoursesUserService {
     }
 
 
-    public void unenroll(Integer studId, Integer courseId) throws EntityNotFoundException {
+    public void unenroll(Integer studId, Integer courseId) throws EntityNotFoundException,BusinessException {
 
         Student student = studentIRepository.get(studId);
         if (student == null)
@@ -421,7 +452,7 @@ public class CoursesUserService {
                 .anyMatch(e -> e.getId().equals(studId) && e.getCourseId().equals(courseId));
 
         if (!isEnrolled)
-            throw new IllegalArgumentException("Student is not enrolled in this course");
+            throw new BusinessException("Student is not enrolled in this course");
 
         List<Enrolled>enrollmentsThatDonMatch  = new ArrayList<>();
         for(Enrolled enrollment : enrollments)
@@ -460,7 +491,7 @@ public class CoursesUserService {
 
 
 
-    public void removeAssignedInstructor(Integer instructorId, Integer courseId) throws EntityNotFoundException {
+    public void removeAssignedInstructor(Integer instructorId, Integer courseId) throws EntityNotFoundException,BusinessException {
         //fetch the instructor
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
@@ -473,7 +504,7 @@ public class CoursesUserService {
 
         //check if the instructor is assigned to a course
         if(course.getInstructorId() == null)
-            throw new IllegalArgumentException("Course already been unassigned");
+            throw new BusinessException("Course already been unassigned");
 
         //remove the course from the instructor list
         List<Integer> assignedCourses = instructor.getCourses();

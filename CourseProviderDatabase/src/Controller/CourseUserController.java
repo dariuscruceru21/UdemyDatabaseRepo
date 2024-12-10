@@ -1,6 +1,8 @@
 package Controller;
 
+import Exceptions.BusinessException;
 import Exceptions.EntityNotFoundException;
+import Exceptions.ValidationException;
 import Models.Admin;
 import Models.Course;
 import Models.Instructor;
@@ -75,7 +77,7 @@ public class CourseUserController {
      * @param course The course to add.
      * @return A success message after adding the course.
      */
-    public String addCourse(Course course) {
+    public String addCourse(Course course) throws ValidationException {
         service.addCourse(course);
         return "Course added successfully.";
     }
@@ -135,7 +137,7 @@ public class CourseUserController {
      * @param instructorId The ID of the instructor to remove.
      * @return A success message after removing the instructor.
      */
-    public String removeInstructor(Integer instructorId) throws EntityNotFoundException {
+    public String removeInstructor(Integer instructorId) throws EntityNotFoundException, BusinessException {
         if (service.getCourseInfo(instructorId) != null) {
             service.unAssignInstructor(instructorId, service.getCourseInfo(instructorId).getId());
         }
@@ -191,7 +193,7 @@ public class CourseUserController {
      * @param courseId The ID of the course.
      * @return A success message if unenrollment is successful.
      */
-    public String unenrollStudentFromCourse(Integer studentId, Integer courseId) throws EntityNotFoundException {
+    public String unenrollStudentFromCourse(Integer studentId, Integer courseId) throws EntityNotFoundException, BusinessException {
         service.unenroll(studentId, courseId);
         return "Student unenrolled successfully.";
     }

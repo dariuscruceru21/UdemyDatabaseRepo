@@ -2,7 +2,9 @@ package Ui;
 
 import Controller.AssignmentController;
 import Controller.CourseUserController;
+import Exceptions.BusinessException;
 import Exceptions.EntityNotFoundException;
+import Exceptions.ValidationException;
 import Models.*;
 import Models.Module;
 import Service.AuthenticationService;
@@ -38,7 +40,7 @@ public class Ui {
      *
      * @throws EntityNotFoundException if a necessary entity cannot be found during menu processing.
      */
-    public void start() throws EntityNotFoundException {
+    public void start() throws EntityNotFoundException, BusinessException, ValidationException {
         System.out.println("Welcome to the Education Management System!");
 
         // Login Process
@@ -96,7 +98,7 @@ public class Ui {
      * @param student the student object whose menu options are being displayed.
      * @throws EntityNotFoundException if a necessary entity cannot be found during menu processing.
      */
-    public void studentMenu(Student student) throws EntityNotFoundException {
+    public void studentMenu(Student student) throws EntityNotFoundException, BusinessException {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -199,7 +201,7 @@ public class Ui {
      * @param admin the admin object whose menu options are being displayed.
      * @throws EntityNotFoundException if a necessary entity cannot be found during menu processing.
      */
-    public void adminMenu(Admin admin) throws EntityNotFoundException {
+    public void adminMenu(Admin admin) throws EntityNotFoundException, BusinessException, ValidationException {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -509,7 +511,7 @@ public class Ui {
      * start date, end date, and instructor ID. After creating the course, it adds it to the system
      * through the course controller.
      */
-    public void addCourse() {
+    public void addCourse() throws ValidationException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter Course ID: ");
         Integer courseID = scanner.nextInt();
@@ -657,7 +659,7 @@ public class Ui {
      *
      * @throws EntityNotFoundException if the instructor with the given ID does not exist.
      */
-    public void removeInstructor() throws EntityNotFoundException {
+    public void removeInstructor() throws EntityNotFoundException, BusinessException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter Instructor ID to remove: ");
         int instructorId = scanner.nextInt();
@@ -825,7 +827,7 @@ public class Ui {
      *
      * @throws EntityNotFoundException if the student or course does not exist.
      */
-    public void unenroll() throws EntityNotFoundException {
+    public void unenroll() throws EntityNotFoundException, BusinessException {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter you're ID: ");
         int userId = scanner.nextInt();

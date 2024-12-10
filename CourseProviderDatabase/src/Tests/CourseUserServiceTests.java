@@ -1,6 +1,8 @@
 package Tests;
 
+import Exceptions.BusinessException;
 import Exceptions.EntityNotFoundException;
+import Exceptions.ValidationException;
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
@@ -61,7 +63,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(3)
-    void testEnrollStudentUnenrollStudent()throws EntityNotFoundException{
+    void testEnrollStudentUnenrollStudent() throws EntityNotFoundException, BusinessException {
         coursesUserService.enroll(1,1);
         assertNotNull(coursesUserService.getEnrolledStudents(1));
         coursesUserService.unenroll(1,1);
@@ -71,7 +73,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(4)
-    void testAssignIntructorUnassign()throws EntityNotFoundException{
+    void testAssignIntructorUnassign() throws EntityNotFoundException, BusinessException, ValidationException {
         Instructor instructor = new Instructor(101,"john","johm@","john@gmail.com","instructor");
         Course course = new Course(101,"MAP","greu",11,"2024-07-09","2024-08-12",4);
         coursesUserService.addInstructor(instructor);
@@ -86,7 +88,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(5)
-    void testAddRemoveCourse()throws EntityNotFoundException{
+    void testAddRemoveCourse() throws EntityNotFoundException, ValidationException {
         Course course = new Course(101,"MAP","greu",11,"2024-07-09","2024-08-12",4);
         coursesUserService.addCourse(course);
         assertNotNull(courseDataBaseRepository.get(101));
@@ -137,7 +139,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(11)
-    void testRemoveAssignedInstructor() throws EntityNotFoundException {
+    void testRemoveAssignedInstructor() throws EntityNotFoundException, BusinessException, ValidationException {
         Instructor instructor = new Instructor(101,"robert","password123","robert@gmail.com","instructor");
         Course course = new Course(101,"MAP","greu",11,"2024-07-09","2024-08-12",4);
 
@@ -160,7 +162,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(12)
-    void testGetCoursesAStudentEnrolledIn() throws EntityNotFoundException {
+    void testGetCoursesAStudentEnrolledIn() throws EntityNotFoundException, BusinessException, ValidationException {
 
        Student mockStudent = new Student(101,"robert","password123","robert@gmail.com","student");
        Course mockCourse = new Course(101,"MAP","greu",11,"2024-07-09","2024-08-12",4);
@@ -179,7 +181,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(13)
-    void testGetCoursesInstructorTeaches() throws EntityNotFoundException {
+    void testGetCoursesInstructorTeaches() throws EntityNotFoundException, BusinessException, ValidationException {
         // Mock data for Instructor and Course
         Instructor mockInstructor = new Instructor(101, "Dr. John", "password123", "john@example.com", "instructor");
         Course mockCourse = new Course(101, "MAP", "Course description", 11, "2024-07-09", "2024-08-12", 4);
@@ -242,7 +244,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(17)
-    void testUpdateCourse()throws EntityNotFoundException{
+    void testUpdateCourse() throws EntityNotFoundException, ValidationException {
         Course course = new Course(102,"Java","Introduction to java",30,"2024-01-15","2024-05-15",1);
         coursesUserService.addCourse(course);
         assertEquals(courseDataBaseRepository.get(102).getCourseTitle(),course.getCourseTitle());
@@ -287,7 +289,7 @@ public class CourseUserServiceTests {
 
     @Test
     @Order(21)
-    void testGetAllCOursesThatEndBeforeADate() throws EntityNotFoundException {
+    void testGetAllCOursesThatEndBeforeADate() throws EntityNotFoundException, ValidationException {
 
         Course mockCourse = new Course(101,"MAP","greu",11,"2024-07-09","2024-08-12",4);
         Course mockCourse2 = new Course(102,"LP","usor",10,"2024-01-09","2024-05-09",4);

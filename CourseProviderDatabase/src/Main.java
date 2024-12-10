@@ -1,6 +1,8 @@
 import Controller.AssignmentController;
 import Controller.CourseUserController;
+import Exceptions.BusinessException;
 import Exceptions.EntityNotFoundException;
+import Exceptions.ValidationException;
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
@@ -141,12 +143,12 @@ public class Main {
         CourseUserController courseUserController = new CourseUserController(coursesUserService);
         AssignmentController assignmentController = new AssignmentController(assignmentService);
 
-//        Ui ui = new Ui(assignmentController,courseUserController);
-//        try {
-//            ui.start();
-//        } catch (EntityNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
+        Ui ui = new Ui(assignmentController,courseUserController);
+        try {
+            ui.start();
+        } catch (EntityNotFoundException | BusinessException | ValidationException e) {
+            throw new RuntimeException(e);
+        }
         //System.out.println(coursesUserService.getCoursesAStudentEnrolledIn(2));
         //coursesUserService.unenroll(2,101);
 
@@ -167,16 +169,6 @@ public class Main {
         //moduleDataBaseRepository.delete(207);
         //assignmentDataBaseRepository.delete(305);
         //assignmentDataBaseRepository.delete(306);
-        coursesUserService.addCourse(course);
-
-
-
-
-
-
-
-
-
 
 
 
