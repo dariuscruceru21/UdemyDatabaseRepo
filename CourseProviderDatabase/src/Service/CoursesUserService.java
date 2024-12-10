@@ -572,13 +572,13 @@ public class CoursesUserService {
 
     public List<Course> getAllUnderOcupiedCourses(){
         List<Course>courses = courseIRepository.getAll();
-        List<Course> underOcupiedCOurses = new ArrayList<>();
+        List<Course> underOcupiedCourses = new ArrayList<>();
         for(Course course : courses){
             if (course.getEnrolledStudents().size() <= course.getAvailableSpots() * 0.2){
-                underOcupiedCOurses.add(course);
+                underOcupiedCourses.add(course);
             }
         }
-        return underOcupiedCOurses;
+        return underOcupiedCourses;
     }
 
 
