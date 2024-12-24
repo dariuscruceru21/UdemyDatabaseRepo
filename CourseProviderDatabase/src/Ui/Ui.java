@@ -136,7 +136,7 @@ public class Ui {
                 default -> System.out.println("Invalid choice. Please try again.");
 
             }
-        } while (choice != 11);
+        } while (choice != 13);
     }
 
     /**
@@ -191,7 +191,7 @@ public class Ui {
                 case 16 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 14);
+        } while (choice != 16);
     }
 
     /**
@@ -281,7 +281,7 @@ public class Ui {
                 case 29 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 21);
+        } while (choice != 29);
     }
 
 

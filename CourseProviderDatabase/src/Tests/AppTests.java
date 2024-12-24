@@ -65,46 +65,46 @@ public class AppTests {
     @Test
     @Order(4)
     void testAssignIntructorUnassign() throws EntityNotFoundException, BusinessException, ValidationException {
-        Instructor instructor = new Instructor(101,"john","johm@","john@gmail.com","instructor");
-        Course course = new Course(101,"MAP","greu",11,"2024-07-09","2024-08-12",4);
+        Instructor instructor = new Instructor(401,"john","johm@","john@gmail.com","instructor");
+        Course course = new Course(401,"MAP","greu",11,"2024-07-09","2024-08-12",4);
         coursesUserService.addInstructor(instructor);
         coursesUserService.addCourse(course);
-        coursesUserService.assignInstructor(101,101);
-        assertEquals(courseDataBaseRepository.get(101).getInstructorId(),101);
-        coursesUserService.unAssignInstructor(101,101);
-        assertEquals(courseDataBaseRepository.get(101).getInstructorId(),null);
-        coursesUserService.removeInstructor(101);
-        coursesUserService.removeCourse(101);
+        coursesUserService.assignInstructor(401,401);
+        assertEquals(courseDataBaseRepository.get(401).getInstructorId(),401);
+        coursesUserService.unAssignInstructor(401,401);
+        assertEquals(courseDataBaseRepository.get(401).getInstructorId(),null);
+        coursesUserService.removeInstructor(401);
+        coursesUserService.removeCourse(401);
     }
 
     @Test
     @Order(5)
     void testAddRemoveCourse() throws EntityNotFoundException, ValidationException {
-        Course course = new Course(101,"MAP","greu",11,"2024-07-09","2024-08-12",4);
+        Course course = new Course(301,"MAP","greu",11,"2024-07-09","2024-08-12",4);
         coursesUserService.addCourse(course);
-        assertNotNull(courseDataBaseRepository.get(101));
-        coursesUserService.removeCourse(101);
-        assertNull(courseDataBaseRepository.get(101));
+        assertNotNull(courseDataBaseRepository.get(301));
+        coursesUserService.removeCourse(301);
+        assertNull(courseDataBaseRepository.get(301));
     }
 
     @Test
     @Order(6)
     void testAddRemoveStudent()throws EntityNotFoundException{
-        Student student = new Student(3,"stefan","password1234","stefan@gmail.com","student");
+        Student student = new Student(101,"stefan","password1234","stefan@gmail.com","student");
         coursesUserService.addStudent(student);
-        assertNotNull(studentDataBaseRepository.get(3));
-        coursesUserService.removeStudent(3);
-        assertNull(studentDataBaseRepository.get(3));
+        assertNotNull(studentDataBaseRepository.get(101));
+        coursesUserService.removeStudent(101);
+        assertNull(studentDataBaseRepository.get(101));
     }
 
     @Test
     @Order(7)
     void testAddRemoveInstructor()throws EntityNotFoundException{
-        Instructor instructor = new Instructor(101,"robert","password123","robert@gmail.com","instructor");
+        Instructor instructor = new Instructor(501,"robert","password123","robert@gmail.com","instructor");
         coursesUserService.addInstructor(instructor);
-        assertNotNull(instructorDataBaseRepository.get(101));
-        coursesUserService.removeInstructor(101);
-        assertNull(instructorDataBaseRepository.get(101));
+        assertNotNull(instructorDataBaseRepository.get(501));
+        coursesUserService.removeInstructor(501);
+        assertNull(instructorDataBaseRepository.get(501));
     }
 
     @Test
@@ -155,8 +155,8 @@ public class AppTests {
     @Order(12)
     void testGetCoursesAStudentEnrolledIn() throws EntityNotFoundException, BusinessException, ValidationException {
 
-       Student mockStudent = new Student(101,"robert","password123","robert@gmail.com","student");
-       Course mockCourse = new Course(101,"MAP","greu",11,"2024-07-09","2024-08-12",4);
+       Student mockStudent = new Student(601,"robert","password123","robert@gmail.com","student");
+       Course mockCourse = new Course(601,"MAP","greu",11,"2024-07-09","2024-08-12",4);
        coursesUserService.addStudent(mockStudent);
        coursesUserService.addCourse(mockCourse);
        coursesUserService.enroll(mockCourse.getId(), mockCourse.getId());
@@ -174,8 +174,8 @@ public class AppTests {
     @Order(13)
     void testGetCoursesInstructorTeaches() throws EntityNotFoundException, BusinessException, ValidationException {
         // Mock data for Instructor and Course
-        Instructor mockInstructor = new Instructor(101, "Dr. John", "password123", "john@example.com", "instructor");
-        Course mockCourse = new Course(101, "MAP", "Course description", 11, "2024-07-09", "2024-08-12", 4);
+        Instructor mockInstructor = new Instructor(201, "Dr. John", "password123", "john@example.com", "instructor");
+        Course mockCourse = new Course(201, "MAP", "Course description", 11, "2024-07-09", "2024-08-12", 4);
 
         // Add the instructor and course to the system
         coursesUserService.addInstructor(mockInstructor);
@@ -248,13 +248,13 @@ public class AppTests {
     @Test
     @Order(18)
     void testUpdateStudent()throws EntityNotFoundException{
-        Student student = new Student(3,"maia","password21","maia@gmail.com","student");
+        Student student = new Student(101,"maia","password21","maia@gmail.com","student");
         coursesUserService.addStudent(student);
-        assertEquals(studentDataBaseRepository.get(3).getPassword(),student.getPassword());
-        Student student1 = new Student(3,"maia","maiak","maia@gmail.com","student");
+        assertEquals(studentDataBaseRepository.get(101).getPassword(),student.getPassword());
+        Student student1 = new Student(101,"maia","maiak","maia@gmail.com","student");
         coursesUserService.updateStudent(student1);
-        assertEquals(studentDataBaseRepository.get(3).getPassword(),student1.getPassword());
-        coursesUserService.removeStudent(3);
+        assertEquals(studentDataBaseRepository.get(101).getPassword(),student1.getPassword());
+        coursesUserService.removeStudent(101);
     }
 
     @Test
@@ -282,8 +282,8 @@ public class AppTests {
     @Order(21)
     void testGetAllCOursesThatEndBeforeADate() throws EntityNotFoundException, ValidationException {
 
-        Course mockCourse = new Course(101,"MAP","greu",11,"2024-07-09","2024-08-12",4);
-        Course mockCourse2 = new Course(102,"LP","usor",10,"2024-01-09","2024-05-09",4);
+        Course mockCourse = new Course(801,"MAP","greu",11,"2024-07-09","2024-08-12",4);
+        Course mockCourse2 = new Course(802,"LP","usor",10,"2024-01-09","2024-05-09",4);
         coursesUserService.addCourse(mockCourse);
         coursesUserService.addCourse(mockCourse2);
         List<Course>courses = coursesUserService.getAllCoursesThatEndBeforeADate("2024-06-12");
@@ -296,21 +296,36 @@ public class AppTests {
 
     @Test
     @Order(22)
-    void crudTests(){
+    void testAdd(){
         Student student = new Student(200,"marius","password","marius@gmail.com","student");
         studentDataBaseRepository.create(student);
-        Student mockStudent = studentDataBaseRepository.get(200);
-        assertEquals(mockStudent.getPassword(),"password");
-        Student updatedStudent = new Student(200,"maria","pass","maria@gmail.com","student");
-        studentDataBaseRepository.update(updatedStudent);
-        assertEquals(studentDataBaseRepository.get(200).getPassword(),"pass");
+        assertNotNull(studentDataBaseRepository.get(200));
+    }
+
+    @Test
+    @Order(23)
+    void testUpdate() {
+        Student updatedSTudent = new Student(200, "marius", "newpassword", "marius@gmail.com", "student");
+        studentDataBaseRepository.update(updatedSTudent);
+        assertEquals(studentDataBaseRepository.get(200).getPassword(), "newpassword");
+
+    }
+
+    @Test
+    @Order(24)
+    void testRemove() {
         studentDataBaseRepository.delete(200);
         assertNull(studentDataBaseRepository.get(200));
     }
 
+    @Test
+    @Order(25)
+    void testSortInstructorsByEnrollment(){
+       List<Instructor>instructors = coursesUserService.getAllInstructors();
+       instructors = coursesUserService.sortAllInstructorsByNumberOfTeachingCourses();
+       assertEquals(instructors.size(),2);
+       assertEquals(instructors.get(0).getId(),1);
+       assertEquals(instructors.get(1).getId(),2);
 
-
-
-
-
+    }
 }
