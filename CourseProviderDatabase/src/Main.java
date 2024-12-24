@@ -6,6 +6,7 @@ import Exceptions.ValidationException;
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
+import Repository.InMemoryRepo;
 import Service.AssignmentService;
 import Service.AuthenticationService;
 import Service.CoursesUserService;
@@ -55,14 +56,13 @@ public class Main {
         CourseUserController courseUserController = new CourseUserController(coursesUserService);
         AssignmentController assignmentController = new AssignmentController(assignmentService);
 
-        Ui ui = new Ui(assignmentController,courseUserController);
-        try {
-            ui.start();
-        } catch (EntityNotFoundException | BusinessException | ValidationException e) {
-            throw new RuntimeException(e);
-        }
 
+        Course course = new Course(1,"DariusCruceru","greu",100,"2024-12-21","2025-07-21",1);
+        InMemoryRepo<Course> courseInMemoryRepo = new InMemoryRepo<>();
+        courseInMemoryRepo.create(course);
+        System.out.println(courseInMemoryRepo.get(1));
 
+        //System.out.println(coursesUserService.getInstructorsSortedByEnrollment());
 
 
 
