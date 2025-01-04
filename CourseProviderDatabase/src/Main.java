@@ -7,7 +7,8 @@ import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
 
-import Repository.FileRepoistory;
+
+import Repository.FileRepository;
 import Repository.InMemoryRepo;
 import Service.AssignmentService;
 import Service.AuthenticationService;
@@ -15,7 +16,7 @@ import Service.CoursesUserService;
 import Ui.Ui;
 import Utils.Utils;
 
-
+import java.io.File;
 
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -53,14 +54,20 @@ public class Main {
         AssignmentController assignmentController = new AssignmentController(assignmentService);
 
 
-          Course course = new Course(1000,"DariusCruceru","greu",100,"2024-12-21","2025-07-21",1);
+          Instructor instructor = new Instructor(1,"darius","maiapass","maia@gmail.com","instructor");
+          Student student = new Student(1,"ma","mapassword","ma@h","student");
+          Course course = new Course(1,"DariusCruceru","greu",100,"2024-12-21","2025-07-21",1);
 //        InMemoryRepo<Course> courseInMemoryRepo = new InMemoryRepo<>();
 //        courseInMemoryRepo.create(course);
 //        System.out.println(courseInMemoryRepo.get(1));
 
         //System.out.println(coursesUserService.getInstructorsSortedByEnrollment());
 
-       courseDataBaseRepository.create(course);
+        FileRepository<Instructor> instructorFileRepository = new FileRepository<>("instructor.csv");
+        FileRepository<Student> studentFileRepository = new FileRepository<>("student.csv");
+        //instructorFileRepository.create(instructor);
+        instructorFileRepository.update(instructor);
+        System.out.println(instructorFileRepository.get(1));
 
 
 

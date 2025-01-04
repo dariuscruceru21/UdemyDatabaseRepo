@@ -1,10 +1,12 @@
 package Models;
 
+import java.io.Serializable;
+
 /**
  * Represents a generic user in the system, storing basic user information such as ID,
  * username, password, and email. This class is intended to be extended by specific user types.
  */
-public abstract class User implements Identifiable {
+public abstract class User implements Identifiable, Serializable {
     /** Unique identifier for the user */
     private Integer userID;
     /** Username for user login */
