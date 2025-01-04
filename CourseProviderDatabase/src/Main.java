@@ -6,6 +6,8 @@ import Exceptions.ValidationException;
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
+
+import Repository.FileRepoistory;
 import Repository.InMemoryRepo;
 import Service.AssignmentService;
 import Service.AuthenticationService;
@@ -14,13 +16,7 @@ import Ui.Ui;
 import Utils.Utils;
 
 
-import javax.xml.crypto.Data;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -57,13 +53,14 @@ public class Main {
         AssignmentController assignmentController = new AssignmentController(assignmentService);
 
 
-        Course course = new Course(1,"DariusCruceru","greu",100,"2024-12-21","2025-07-21",1);
-        InMemoryRepo<Course> courseInMemoryRepo = new InMemoryRepo<>();
-        courseInMemoryRepo.create(course);
-        System.out.println(courseInMemoryRepo.get(1));
+          Course course = new Course(1000,"DariusCruceru","greu",100,"2024-12-21","2025-07-21",1);
+//        InMemoryRepo<Course> courseInMemoryRepo = new InMemoryRepo<>();
+//        courseInMemoryRepo.create(course);
+//        System.out.println(courseInMemoryRepo.get(1));
 
         //System.out.println(coursesUserService.getInstructorsSortedByEnrollment());
 
+       courseDataBaseRepository.create(course);
 
 
 

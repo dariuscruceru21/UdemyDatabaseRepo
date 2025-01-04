@@ -11,9 +11,9 @@ repositories {
 }
 
 dependencies {
-    // JUnit for testing
+    // JUnit 5 for testing
     testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.11.4'
 
 
     // PostgreSQL driver for database connection
@@ -21,11 +21,17 @@ dependencies {
 
     // Optional: Logging library for better debug messages
     implementation 'org.slf4j:slf4j-simple:2.0.9'
+
+    // https://mvnrepository.com/artifact/com.opencsv/opencsv
+    implementation 'com.opencsv:opencsv:5.9'
+
 }
 
 test {
-    useJUnitPlatform()
-    testLogging.showStandardStreams=true
+    useJUnitPlatform() // Ensure JUnit Platform is used for tests
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 sourceSets {
