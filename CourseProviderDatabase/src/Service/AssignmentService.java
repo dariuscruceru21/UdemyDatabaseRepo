@@ -55,13 +55,13 @@ public class AssignmentService {
                 this.assignmentModuleRepo = new FileRepository<>("assignmentModule.csv");
                 break;
             case "db":
-                this.quizRepo = new DataBaseRepository<>("quiz",Quiz.class,utils.getUsersParameters());
-                this.assignmentRepo = new DataBaseRepository<>("assignment",Assignment.class,utils.getUsersParameters());
-                this.moduleRepo = new DataBaseRepository<>("module",Module.class,utils.getUsersParameters());
-                this.courseRepo = new DataBaseRepository<>("course",Course.class,utils.getUsersParameters());
-                this.moduleCourseRepo = new DataBaseRepository<>("moduleCourse",ModuleCourse.class,utils.getUsersParameters());
-                this.assignmentQuizRepo = new DataBaseRepository<>("assignmentQuiz",QuizAssignment.class,utils.getUsersParameters());
-                this.assignmentModuleRepo = new DataBaseRepository<>("assignmentModule",AssignmentModule.class,utils.getUsersParameters());
+                this.quizRepo = new DataBaseRepository<>("quiz",Quiz.class,utils.getQuizParameters());
+                this.assignmentRepo = new DataBaseRepository<>("assignment",Assignment.class,utils.getAssignmentParameteres());
+                this.moduleRepo = new DataBaseRepository<>("module",Module.class,utils.getModuleParameters());
+                this.courseRepo = new DataBaseRepository<>("course",Course.class,utils.getCourseParameters());
+                this.moduleCourseRepo = new DataBaseRepository<>("coursemodule",ModuleCourse.class,utils.getCourseModuleParameters());
+                this.assignmentQuizRepo = new DataBaseRepository<>("assignmentquiz",QuizAssignment.class,utils.getQuizAssignmentParameteres());
+                this.assignmentModuleRepo = new DataBaseRepository<>("moduleassignment",AssignmentModule.class,utils.getModuleAssignmentParameteres());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown storage method: " + storageMethod);

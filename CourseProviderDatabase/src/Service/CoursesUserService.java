@@ -60,11 +60,11 @@ public class CoursesUserService {
                 this.enrolledIRepository = new FileRepository<>("enrolled.csv");
                 break;
             case "db":
-                this.courseIRepository = new DataBaseRepository<>("course",Course.class,utils.getUsersParameters());
+                this.courseIRepository = new DataBaseRepository<>("course",Course.class,utils.getCourseParameters());
                 this.studentIRepository = new DataBaseRepository<>("student",Student.class,utils.getUsersParameters());
                 this.instructorIRepository = new DataBaseRepository<>("instructor",Instructor.class,utils.getUsersParameters());
                 this.adminIRepository = new DataBaseRepository<>("admin",Admin.class,utils.getUsersParameters());
-                this.enrolledIRepository = new DataBaseRepository<>("enrolled",Enrolled.class,utils.getUsersParameters());
+                this.enrolledIRepository = new DataBaseRepository<>("studentcourse",Enrolled.class,utils.getEnrolledParameters());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown storage method: " + storageMethod);
