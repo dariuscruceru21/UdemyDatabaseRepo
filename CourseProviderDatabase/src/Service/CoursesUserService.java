@@ -4,14 +4,20 @@ import Exceptions.BusinessException;
 import Exceptions.EntityNotFoundException;
 import Exceptions.ValidationException;
 import Models.*;
+import Repository.DataBaseRepository;
+import Repository.FileRepository;
 import Repository.IRepository;
+import Repository.InMemoryRepo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import Utils.Utils;
+
 
 public class CoursesUserService {
+    Utils utils = new Utils();
     private final IRepository<Course> courseIRepository;
     private final IRepository<Student> studentIRepository;
     private final IRepository<Instructor> instructorIRepository;
@@ -35,6 +41,34 @@ public class CoursesUserService {
         this.instructorIRepository = instructorIRepository;
         this.adminIRepository = adminIRepository;
         this.enrolledIRepository = enrolledIRepository;
+    }
+
+    public CoursesUserService(String storageMethod) {
+        switch (storageMethod.toLowerCase()) {
+            case "inmemory":
+                this.courseIRepository = new InMemoryRepo<>();
+                this.studentIRepository = new InMemoryRepo<>();
+                this.instructorIRepository = new InMemoryRepo<>();
+                this.adminIRepository = new InMemoryRepo<>();
+                this.enrolledIRepository = new InMemoryRepo<>();
+                break;
+            case "file":
+                this.courseIRepository = new FileRepository<>("course.csv");
+                this.studentIRepository = new FileRepository<>("student.csv");
+                this.instructorIRepository = new FileRepository<>("instructor.csv");
+                this.adminIRepository = new FileRepository<>("admin.csv");
+                this.enrolledIRepository = new FileRepository<>("enrolled.csv");
+                break;
+            case "db":
+                this.courseIRepository = new DataBaseRepository<>("course",Course.class,utils.getUsersParameters());
+                this.studentIRepository = new DataBaseRepository<>("student",Student.class,utils.getUsersParameters());
+                this.instructorIRepository = new DataBaseRepository<>("instructor",Instructor.class,utils.getUsersParameters());
+                this.adminIRepository = new DataBaseRepository<>("admin",Admin.class,utils.getUsersParameters());
+                this.enrolledIRepository = new DataBaseRepository<>("enrolled",Enrolled.class,utils.getUsersParameters());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown storage method: " + storageMethod);
+        }
     }
 
     /**

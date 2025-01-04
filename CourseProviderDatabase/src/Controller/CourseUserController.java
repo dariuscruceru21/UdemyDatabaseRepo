@@ -14,8 +14,8 @@ import java.util.List;
 public class CourseUserController {
     private final CoursesUserService service;
 
-    public CourseUserController(CoursesUserService service) {
-        this.service = service;
+    public CourseUserController(String storageMethod) {
+        this.service = new CoursesUserService(storageMethod);
     }
 
     /**

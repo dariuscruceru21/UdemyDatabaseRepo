@@ -3,14 +3,19 @@ package Service;
 import Exceptions.EntityNotFoundException;
 import Models.*;
 import Models.Module;
+import Repository.DataBaseRepository;
+import Repository.FileRepository;
 import Repository.IRepository;
+import Repository.InMemoryRepo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import Utils.Utils;
 
 public class AssignmentService {
+    Utils utils = new Utils();
     private final IRepository<Quiz> quizRepo;
     private final IRepository<Assignment> assignmentRepo;
     private final IRepository<Module> moduleRepo;
@@ -27,6 +32,40 @@ public class AssignmentService {
         this.moduleCourseRepo = moduleCourseRepo;
         this.assignmentModuleRepo = assignmentModuleRepo;
         this.assignmentQuizRepo = assignmentQuizRepo;
+    }
+
+    public AssignmentService(String storageMethod){
+        switch (storageMethod.toLowerCase()) {
+            case "inmemory":
+                this.quizRepo = new InMemoryRepo<>();
+                this.assignmentRepo = new InMemoryRepo<>();
+                this.moduleRepo = new InMemoryRepo<>();
+                this.courseRepo = new InMemoryRepo<>();
+                this.moduleCourseRepo = new InMemoryRepo<>();
+                this.assignmentQuizRepo = new InMemoryRepo<>();
+                this.assignmentModuleRepo = new InMemoryRepo<>();
+                break;
+            case "file":
+                this.quizRepo = new FileRepository<>("quiz.csv");
+                this.assignmentRepo = new FileRepository<>("assignment.csv");
+                this.moduleRepo = new FileRepository<>("module.csv");
+                this.courseRepo = new FileRepository<>("course.csv");
+                this.moduleCourseRepo = new FileRepository<>("moduleCourse.csv");
+                this.assignmentQuizRepo = new FileRepository<>("assignmentQuiz.csv");
+                this.assignmentModuleRepo = new FileRepository<>("assignmentModule.csv");
+                break;
+            case "db":
+                this.quizRepo = new DataBaseRepository<>("quiz",Quiz.class,utils.getUsersParameters());
+                this.assignmentRepo = new DataBaseRepository<>("assignment",Assignment.class,utils.getUsersParameters());
+                this.moduleRepo = new DataBaseRepository<>("module",Module.class,utils.getUsersParameters());
+                this.courseRepo = new DataBaseRepository<>("course",Course.class,utils.getUsersParameters());
+                this.moduleCourseRepo = new DataBaseRepository<>("moduleCourse",ModuleCourse.class,utils.getUsersParameters());
+                this.assignmentQuizRepo = new DataBaseRepository<>("assignmentQuiz",QuizAssignment.class,utils.getUsersParameters());
+                this.assignmentModuleRepo = new DataBaseRepository<>("assignmentModule",AssignmentModule.class,utils.getUsersParameters());
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown storage method: " + storageMethod);
+        }
     }
 
     /**

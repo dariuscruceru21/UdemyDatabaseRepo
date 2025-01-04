@@ -10,8 +10,8 @@ import Service.AssignmentService;
 public class AssignmentController {
     private final AssignmentService assignmentService;
 
-    public AssignmentController(AssignmentService assignmentService) {
-        this.assignmentService = assignmentService;
+    public AssignmentController(String storageMethod) {
+        this.assignmentService = new AssignmentService(storageMethod);
     }
 
     /**

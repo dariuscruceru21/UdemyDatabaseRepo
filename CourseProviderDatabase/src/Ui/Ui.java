@@ -18,20 +18,20 @@ import java.util.Scanner;
  * This class delegates the functionality of assignment and course-user related operations to the respective controller classes.
  */
 public class Ui {
-    private final AuthenticationService authService = new AuthenticationService();
-    private final AssignmentController assignmentController;
-    private final CourseUserController courseUserController;
+    private  AuthenticationService authService;
+    private  AssignmentController assignmentController;
+    private  CourseUserController courseUserController;
 
-    /**
-     * Constructs a new Ui object, initializing the controllers for assignment and course-user management.
-     *
-     * @param assignmentController the controller responsible for managing assignments.
-     * @param courseUserController the controller responsible for managing users in courses.
-     */
-    public Ui(AssignmentController assignmentController, CourseUserController courseUserController) {
-        this.assignmentController = assignmentController;
-        this.courseUserController = courseUserController;
-    }
+//    /**
+//     * Constructs a new Ui object, initializing the controllers for assignment and course-user management.
+//     *
+//     * @param assignmentController the controller responsible for managing assignments.
+//     * @param courseUserController the controller responsible for managing users in courses.
+//     */
+//    public Ui(AssignmentController assignmentController, CourseUserController courseUserController) {
+//        this.assignmentController = assignmentController;
+//        this.courseUserController = courseUserController;
+//    }
 
     /**
      * Starts the Education Management System by welcoming the user and initiating the login process.
@@ -41,7 +41,46 @@ public class Ui {
      * @throws EntityNotFoundException if a necessary entity cannot be found during menu processing.
      */
     public void start() throws EntityNotFoundException, BusinessException, ValidationException {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to the Education Management System!");
+
+        System.out.println("--- Select Data Storage Method ---");
+        System.out.println("1. In-memory");
+        System.out.println("2. File");
+        System.out.println("3. Database");
+        System.out.print("Choose an option: ");
+
+        int storageOption;
+
+        try {
+            storageOption = scanner.nextInt();
+            scanner.nextLine();
+        } catch (Exception e) {
+            System.out.println("Invalid option, defaulting to Database storage.");
+            storageOption = 3;
+            scanner.nextLine();
+        }
+        String storageMethod;
+
+        switch (storageOption) {
+            case 1:
+                storageMethod = "inmemory";
+                break;
+            case 2:
+                storageMethod = "file";
+                break;
+            case 3:
+                storageMethod = "db";
+                break;
+            default:
+                System.out.println("Invalid option, defaulting to Database storage.");
+                storageMethod = "db";
+                break;
+        }
+
+        this.assignmentController = new AssignmentController(storageMethod);
+        this.courseUserController = new CourseUserController(storageMethod);
+        this.authService = new AuthenticationService(storageMethod);
 
         // Login Process
         User loggedInUser = login();
