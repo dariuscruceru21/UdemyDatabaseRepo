@@ -321,31 +321,31 @@ public class Ui {
             System.out.println("13. Get all instructors by number of students they teach");
             //Module handling
             System.out.println("14. View all Modules from a Course");
-            //ADD MODULE
-            //REMOVE MODULE
-            System.out.println("15. Add Module to Course");
-            System.out.println("16. Remove Module from Course");
+            System.out.println("15. Add module");
+            System.out.println("16. Remove Module");
+            System.out.println("17. Add Module to Course");
+            System.out.println("18. Remove Module from Course");
             //Assignment handling
-            System.out.println("17. View all Assignments from a module");
-            //ADD ASSIGNMENT
-            //REMOVE ASSIGNMENT
-            System.out.println("18. Add Assignment to Module");
-            System.out.println("19. Remove Assignment from Module");
+            System.out.println("19. View all Assignments from a module");
+            System.out.println("20. Add assignment");
+            System.out.println("21. Remove assignment");
+            System.out.println("22. Add Assignment to Module");
+            System.out.println("23. Remove Assignment from Module");
             //Quiz handling
-            System.out.println("20. View All Quiz's from a Assignment");
-            //ADD QUIZ
-            //REMOVE QUIZ
-            System.out.println("21. Add Quiz to Assignment");
-            System.out.println("22. Remove Quiz from Assignment");
+            System.out.println("24. View All Quiz's from a Assignment");
+            System.out.println("25. Add Quiz");
+            System.out.println("26. Remove Quiz");
+            System.out.println("27. Add Quiz to Assignment");
+            System.out.println("28. Remove Quiz from Assignment");
             //Admin handling
-            System.out.println("23. View all admins");
-            System.out.println("24. Add Admin");
-            System.out.println("25. Remove Admin");
+            System.out.println("29. View all admins");
+            System.out.println("30. Add Admin");
+            System.out.println("31. Remove Admin");
             //Update operations
-            System.out.println("26. Update Course");
-            System.out.println("27. Update Instructor");
-            System.out.println("28. Update Student");
-            System.out.println("29. Logout");
+            System.out.println("32. Update Course");
+            System.out.println("33. Update Instructor");
+            System.out.println("34. Update Student");
+            System.out.println("35. Logout");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
             scanner.nextLine();
@@ -365,21 +365,27 @@ public class Ui {
                 case 12 -> sortInstructorsByNumberOfCourses();
                 case 13 -> sortInstructorsByEnrollment();
                 case 14 -> viewModulesFromCourse();
-                case 15 -> addModuleToCourse();
-                case 16 -> removeModuleFromCourse();
-                case 17 -> viewAssignmentsFromModule();
-                case 18 -> addAssignmentToModule();
-                case 19 -> removeAssignmentFromModule();
-                case 20 -> viewQuizFromAssignment();
-                case 21 -> addQuizToAssignment();
-                case 22 -> removeQuizFromAssignment();
-                case 23 -> viewAllAdmins();
-                case 24 -> addAdmin();
-                case 25 -> removeAdmin();
-                case 26 -> updateCourse();
-                case 27 -> updateInstructor();
-                case 28 -> updateStudent();
-                case 29 -> System.out.println("Logging out...");
+                case 15 -> addModule();
+                case 16 -> removeModule();
+                case 17 -> addModuleToCourse();
+                case 18 -> removeModuleFromCourse();
+                case 19 -> viewAssignmentsFromModule();
+                case 20 -> addAssignment();
+                case 21 -> removeAssignment();
+                case 22 -> addAssignmentToModule();
+                case 23 -> removeAssignmentFromModule();
+                case 24 -> viewQuizFromAssignment();
+                case 25 -> addQuiz();
+                case 26 -> removeQuiz();
+                case 27 -> addQuizToAssignment();
+                case 28 -> removeQuizFromAssignment();
+                case 29 -> viewAllAdmins();
+                case 30 -> addAdmin();
+                case 31 -> removeAdmin();
+                case 32 -> updateCourse();
+                case 33 -> updateInstructor();
+                case 34 -> updateStudent();
+                case 35 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 29);
