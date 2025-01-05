@@ -1,6 +1,8 @@
 package Models;
 
-public class AssignmentModule implements Identifiable {
+import java.io.Serializable;
+
+public class AssignmentModule implements Identifiable, Serializable {
     private Integer moduleId;
     private Integer assignmentId;
 

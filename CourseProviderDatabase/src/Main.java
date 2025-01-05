@@ -62,20 +62,27 @@ public class Main {
 //
 //        //System.out.println(coursesUserService.getInstructorsSortedByEnrollment());
 //
-//        FileRepository<Instructor> instructorFileRepository = new FileRepository<>("instructor.csv");
+       FileRepository<Instructor> instructorFileRepository = new FileRepository<>("instructor.csv");
 //        FileRepository<Student> studentFileRepository = new FileRepository<>("student.csv");
 //        List<Instructor>instructors = instructorFileRepository.getAll();
 
-        Ui ui = new Ui();
-        try {
-            ui.start();
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (BusinessException e) {
-            throw new RuntimeException(e);
-        } catch (ValidationException e) {
-            throw new RuntimeException(e);
-        }
+
+            FileRepository<Admin>adminFile = new FileRepository<>("admin.csv");
+            Admin admin = new Admin(5, "adminUser", "adminPass", "admin@example.com", "admin");
+            Course course = new Course(101, "Java Programming", "Learn Java basics", 30, "2025-01-15", "2025-05-15", 4);
+            FileRepository<Course>courseFileRepository = new FileRepository<>("course.csv");
+            //courseFileRepository.create(course);
+        System.out.println(courseFileRepository.getAll());
+//        Ui ui = new Ui();
+//        try {
+//            ui.start();
+//        } catch (EntityNotFoundException e) {
+//            throw new RuntimeException(e);
+//        } catch (BusinessException e) {
+//            throw new RuntimeException(e);
+//        } catch (ValidationException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
     }

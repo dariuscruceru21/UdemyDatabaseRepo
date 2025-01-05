@@ -1,6 +1,8 @@
 package Models;
 
-public class ModuleCourse implements Identifiable {
+import java.io.Serializable;
+
+public class ModuleCourse implements Identifiable, Serializable {
     private Integer moduleId;
     private Integer courseId;
 

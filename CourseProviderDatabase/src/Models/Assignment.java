@@ -1,6 +1,7 @@
 
 package Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Represents an assignment that may contain a list of quizzes and has an associated score.
  * Each assignment has a unique ID, description, due date, and score.
  */
-public class Assignment implements Identifiable {
+public class Assignment implements Identifiable, Serializable {
     private Integer assignmentID;
     private String description;
     private String dueDate;

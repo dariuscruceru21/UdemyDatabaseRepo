@@ -1,6 +1,8 @@
 package Models;
 
-public class QuizAssignment implements Identifiable {
+import java.io.Serializable;
+
+public class QuizAssignment implements Identifiable, Serializable {
     private Integer assignmentId;
     private Integer quizId;
 
