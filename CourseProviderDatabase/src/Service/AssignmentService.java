@@ -230,6 +230,40 @@ public class AssignmentService {
     }
 
     /**
+     * Removes a module and its associated entries in the system.
+     *
+     * @param moduleId The ID of the module to remove.
+     * @throws EntityNotFoundException If the module does not exist.
+     */
+    public void removeModule(Integer moduleId) throws EntityNotFoundException {
+        // Check if the module exists
+        Module module = moduleRepo.get(moduleId);
+        if (module == null) {
+            throw new EntityNotFoundException(moduleId);
+        }
+
+        // Remove related entries from the module-course table
+        List<ModuleCourse> moduleCourses = moduleCourseRepo.getAll();
+        for (ModuleCourse moduleCourse : moduleCourses) {
+            if (moduleCourse.getId().equals(moduleId)) {
+                moduleCourseRepo.delete(moduleCourse.getId());
+            }
+        }
+
+        // Remove related entries from the module-assignment table
+        List<AssignmentModule> moduleAssignments = assignmentModuleRepo.getAll();
+        for (AssignmentModule moduleAssignment : moduleAssignments) {
+            if (moduleAssignment.getId().equals(moduleId)) {
+                assignmentModuleRepo.delete(moduleAssignment.getId());
+            }
+        }
+
+        // Remove the module itself
+        moduleRepo.delete(moduleId);
+    }
+
+
+    /**
      * Removes a module from a specific course.
      *
      * @param courseId ID of the course.
@@ -273,6 +307,39 @@ public class AssignmentService {
 
     }
 
+    /**
+     * Removes an assignment and its associated entries in the system.
+     *
+     * @param assignmentId The ID of the assignment to remove.
+     * @throws EntityNotFoundException If the assignment does not exist.
+     */
+    public void removeAssignment(Integer assignmentId) throws EntityNotFoundException {
+        // Check if the assignment exists
+        Assignment assignment = assignmentRepo.get(assignmentId);
+        if (assignment == null) {
+            throw new EntityNotFoundException(assignmentId);
+        }
+
+        // Remove related entries from the assignment-module table
+        List<AssignmentModule> assignmentModules = assignmentModuleRepo.getAll();
+        for (AssignmentModule assignmentModule : assignmentModules) {
+            if (assignmentModule.getAssignmentId().equals(assignmentId)) {
+                assignmentModuleRepo.delete(assignmentModule.getId());
+            }
+        }
+
+        // Remove related entries from the assignment-quiz table
+        List<QuizAssignment> quizAssignments = assignmentQuizRepo.getAll();
+        for (QuizAssignment quizAssignment : quizAssignments) {
+            if (quizAssignment.getId().equals(assignmentId)) {
+                assignmentQuizRepo.delete(quizAssignment.getId());
+            }
+        }
+
+        // Remove the assignment itself
+        assignmentRepo.delete(assignmentId);
+    }
+
 
     /**
      * Removes an assignment from a specific module.
@@ -313,6 +380,31 @@ public class AssignmentService {
         assignmentModule.remove(assignmentId);
         module.setAssignments(assignmentModule);
         moduleRepo.update(module);
+    }
+
+    /**
+     * Removes a quiz and its associated entries in the quiz-assignment table.
+     *
+     * @param quizId The ID of the quiz to remove.
+     * @throws EntityNotFoundException If the quiz does not exist.
+     */
+    public void removeQuiz(Integer quizId) throws EntityNotFoundException {
+        // Check if the quiz exists
+        Quiz quiz = quizRepo.get(quizId);
+        if (quiz == null) {
+            throw new EntityNotFoundException(quizId);
+        }
+
+        // Remove related entries from the quiz-assignment table
+        List<QuizAssignment> quizAssignments = assignmentQuizRepo.getAll();
+        for (QuizAssignment quizAssignment : quizAssignments) {
+            if (quizAssignment.getQuizId().equals(quizId)) {
+                assignmentQuizRepo.delete(quizAssignment.getId());
+            }
+        }
+
+        // Remove the quiz itself
+        quizRepo.delete(quizId);
     }
 
 

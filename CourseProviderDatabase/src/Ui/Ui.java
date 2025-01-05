@@ -233,7 +233,7 @@ public class Ui {
      * @param instructor the instructor object whose menu options are being displayed.
      * @throws EntityNotFoundException if a necessary entity cannot be found during menu processing.
      */
-    public void instructorMenu(Instructor instructor) throws EntityNotFoundException {
+    public void instructorMenu(Instructor instructor) throws EntityNotFoundException, ValidationException {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -245,19 +245,23 @@ public class Ui {
             System.out.println("4. Get student info");
             //Assignment handling
             System.out.println("5. View all Assignments from a module");
-            System.out.println("6. Add Assignment to Module");
-            System.out.println("7. Remove Assignment from Module");
+            System.out.println("6. Add an assignment");
+            System.out.println("7. Remove an assignment");
+            System.out.println("8. Add Assignment to Module");
+            System.out.println("9. Remove Assignment from Module");
             //Quiz handling
-            System.out.println("8. View All Quiz's from a Assignment");
-            System.out.println("9. Add Quiz to Assignment");
-            System.out.println("10. Remove Quiz from Assignment");
+            System.out.println("10. View All Quiz's from a Assignment");
+            System.out.println("11. Add a quiz");
+            System.out.println("12. Remove a quiz");
+            System.out.println("13. Add Quiz to Assignment");
+            System.out.println("14. Remove Quiz from Assignment");
             //Personal info
-            System.out.println("11. Get instructor info");
-            System.out.println("12. Preview underocupied Courses");
-            System.out.println("13. Preview courses that end before a given date");
-            System.out.println("14. Get courses you teach(provide ID)");
-            System.out.println("15. Get the assigned instructor to a course");
-            System.out.println("16. Logout");
+            System.out.println("15. Get instructor info");
+            System.out.println("16. Preview underocupied Courses");
+            System.out.println("17. Preview courses that end before a given date");
+            System.out.println("18. Get courses you teach(provide ID)");
+            System.out.println("19. Get the assigned instructor to a course");
+            System.out.println("20. Logout");
             choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> viewAllCourses();
@@ -265,17 +269,21 @@ public class Ui {
                 case 3 -> getEnrolledStudents();
                 case 4 -> getStudentInfo();
                 case 5 -> viewAssignmentsFromModule();
-                case 6 -> addAssignmentToModule();
-                case 7 -> removeAssignmentFromModule();
-                case 8 -> viewQuizFromAssignment();
-                case 9 -> addQuizToAssignment();
-                case 10 -> removeQuizFromAssignment();
-                case 11 -> getInstructorInfo();
-                case 12 -> getUnderOcupiedCourses();
-                case 13 -> previewCoursesThatEndBeforeADate();
-                case 14 -> getCoursesByInstructor();
-                case 15 -> getAssignedInstructor();
-                case 16 -> System.out.println("Logging out...");
+                case 6 -> addAssignment();
+                case 7 -> removeAssignment();
+                case 8 -> addAssignmentToModule();
+                case 9 -> removeAssignmentFromModule();
+                case 10 -> addQuiz();
+                case 11 -> removeQuiz();
+                case 12 -> viewQuizFromAssignment();
+                case 13 -> addQuizToAssignment();
+                case 14 -> removeQuizFromAssignment();
+                case 15 -> getInstructorInfo();
+                case 16 -> getUnderOcupiedCourses();
+                case 17 -> previewCoursesThatEndBeforeADate();
+                case 18 -> getCoursesByInstructor();
+                case 19 -> getAssignedInstructor();
+                case 20 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 16);
@@ -313,14 +321,20 @@ public class Ui {
             System.out.println("13. Get all instructors by number of students they teach");
             //Module handling
             System.out.println("14. View all Modules from a Course");
+            //ADD MODULE
+            //REMOVE MODULE
             System.out.println("15. Add Module to Course");
             System.out.println("16. Remove Module from Course");
             //Assignment handling
             System.out.println("17. View all Assignments from a module");
+            //ADD ASSIGNMENT
+            //REMOVE ASSIGNMENT
             System.out.println("18. Add Assignment to Module");
             System.out.println("19. Remove Assignment from Module");
             //Quiz handling
             System.out.println("20. View All Quiz's from a Assignment");
+            //ADD QUIZ
+            //REMOVE QUIZ
             System.out.println("21. Add Quiz to Assignment");
             System.out.println("22. Remove Quiz from Assignment");
             //Admin handling
@@ -401,6 +415,7 @@ public class Ui {
         Course course = new Course(courseID, courseName, courseDescription, availableSpots, startDate, endDate, id);
         System.out.println(courseUserController.updateCourse(course));
     }
+
 
     /**
      * Updates an existing instructor in the system.
@@ -490,6 +505,113 @@ public class Ui {
         scanner.nextLine();
         System.out.println(courseUserController.removeAdmin(adminId));
     }
+
+    /**
+     * Removes a module from the system.
+     * Prompts the user to enter the module's ID.
+     *
+     * @throws EntityNotFoundException if the module to be removed does not exist.
+     */
+    public void removeModule() throws EntityNotFoundException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Module ID to remove: ");
+        Integer moduleId = scanner.nextInt();
+        scanner.nextLine(); // Clear the buffer
+        System.out.println(assignmentController.removeModule(moduleId));
+    }
+
+    /**
+     * Removes an assignment from the system.
+     * Prompts the user to enter the assignment's ID.
+     *
+     * @throws EntityNotFoundException if the assignment to be removed does not exist.
+     */
+    public void removeAssignment() throws EntityNotFoundException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Assignment ID to remove: ");
+        Integer assignmentId = scanner.nextInt();
+        scanner.nextLine(); // Clear the buffer
+        System.out.println(assignmentController.removeAssignment(assignmentId));
+    }
+
+    /**
+     * Removes a quiz from the system.
+     * Prompts the user to enter the quiz's ID.
+     *
+     * @throws EntityNotFoundException if the quiz to be removed does not exist.
+     */
+    public void removeQuiz() throws EntityNotFoundException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Quiz ID to remove: ");
+        Integer quizId = scanner.nextInt();
+        scanner.nextLine(); // Clear the buffer
+        System.out.println(assignmentController.removeQuiz(quizId));
+    }
+
+
+    /**
+     * Adds a new module to the system.
+     * Prompts the user to enter the modules's details.
+     *
+     * @throws ValidationException if there is an issue adding the module.
+     */
+    public void addModule() throws ValidationException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Module ID: ");
+        int moduleID = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Module Title: ");
+        String moduleTitle = scanner.nextLine();
+        System.out.print("Enter Module Content: ");
+        String moduleContent = scanner.nextLine();
+        Module module = new Module(moduleID, moduleTitle, moduleContent);
+        assignmentController.addModule(module);
+    }
+
+    /**
+     * Adds a new assignment to the system.
+     * Prompts the user to enter the assignments's details.
+     *
+     * @throws ValidationException if there is an issue adding the assignment.
+     */
+    public void addAssignment() throws ValidationException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Assignment ID: ");
+        Integer assignmentID = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Assignment Description: ");
+        String assignmentDescription = scanner.nextLine();
+        System.out.print("Enter Assignment due date: ");
+        String assignmentDueDate = scanner.nextLine();
+        System.out.print("Enter Assignment score: ");
+        Integer assignmentScore = scanner.nextInt();
+        scanner.nextLine();
+        Assignment assignment = new Assignment(assignmentID, assignmentDescription, assignmentDueDate, assignmentScore);
+        assignmentController.addAssignment(assignment);
+    }
+
+    /**
+     * Adds a new quiz to the system.
+     * Prompts the user to enter the quiz's details.
+     *
+     * @throws ValidationException if there is an issue adding the quiz.
+     */
+    public void addQuiz() throws ValidationException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Quiz ID: ");
+        Integer quizID = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter Quiz Title: ");
+        String quizTitle = scanner.nextLine();
+        System.out.print("Enter Quiz Contents: ");
+        String quizContents = scanner.nextLine();
+        System.out.print("Enter Quiz correct Answer: ");
+        int correctAnswer = scanner.nextInt();
+        scanner.nextLine();
+        Quiz quiz = new Quiz(quizID, quizTitle, quizContents, correctAnswer);
+        assignmentController.addQuiz(quiz);
+    }
+
 
     /**
      * Retrieves and displays information about a specific course.

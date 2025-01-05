@@ -98,6 +98,22 @@ public class AssignmentController {
     }
 
     /**
+     * Removes a module from the system, along with its associations in the module-course and module-assignment tables.
+     *
+     * @param moduleId The ID of the module to remove.
+     * @return Success message if removed, or error message if failed.
+     */
+    public String removeModule(Integer moduleId) {
+        try {
+            assignmentService.removeModule(moduleId);
+            return "Module removed successfully.";
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            return "Failed to remove module: " + e.getMessage();
+        }
+    }
+
+
+    /**
      * Removes a module from a specific course.
      *
      * @param courseId The ID of the course.
@@ -110,6 +126,21 @@ public class AssignmentController {
             return "Module removed from course successfully.";
         } catch (IllegalArgumentException e) {
             return "Failed to remove module: " + e.getMessage();
+        }
+    }
+
+    /**
+     * Removes an assignment from the system, along with its associations in the assignment-module and assignment-quiz tables.
+     *
+     * @param assignmentId The ID of the assignment to remove.
+     * @return Success message if removed, or error message if failed.
+     */
+    public String removeAssignment(Integer assignmentId) {
+        try {
+            assignmentService.removeAssignment(assignmentId);
+            return "Assignment removed successfully.";
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            return "Failed to remove assignment: " + e.getMessage();
         }
     }
 
@@ -128,6 +159,22 @@ public class AssignmentController {
             return "Failed to remove assignment: " + e.getMessage();
         }
     }
+
+    /**
+     * Removes a quiz from the system, along with its associations in the quiz-assignment table.
+     *
+     * @param quizId The ID of the quiz to remove.
+     * @return Success message if removed, or error message if failed.
+     */
+    public String removeQuiz(Integer quizId) {
+        try {
+            assignmentService.removeQuiz(quizId);
+            return "Quiz removed successfully.";
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            return "Failed to remove quiz: " + e.getMessage();
+        }
+    }
+
 
     /**
      * Removes a quiz from a specific assignment.
