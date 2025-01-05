@@ -82,6 +82,11 @@ public class Ui {
         this.courseUserController = new CourseUserController(storageMethod);
         this.authService = new AuthenticationService(storageMethod);
 
+        if ("inmemory".equalsIgnoreCase(storageMethod)) {
+            populateInMemoryRepo();
+        }
+
+
         // Login Process
         User loggedInUser = login();
 
@@ -128,6 +133,49 @@ public class Ui {
         }
         return user;
     }
+
+    /**
+     * Populates the in-memory repository with initial data for testing and runtime operations.
+     * This method initializes and adds sample data for Users, Students, Instructors, Admins,
+     * Courses, Modules, Assignments, Quizzes, Messages, and Forums into the repository.
+     */
+    public void populateInMemoryRepo() throws ValidationException {
+        // Adding Students
+        courseUserController.addStudent(new Student(3, "mikeSmith", "pass789", "mike.smith@example.com", "student"));
+
+        // Adding Instructors
+        courseUserController.addInstructor(new Instructor(4, "profMiller", "teach123", "miller@example.com", "instructor"));
+
+        // Adding Admins
+        courseUserController.addAdmin(new Admin(5, "adminUser", "adminPass", "admin@example.com", "admin"));
+
+        // Adding Courses
+        try {
+            courseUserController.addCourse(new Course(101, "Java Programming", "Learn Java basics", 30, "2025-01-15", "2025-05-15", 4));
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            courseUserController.addCourse(new Course(102, "Database Systems", "Introduction to databases", 25, "2025-02-01", "2025-06-01", 4));
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Adding Modules
+        assignmentController.addModule(new Module(201, "Introduction to Java", "Java basics and setup"));
+        assignmentController.addModule(new Module(202, "Advanced Java", "Multithreading and streams"));
+
+        // Adding Assignments
+        assignmentController.addAssignment(new Assignment(301, "Complete Java Project", "2025-03-01", 100));
+        assignmentController.addAssignment(new Assignment(302, "Database Query Exercise", "2025-04-01", 50));
+
+        // Adding Quizzes
+        assignmentController.addQuiz(new Quiz(401, "Java Basics Quiz", "Multiple choice questions on Java basics", 3));
+        assignmentController.addQuiz(new Quiz(402, "Database Fundamentals", "SQL queries and relational design questions", 2));
+
+
+    }
+
 
     /**
      * Displays the menu of options available to a Student, allowing them to view courses, enroll or unenroll,

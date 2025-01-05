@@ -320,9 +320,6 @@ public class CoursesUserService {
             throw new EntityNotFoundException(courseId);
         }
 
-        // Before deleting, ensure that there are no students or instructors assigned to this course.
-        // Example: You may choose to unenroll students or unassign the instructor.
-
         // Unassign the instructor from the course (if any)
         if (course.getInstructorId() != null) {
             Instructor instructor = instructorIRepository.get(course.getInstructorId());

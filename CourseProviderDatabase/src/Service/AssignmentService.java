@@ -1,6 +1,7 @@
 package Service;
 
 import Exceptions.EntityNotFoundException;
+import Exceptions.ValidationException;
 import Models.*;
 import Models.Module;
 import Repository.DataBaseRepository;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+
 import Utils.Utils;
 
 public class AssignmentService {
@@ -34,7 +36,7 @@ public class AssignmentService {
         this.assignmentQuizRepo = assignmentQuizRepo;
     }
 
-    public AssignmentService(String storageMethod){
+    public AssignmentService(String storageMethod) {
         switch (storageMethod.toLowerCase()) {
             case "inmemory":
                 this.quizRepo = new InMemoryRepo<>();
@@ -55,27 +57,48 @@ public class AssignmentService {
                 this.assignmentModuleRepo = new FileRepository<>("assignmentModule.csv");
                 break;
             case "db":
-                this.quizRepo = new DataBaseRepository<>("quiz",Quiz.class,utils.getQuizParameters());
-                this.assignmentRepo = new DataBaseRepository<>("assignment",Assignment.class,utils.getAssignmentParameteres());
-                this.moduleRepo = new DataBaseRepository<>("module",Module.class,utils.getModuleParameters());
-                this.courseRepo = new DataBaseRepository<>("course",Course.class,utils.getCourseParameters());
-                this.moduleCourseRepo = new DataBaseRepository<>("coursemodule",ModuleCourse.class,utils.getCourseModuleParameters());
-                this.assignmentQuizRepo = new DataBaseRepository<>("assignmentquiz",QuizAssignment.class,utils.getQuizAssignmentParameteres());
-                this.assignmentModuleRepo = new DataBaseRepository<>("moduleassignment",AssignmentModule.class,utils.getModuleAssignmentParameteres());
+                this.quizRepo = new DataBaseRepository<>("quiz", Quiz.class, utils.getQuizParameters());
+                this.assignmentRepo = new DataBaseRepository<>("assignment", Assignment.class, utils.getAssignmentParameteres());
+                this.moduleRepo = new DataBaseRepository<>("module", Module.class, utils.getModuleParameters());
+                this.courseRepo = new DataBaseRepository<>("course", Course.class, utils.getCourseParameters());
+                this.moduleCourseRepo = new DataBaseRepository<>("coursemodule", ModuleCourse.class, utils.getCourseModuleParameters());
+                this.assignmentQuizRepo = new DataBaseRepository<>("assignmentquiz", QuizAssignment.class, utils.getQuizAssignmentParameteres());
+                this.assignmentModuleRepo = new DataBaseRepository<>("moduleassignment", AssignmentModule.class, utils.getModuleAssignmentParameteres());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown storage method: " + storageMethod);
         }
     }
 
+
+    /**
+     * Adds a new module to the repository.
+     *
+     * @param module The course to add.
+     */
+    public void addModule(Module module) throws ValidationException {
+        try{
+            ValidationException.validateId(module.getId());
+            if (moduleRepo.get(module.getId()) == null) {
+                System.err.println("Module with this Id already exists.");
+            } else {
+                moduleRepo.create(module);
+            }
+        }catch (ValidationException e) {
+            System.err.println("Failed to add module: " + e.getMessage());
+        }
+
+    }
+
     /**
      * Adds an module to a specific course.
+     *
      * @param courseId ID of the course.
      * @param moduleId The module to add.
      */
-    public void addModuleToCourse(Integer moduleId,Integer courseId) {
+    public void addModuleToCourse(Integer moduleId, Integer courseId) {
         Course course = courseRepo.get(courseId);
-        if(course == null)
+        if (course == null)
             throw new IllegalArgumentException("Course with id " + courseId + " not found");
         Module module = moduleRepo.get(moduleId);
         if (module == null)
@@ -85,11 +108,11 @@ public class AssignmentService {
         List<ModuleCourse> moduleCourses = moduleCourseRepo.getAll();
         boolean alreadyExist = moduleCourses.stream().anyMatch(e -> e.getId().equals(moduleId) && e.getCourseId().equals(courseId));
 
-        if(alreadyExist)
+        if (alreadyExist)
             throw new IllegalArgumentException("Module with id " + moduleId + " already exists");
 
         //create new moduleCourse entry
-        ModuleCourse moduleCourse = new ModuleCourse(moduleId,courseId);
+        ModuleCourse moduleCourse = new ModuleCourse(moduleId, courseId);
         moduleCourseRepo.create(moduleCourse);
 
 
@@ -103,17 +126,34 @@ public class AssignmentService {
     }
 
 
+    /**
+     * Adds a new assignment to the repository.
+     *
+     * @param assignment The course to add.
+     */
+    public void addAssignment(Assignment assignment) throws ValidationException {
+        try{
+            ValidationException.validateId(assignment.getId());
+            if (assignmentRepo.get(assignment.getId()) == null) {
+                System.err.println("Assignment with this Id already exists.");
+            } else {
+                assignmentRepo.create(assignment);
+            }
+        }catch (ValidationException e) {
+            System.err.println("Failed to add assignment: " + e.getMessage());
+        }
 
-
+    }
 
     /**
      * Adds an assignment to a specific module.
-     * @param moduleId ID of the module.
+     *
+     * @param moduleId     ID of the module.
      * @param assignmentId The id of the assignment to add.
      */
-    public void addAssignmentToModule(Integer moduleId, Integer assignmentId){
+    public void addAssignmentToModule(Integer moduleId, Integer assignmentId) {
         Module module = moduleRepo.get(moduleId);
-        if(module == null)
+        if (module == null)
             throw new IllegalArgumentException("Module with id " + moduleId + " not found");
         Assignment assignment = assignmentRepo.get(assignmentId);
         if (assignment == null)
@@ -123,11 +163,11 @@ public class AssignmentService {
         List<AssignmentModule> assignmentModules = assignmentModuleRepo.getAll();
         boolean alreadyExist = assignmentModules.stream().anyMatch(e -> e.getId().equals(moduleId) && e.getAssignmentId().equals(assignmentId));
 
-        if(alreadyExist)
+        if (alreadyExist)
             throw new IllegalArgumentException("Assignment with id " + assignmentId + " already exists");
 
         //create new assignmentModule entry
-        AssignmentModule assignmentModule = new AssignmentModule(moduleId,assignmentId);
+        AssignmentModule assignmentModule = new AssignmentModule(moduleId, assignmentId);
         assignmentModuleRepo.create(assignmentModule);
 
         // Update the modules's list of assignments
@@ -137,14 +177,35 @@ public class AssignmentService {
         moduleRepo.update(module);
     }
 
+
+    /**
+     * Adds a new quiz to the repository.
+     *
+     * @param quiz The course to add.
+     */
+    public void addQuiz(Quiz quiz) throws ValidationException {
+        try{
+            ValidationException.validateId(quiz.getId());
+            if (quizRepo.get(quiz.getId()) == null) {
+                System.err.println("Quiz with this Id already exists.");
+            } else {
+                quizRepo.create(quiz);
+            }
+        }catch (ValidationException e) {
+            System.err.println("Failed to add quiz: " + e.getMessage());
+        }
+
+    }
+
     /**
      * Adds a quiz to a specific assignment.
+     *
      * @param assignmentId ID of the assignment.
-     * @param quizId The id of the quiz to add.
+     * @param quizId       The id of the quiz to add.
      */
-    public void addQuizToAssignment(Integer assignmentId, Integer quizId){
+    public void addQuizToAssignment(Integer assignmentId, Integer quizId) {
         Assignment assignment = assignmentRepo.get(assignmentId);
-        if(assignment == null)
+        if (assignment == null)
             throw new IllegalArgumentException("Assignment with id " + assignmentId + " not found");
         Quiz quiz = quizRepo.get(quizId);
         if (quiz == null)
@@ -154,7 +215,7 @@ public class AssignmentService {
         List<QuizAssignment> quizAssignments = assignmentQuizRepo.getAll();
         boolean alreadyExist = quizAssignments.stream().anyMatch(e -> e.getId().equals(assignmentId) && e.getQuizId().equals(quizId));
 
-        if(alreadyExist)
+        if (alreadyExist)
             throw new IllegalArgumentException("Quiz with id " + quizId + " already exists");
 
         //create new assignmentQuiz entry
@@ -170,10 +231,11 @@ public class AssignmentService {
 
     /**
      * Removes a module from a specific course.
+     *
      * @param courseId ID of the course.
      * @param moduleId The id of the module to remove.
      */
-    public void removeModuleFromCourse(Integer moduleId,Integer courseId) throws EntityNotFoundException{
+    public void removeModuleFromCourse(Integer moduleId, Integer courseId) throws EntityNotFoundException {
 
         Course course = courseRepo.get(courseId);
         if (course == null)
@@ -185,21 +247,21 @@ public class AssignmentService {
         List<ModuleCourse> moduleCourses = moduleCourseRepo.getAll();
 
         List<ModuleCourse> moduleCoursesThatDOntMatch = new ArrayList<>();
-        for(ModuleCourse moduleCourse : moduleCourses){
-            if(moduleCourse.getId().equals(moduleId) && moduleCourse.getCourseId() != courseId)
+        for (ModuleCourse moduleCourse : moduleCourses) {
+            if (moduleCourse.getId().equals(moduleId) && moduleCourse.getCourseId() != courseId)
                 moduleCoursesThatDOntMatch.add(moduleCourse);
         }
 
         //find and remove searched entry
-        for(ModuleCourse moduleCourse : moduleCourses){
-            if (moduleCourse.getId().equals(moduleId) && moduleCourse.getCourseId().equals(courseId)){
+        for (ModuleCourse moduleCourse : moduleCourses) {
+            if (moduleCourse.getId().equals(moduleId) && moduleCourse.getCourseId().equals(courseId)) {
                 moduleCourseRepo.delete(moduleCourse.getId());
                 break;
             }
         }
 
 
-        for(ModuleCourse moduleCourse : moduleCoursesThatDOntMatch){
+        for (ModuleCourse moduleCourse : moduleCoursesThatDOntMatch) {
             moduleCourseRepo.create(moduleCourse);
         }
 
@@ -209,17 +271,16 @@ public class AssignmentService {
         course.setModules(moduleCourse);
         courseRepo.update(course);
 
-
-
     }
 
 
     /**
      * Removes an assignment from a specific module.
-     * @param moduleId ID of the module.
+     *
+     * @param moduleId     ID of the module.
      * @param assignmentId The id of the assignment to remove.
      */
-    public void removeAssignmentFromModule(Integer moduleId, Integer assignmentId) throws EntityNotFoundException{
+    public void removeAssignmentFromModule(Integer moduleId, Integer assignmentId) throws EntityNotFoundException {
         Module module = moduleRepo.get(moduleId);
         if (module == null)
             throw new EntityNotFoundException(moduleId);
@@ -244,7 +305,7 @@ public class AssignmentService {
             }
         }
 
-        for(AssignmentModule assignmentModule : assignmentModulesThatDontMatch)
+        for (AssignmentModule assignmentModule : assignmentModulesThatDontMatch)
             assignmentModuleRepo.create(assignmentModule);
 
         //update lists
@@ -255,16 +316,13 @@ public class AssignmentService {
     }
 
 
-
-
-
-
     /**
      * Removes a quiz from a specific assignment.
+     *
      * @param assignmentId ID of the assignment.
-     * @param quizId The id of the quiz to remove.
+     * @param quizId       The id of the quiz to remove.
      */
-    public void removeQuizFromAssignment(Integer assignmentId, Integer quizId) throws EntityNotFoundException{
+    public void removeQuizFromAssignment(Integer assignmentId, Integer quizId) throws EntityNotFoundException {
         Assignment assignment = assignmentRepo.get(assignmentId);
         if (assignment == null)
             throw new EntityNotFoundException(assignmentId);
@@ -278,19 +336,19 @@ public class AssignmentService {
 
         List<QuizAssignment> quizAssignmentsThatDontMatch = new ArrayList<>();
         for (QuizAssignment quizAssignment : quizAssignments)
-            if(quizAssignment.getId().equals(assignmentId) && !quizAssignment.getQuizId().equals(quizId))
+            if (quizAssignment.getId().equals(assignmentId) && !quizAssignment.getQuizId().equals(quizId))
                 quizAssignmentsThatDontMatch.add(quizAssignment);
 
 
         //find and remove the specific entry
-        for(QuizAssignment quizAssignment : quizAssignments)
-            if(quizAssignment.getId().equals(assignmentId)  && quizAssignment.getQuizId().equals(quizId)) {
+        for (QuizAssignment quizAssignment : quizAssignments)
+            if (quizAssignment.getId().equals(assignmentId) && quizAssignment.getQuizId().equals(quizId)) {
                 assignmentQuizRepo.delete(quizAssignment.getId());
                 break;
             }
 
         System.out.println(quizAssignmentsThatDontMatch);
-        for(QuizAssignment quizAssignment : quizAssignmentsThatDontMatch)
+        for (QuizAssignment quizAssignment : quizAssignmentsThatDontMatch)
             assignmentQuizRepo.create(quizAssignment);
 
 
@@ -310,7 +368,7 @@ public class AssignmentService {
      * @param assignmentId The ID of the assignment that the student is taking the quiz for.
      *                     The assignment should contain quizzes that the student will answer.
      */
-    public void takeAssignmentQuiz(Integer assignmentId){
+    public void takeAssignmentQuiz(Integer assignmentId) {
         // Fetch the assignment object from the repository using its ID
         Assignment assignment = assignmentRepo.get(assignmentId);
 
@@ -318,7 +376,7 @@ public class AssignmentService {
         Scanner scanner = new Scanner(System.in);
 
         // Iterate over each quiz in the assignment
-        for(Integer quizId : assignment.getQuizzes()){
+        for (Integer quizId : assignment.getQuizzes()) {
 
             // Display the quiz question (contents) to the user
             Quiz quiz = quizRepo.get(quizId);
@@ -329,12 +387,12 @@ public class AssignmentService {
             int answer = scanner.nextInt();  // Capture the user's answer
 
             // Check if the user's answer is correct
-            if(answer == quiz.getCorrectAnswer()){
+            if (answer == quiz.getCorrectAnswer()) {
                 // If correct, inform the user and increment the score
                 System.out.println("Correct!\n");
                 assignment.setScore(assignment.getScore() + 1);  // Update score
                 return;  // Exit after one correct answer (can be changed based on behavior)
-            }else{
+            } else {
                 // If wrong, inform the user and reveal the correct answer
                 System.out.println("Wrong answer! The answer was " + quiz.getCorrectAnswer() + "\n");
                 return;  // Exit after one wrong answer (can be changed based on behavior)
@@ -356,7 +414,7 @@ public class AssignmentService {
      * @param courseId The ID of the course whose modules are to be fetched.
      * @return A list of modules associated with the specified course.
      */
-    public List<Module> getModulesFromCourse(Integer courseId)throws EntityNotFoundException{
+    public List<Module> getModulesFromCourse(Integer courseId) throws EntityNotFoundException {
         // Get the course object by its ID
         Course course = courseRepo.get(courseId);
         if (course == null)
@@ -370,7 +428,7 @@ public class AssignmentService {
 
         //fetch Modules
         List<Module> modules = new ArrayList<>();
-        for(Integer moduleId : moduleCourssesIds){
+        for (Integer moduleId : moduleCourssesIds) {
             Module module = moduleRepo.get(moduleId);
             if (module != null)
                 modules.add(module);
@@ -387,10 +445,10 @@ public class AssignmentService {
      * @param moduleId The ID of the module whose assignments are to be fetched.
      * @return A list of assignments associated with the specified module.
      */
-    public List<Assignment> getAssignmentsFromModule(Integer moduleId)throws EntityNotFoundException{
+    public List<Assignment> getAssignmentsFromModule(Integer moduleId) throws EntityNotFoundException {
         // Get the module object by its ID
         Module module = moduleRepo.get(moduleId);
-        if(module == null)
+        if (module == null)
             throw new EntityNotFoundException(moduleId);
 
         List<AssignmentModule> assignmentModules = assignmentModuleRepo.getAll();
@@ -400,10 +458,10 @@ public class AssignmentService {
                 .collect(Collectors.toList());
 
         //fetch the assignments
-        List<Assignment> assignments= new ArrayList<>();
-        for(Integer assignmentId : moduleAssignmentsIds){
+        List<Assignment> assignments = new ArrayList<>();
+        for (Integer assignmentId : moduleAssignmentsIds) {
             Assignment assignment = assignmentRepo.get(assignmentId);
-            if(assignment != null)
+            if (assignment != null)
                 assignments.add(assignment);
         }
 
@@ -418,19 +476,19 @@ public class AssignmentService {
      * @param assignmentId The ID of the assignment whose quizzes are to be fetched.
      * @return A list of quizzes associated with the specified assignment.
      */
-    public List<Quiz> getQuizFromAssignment(Integer assignmentId)throws EntityNotFoundException{
+    public List<Quiz> getQuizFromAssignment(Integer assignmentId) throws EntityNotFoundException {
         Assignment assignment = assignmentRepo.get(assignmentId);
         if (assignment == null)
             throw new EntityNotFoundException(assignmentId);
         List<QuizAssignment> quizAssignments = assignmentQuizRepo.getAll();
-        List<Integer>quizAssignmentsIds = quizAssignments.stream()
+        List<Integer> quizAssignmentsIds = quizAssignments.stream()
                 .filter(e -> e.getId().equals(assignmentId))
                 .map(QuizAssignment::getQuizId)
                 .collect(Collectors.toList());
 
         //fetch all quizes
         List<Quiz> quizzes = new ArrayList<>();
-        for(Integer quizId : quizAssignmentsIds){
+        for (Integer quizId : quizAssignmentsIds) {
             Quiz quiz = quizRepo.get(quizId);
             if (quiz != null)
                 quizzes.add(quiz);

@@ -1,7 +1,9 @@
 package Controller;
+
 import java.util.List;
 
 import Exceptions.EntityNotFoundException;
+import Exceptions.ValidationException;
 import Models.Assignment;
 import Models.Module;
 import Models.Quiz;
@@ -14,8 +16,21 @@ public class AssignmentController {
         this.assignmentService = new AssignmentService(storageMethod);
     }
 
+
+    /**
+     * Adds a new module to the system.
+     *
+     * @param module The module to add.
+     *               Print a success message after adding the module.
+     */
+    public void addModule(Module module) throws ValidationException {
+        assignmentService.addModule(module);
+        System.out.println("Course added successfully.");
+    }
+
     /**
      * Adds a module to a specific course.
+     *
      * @param courseId The ID of the course.
      * @param moduleId The id of the module to be added.
      * @return Success message if added, or error message if failed.
@@ -29,9 +44,21 @@ public class AssignmentController {
         }
     }
 
+
+    /**
+     * Adds a new assignment to the system.
+     *
+     * @param assignment The assignment to add.
+     */
+    public void addAssignment(Assignment assignment) throws ValidationException {
+        assignmentService.addAssignment(assignment);
+        System.out.println("Assignment added successfully.");
+    }
+
     /**
      * Adds an assignment to a specific module.
-     * @param moduleId The ID of the module.
+     *
+     * @param moduleId     The ID of the module.
      * @param assignmentId The id of the assignment to add.
      * @return Success message if added, or error message if failed.
      */
@@ -45,9 +72,20 @@ public class AssignmentController {
     }
 
     /**
+     * Adds a new quiz to the system.
+     *
+     * @param quiz The module to add.
+     */
+    public void addQuiz(Quiz quiz) throws ValidationException {
+        assignmentService.addQuiz(quiz);
+        System.out.println("Quiz added successfully.");
+    }
+
+    /**
      * Adds a quiz to a specific assignment.
+     *
      * @param assignmentId The ID of the assignment.
-     * @param quizId The id of the quiz to add.
+     * @param quizId       The id of the quiz to add.
      * @return Success message if added, or error message if failed.
      */
     public String addQuizToAssignment(Integer assignmentId, Integer quizId) {
@@ -61,6 +99,7 @@ public class AssignmentController {
 
     /**
      * Removes a module from a specific course.
+     *
      * @param courseId The ID of the course.
      * @param moduleId The ID of the module to remove.
      * @return Success message if removed, or error message if failed.
@@ -76,7 +115,8 @@ public class AssignmentController {
 
     /**
      * Removes an assignment from a specific module.
-     * @param moduleId The ID of the module.
+     *
+     * @param moduleId     The ID of the module.
      * @param assignmentId The ID of the assignment to remove.
      * @return Success message if removed, or error message if failed.
      */
@@ -91,8 +131,9 @@ public class AssignmentController {
 
     /**
      * Removes a quiz from a specific assignment.
+     *
      * @param assignmentId The ID of the assignment.
-     * @param quizId The ID of the quiz to remove.
+     * @param quizId       The ID of the quiz to remove.
      * @return Success message if removed, or error message if failed.
      */
     public String removeQuizFromAssignment(Integer assignmentId, Integer quizId) throws EntityNotFoundException {
@@ -106,20 +147,22 @@ public class AssignmentController {
 
     /**
      * Allows a student to take a quiz in an assignment.
+     *
      * @param assignmentId The ID of the assignment.
-     * @return The score or a message indicating if the operation failed.
+     *                     Print the score or a message indicating if the operation failed.
      */
-    public String takeAssignmentQuiz(Integer assignmentId) {
+    public void takeAssignmentQuiz(Integer assignmentId) {
         try {
             assignmentService.takeAssignmentQuiz(assignmentId);
-            return "Quiz completed. Check console for your score!";
+            System.out.println("Quiz completed. Check console for your score!");
         } catch (Exception e) {
-            return "Failed to take quiz: " + e.getMessage();
+            System.out.println("Failed to take quiz: " + e.getMessage());
         }
     }
 
     /**
      * Retrieves all modules in a specific course.
+     *
      * @param courseId The ID of the course.
      * @return A list of modules or an empty list if not found.
      */
@@ -134,6 +177,7 @@ public class AssignmentController {
 
     /**
      * Retrieves all assignments in a specific module.
+     *
      * @param moduleId The ID of the module.
      * @return A list of assignments or an empty list if not found.
      */
@@ -148,6 +192,7 @@ public class AssignmentController {
 
     /**
      * Retrieves all quizzes in a specific assignment.
+     *
      * @param assignmentId The ID of the assignment.
      * @return A list of quizzes or an empty list if not found.
      */
