@@ -25,11 +25,9 @@ public class AssignmentService {
     private final IRepository<ModuleCourse> moduleCourseRepo;
     private final IRepository<AssignmentModule> assignmentModuleRepo;
     private final IRepository<QuizAssignment> assignmentQuizRepo;
-    private final IRepository<Forum> forumRepo;
     private final IRepository<Message> messageRepo;
-    private final IRepository<MessageForum> messageForumRepo;
 
-    public AssignmentService(IRepository<Quiz> quizRepo, IRepository<Assignment> assignmentRepo, IRepository<Module> moduleRepo, IRepository<Course> courseRepo, IRepository<ModuleCourse> moduleCourseRepo, IRepository<AssignmentModule> assignmentModuleRepo, IRepository<QuizAssignment> assignmentQuizRepo, IRepository<Forum> forumRepo, IRepository<Message> messageRepo, IRepository<MessageForum> messageForumRepo) {
+    public AssignmentService(IRepository<Quiz> quizRepo, IRepository<Assignment> assignmentRepo, IRepository<Module> moduleRepo, IRepository<Course> courseRepo, IRepository<ModuleCourse> moduleCourseRepo, IRepository<AssignmentModule> assignmentModuleRepo, IRepository<QuizAssignment> assignmentQuizRepo, IRepository<Message> messageRepo) {
         this.quizRepo = quizRepo;
         this.assignmentRepo = assignmentRepo;
         this.moduleRepo = moduleRepo;
@@ -37,9 +35,7 @@ public class AssignmentService {
         this.moduleCourseRepo = moduleCourseRepo;
         this.assignmentModuleRepo = assignmentModuleRepo;
         this.assignmentQuizRepo = assignmentQuizRepo;
-        this.forumRepo = forumRepo;
         this.messageRepo = messageRepo;
-        this.messageForumRepo = messageForumRepo;
     }
 
     public AssignmentService(String storageMethod) {
@@ -52,9 +48,7 @@ public class AssignmentService {
                 this.moduleCourseRepo = new InMemoryRepo<>();
                 this.assignmentQuizRepo = new InMemoryRepo<>();
                 this.assignmentModuleRepo = new InMemoryRepo<>();
-                this.forumRepo = new InMemoryRepo<>();
                 this.messageRepo = new InMemoryRepo<>();
-                this.messageForumRepo = new InMemoryRepo<>();
                 break;
             case "file":
                 this.quizRepo = new FileRepository<>("quiz.csv");
@@ -64,9 +58,7 @@ public class AssignmentService {
                 this.moduleCourseRepo = new FileRepository<>("moduleCourse.csv");
                 this.assignmentQuizRepo = new FileRepository<>("assignmentQuiz.csv");
                 this.assignmentModuleRepo = new FileRepository<>("assignmentModule.csv");
-                this.forumRepo = new FileRepository<>("forum.csv");
                 this.messageRepo = new FileRepository<>("message.csv");
-                this.messageForumRepo = new FileRepository<>("messageForum.csv");
                 break;
             case "db":
                 this.quizRepo = new DataBaseRepository<>("quiz", Quiz.class, utils.getQuizParameters());
@@ -77,8 +69,6 @@ public class AssignmentService {
                 this.assignmentQuizRepo = new DataBaseRepository<>("assignmentquiz", QuizAssignment.class, utils.getQuizAssignmentParameteres());
                 this.assignmentModuleRepo = new DataBaseRepository<>("moduleassignment", AssignmentModule.class, utils.getModuleAssignmentParameteres());
                 this.messageRepo = new DataBaseRepository<>("messge", Message.class, utils.getMessageParamteres());
-                this.forumRepo = new DataBaseRepository<>("forum", Forum.class, utils.getForumParameters());
-                this.messageForumRepo = new DataBaseRepository<>("messageForum", MessageForum.class, utils.getMessageForumParameters());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown storage method: " + storageMethod);

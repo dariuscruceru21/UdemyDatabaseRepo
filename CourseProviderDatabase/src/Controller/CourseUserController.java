@@ -359,11 +359,9 @@ public class CourseUserController {
      * Allows the instructors to give feedback on specific assignments.
      *
      * @param assignmentId id of the assignment.
-     * @param studentId    id of the student that completed the assignment.
-     * @param instructorId id of the instructor that corrected the assignment.
      */
-    public void giveAssignmentFeedback(Integer assignmentId, Integer studentId, Integer instructorId) {
-        service.giveAssignmentFeedback(assignmentId, studentId, instructorId);
+    public void giveAssignmentFeedback(Integer assignmentId) {
+        service.giveAssignmentFeedback(assignmentId);
     }
 
 }

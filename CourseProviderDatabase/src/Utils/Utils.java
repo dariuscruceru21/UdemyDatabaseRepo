@@ -21,8 +21,7 @@ public class Utils {
     private final List<String> quizAssignmentParameteres = Arrays.asList("assignmentId", "quizId");
     private final List<String> moduleAssignmentParameteres = Arrays.asList("moduleId", "assignmentId");
     private final List<String> courseModuleParameters = Arrays.asList("moduleId", "courseId");
-    private final List<String> forumParameters = Arrays.asList("forumID", "topic", "relatedTopics");
-    private final List<String> messageForumParameters = Arrays.asList("messageID", "forumID");
+
 
 
     public Utils() {
@@ -68,14 +67,6 @@ public class Utils {
 
     public List<String> getCourseModuleParameters() {
         return courseModuleParameters;
-    }
-
-    public List<String> getMessageForumParameters() {
-        return messageForumParameters;
-    }
-
-    public List<String> getForumParameters() {
-        return forumParameters;
     }
 
 

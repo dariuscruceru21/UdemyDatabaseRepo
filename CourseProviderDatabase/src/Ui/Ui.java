@@ -1183,6 +1183,9 @@ public class Ui {
         }
     }
 
+    /**
+     *This method is a way for instructors to give feedback on assignments
+     */
     public void giveAssignmentFeedback(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Assignment, you want to give feedback for, ID: ");
@@ -1194,7 +1197,7 @@ public class Ui {
         System.out.println("Your instructor ID: ");
         int instructorId = scanner.nextInt();
         scanner.nextLine();
-        courseUserController.giveAssignmentFeedback(assignmentId, studentId, instructorId);
+        courseUserController.giveAssignmentFeedback(assignmentId);
         System.out.println("Please provide your feedback: ");
         String feedback = scanner.nextLine();
         Message message = new Message(assignmentId, feedback, instructorId, studentId);

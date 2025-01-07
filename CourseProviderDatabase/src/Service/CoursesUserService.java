@@ -81,10 +81,8 @@ public class CoursesUserService {
      * Allows the instructors to give feedback on specific assignments.
      *
      * @param assignmentId id of the assignment.
-     * @param studentId id of the student that completed the assignment.
-     * @param instructorId id of the instructor that corrected the assignment.
      */
-    public void giveAssignmentFeedback(Integer assignmentId, Integer studentId, Integer instructorId){
+    public void giveAssignmentFeedback(Integer assignmentId){
         Message turnedInAssignment = messageIRepository.get(assignmentId);
         System.out.println(turnedInAssignment.getMessage());
     }
