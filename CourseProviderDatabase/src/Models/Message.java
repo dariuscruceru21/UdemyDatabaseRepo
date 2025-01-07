@@ -1,10 +1,12 @@
 package Models;
 
+import java.io.Serializable;
+
 /**
  * Represents a message within the system that is sent between two users (a sender and a receiver).
  * Each message has a unique ID, content, sender, and receiver.
  */
-public class Message implements Identifiable {
+public class Message implements Identifiable, Serializable {
     private int messageID;
     private String messagecontent;
     private Integer senderid;

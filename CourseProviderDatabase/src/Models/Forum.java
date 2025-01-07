@@ -1,13 +1,14 @@
 
 package Models;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * Represents a forum in the system where users can participate in discussions based on a specific topic.
  * The forum has a unique ID, a main topic, and a list of related topics.
  */
-public class Forum implements Identifiable {
+public class Forum implements Identifiable, Serializable {
     private Integer forumID;
     private String topic;
     private String[] topics;

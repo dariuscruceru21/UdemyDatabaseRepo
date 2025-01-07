@@ -1,6 +1,7 @@
 
 package Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * and a list of assignments. A module can be associated with a course and contains
  * methods for managing assignments and enrolling students.
  */
-public class Module implements Identifiable {
+public class Module implements Identifiable, Serializable {
     private int moduleID;
     private String moduleTitle;
     private String moduleContent;

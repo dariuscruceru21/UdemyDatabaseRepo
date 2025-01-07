@@ -1,6 +1,8 @@
 package Models;
 
-public class Enrolled implements Identifiable {
+import java.io.Serializable;
+
+public class Enrolled implements Identifiable, Serializable {
     private Integer studentId;
     private Integer courseId;
 

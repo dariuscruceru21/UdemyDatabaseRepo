@@ -1,11 +1,13 @@
 
 package Models;
 
+import java.io.Serializable;
+
 /**
  * Represents a quiz within the system, which contains a title, content, and a correct answer.
  * A quiz can be associated with modules or assignments and is identifiable by a unique quiz ID.
  */
-public class Quiz implements Identifiable {
+public class Quiz implements Identifiable, Serializable {
     private Integer quizId;
     private String title;
     private String contents;

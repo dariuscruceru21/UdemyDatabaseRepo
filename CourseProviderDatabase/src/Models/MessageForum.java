@@ -1,6 +1,8 @@
 package Models;
 
-public class MessageForum implements Identifiable {
+import java.io.Serializable;
+
+public class MessageForum implements Identifiable, Serializable {
     private Integer messageId;
     private Integer forumId;
 

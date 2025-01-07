@@ -1,5 +1,6 @@
 package Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Represents a course in the system, which includes information about the course
  * title, description, schedule, instructor, enrolled students, and associated modules.
  */
-public class Course implements Identifiable {
+public class Course implements Identifiable, Serializable {
     /** Unique identifier for the course */
     private Integer courseID;
     /** Title of the course */
