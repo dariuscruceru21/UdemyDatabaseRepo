@@ -285,7 +285,8 @@ public class Ui {
             System.out.println("17. Preview courses that end before a given date");
             System.out.println("18. Get courses you teach(provide ID)");
             System.out.println("19. Get the assigned instructor to a course");
-            System.out.println("20. Logout");
+            System.out.println("20. Give feedback for an assignment");
+            System.out.println("21. Logout");
             choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> viewAllCourses();
@@ -307,7 +308,8 @@ public class Ui {
                 case 17 -> previewCoursesThatEndBeforeADate();
                 case 18 -> getCoursesByInstructor();
                 case 19 -> getAssignedInstructor();
-                case 20 -> System.out.println("Logging out...");
+                case 20 -> giveAssignmentFeedback();
+                case 21 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 16);
@@ -1161,7 +1163,13 @@ public class Ui {
         System.out.print("Enter Assignment ID: ");
         int assignmentId = scanner.nextInt();
         scanner.nextLine();
-        assignmentController.takeAssignmentQuiz(assignmentId);
+        System.out.println("Enter student ID: ");
+        int studentId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter instructor ID: ");
+        int instructorId = scanner.nextInt();
+        scanner.nextLine();
+        assignmentController.takeAssignmentQuiz(assignmentId, studentId, instructorId);
     }
 
     /**
@@ -1173,6 +1181,24 @@ public class Ui {
         for (Course course : courses) {
             System.out.println(course);
         }
+    }
+
+    public void giveAssignmentFeedback(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Assignment, you want to give feedback for, ID: ");
+        int assignmentId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("ID of the student that completed this assignment: ");
+        int studentId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Your instructor ID: ");
+        int instructorId = scanner.nextInt();
+        scanner.nextLine();
+        courseUserController.giveAssignmentFeedback(assignmentId, studentId, instructorId);
+        System.out.println("Please provide your feedback: ");
+        String feedback = scanner.nextLine();
+        Message message = new Message(assignmentId, feedback, instructorId, studentId);
+        assignmentController.createMessage(message);
     }
 
 

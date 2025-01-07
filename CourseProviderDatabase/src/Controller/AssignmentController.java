@@ -5,6 +5,7 @@ import java.util.List;
 import Exceptions.EntityNotFoundException;
 import Exceptions.ValidationException;
 import Models.Assignment;
+import Models.Message;
 import Models.Module;
 import Models.Quiz;
 import Service.AssignmentService;
@@ -198,13 +199,17 @@ public class AssignmentController {
      * @param assignmentId The ID of the assignment.
      *                     Print the score or a message indicating if the operation failed.
      */
-    public void takeAssignmentQuiz(Integer assignmentId) {
+    public void takeAssignmentQuiz(Integer assignmentId, Integer studentId, Integer instructorId) {
         try {
-            assignmentService.takeAssignmentQuiz(assignmentId);
+            assignmentService.takeAssignmentQuiz(assignmentId, studentId, instructorId);
             System.out.println("Quiz completed. Check console for your score!");
         } catch (Exception e) {
             System.out.println("Failed to take quiz: " + e.getMessage());
         }
+    }
+
+    public void createMessage(Message message){
+        assignmentService.createMessage(message);
     }
 
     /**

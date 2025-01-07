@@ -20,6 +20,7 @@ public class CourseUserController {
 
     /**
      * Retrieves all students enrolled in a specified course.
+     *
      * @param courseId The ID of the course.
      * @return A list of students enrolled in the course.
      */
@@ -29,8 +30,9 @@ public class CourseUserController {
 
     /**
      * Enrolls a student in a course if there are available spots.
+     *
      * @param studentId The ID of the student to enroll.
-     * @param courseId The ID of the course.
+     * @param courseId  The ID of the course.
      * @return A success message if enrollment is successful.
      */
     public String enrollStudentInCourse(Integer studentId, Integer courseId) {
@@ -44,8 +46,9 @@ public class CourseUserController {
 
     /**
      * Assigns an instructor to a specified course.
+     *
      * @param instructorId The ID of the instructor.
-     * @param courseId The ID of the course.
+     * @param courseId     The ID of the course.
      * @return A success message if the assignment is successful.
      */
     public String assignInstructorToCourse(Integer instructorId, Integer courseId) {
@@ -59,8 +62,9 @@ public class CourseUserController {
 
     /**
      * Unassigns an instructor from a specific course.
+     *
      * @param instructorId The ID of the instructor.
-     * @param courseId The ID of the course.
+     * @param courseId     The ID of the course.
      * @return A success message if unassignment is successful.
      */
     public String unassignInstructorFromCourse(java.lang.Integer instructorId, java.lang.Integer courseId) {
@@ -74,6 +78,7 @@ public class CourseUserController {
 
     /**
      * Adds a new course to the system.
+     *
      * @param course The course to add.
      * @return A success message after adding the course.
      */
@@ -84,6 +89,7 @@ public class CourseUserController {
 
     /**
      * Adds a new student to the system.
+     *
      * @param student The student to add.
      * @return A success message after adding the student.
      */
@@ -94,6 +100,7 @@ public class CourseUserController {
 
     /**
      * Adds a new instructor to the system.
+     *
      * @param instructor The instructor to add.
      * @return A success message after adding the instructor.
      */
@@ -104,6 +111,7 @@ public class CourseUserController {
 
     /**
      * Adds a new admin to the system.
+     *
      * @param admin The instructor to add.
      * @return A success message after adding the instructor.
      */
@@ -114,6 +122,7 @@ public class CourseUserController {
 
     /**
      * Removes a course and unenrolls all students from it.
+     *
      * @param courseId The ID of the course to remove.
      * @return A success message after removing the course.
      */
@@ -124,6 +133,7 @@ public class CourseUserController {
 
     /**
      * Removes a student and unenrolls them from all courses.
+     *
      * @param studentId The ID of the student to remove.
      * @return A success message after removing the student.
      */
@@ -134,6 +144,7 @@ public class CourseUserController {
 
     /**
      * Removes an instructor and unassigns them from all courses.
+     *
      * @param instructorId The ID of the instructor to remove.
      * @return A success message after removing the instructor.
      */
@@ -147,6 +158,7 @@ public class CourseUserController {
 
     /**
      * Removes an admin.
+     *
      * @param adminId The ID of the admin to remove.
      * @return A success message after removing the admin.
      */
@@ -157,6 +169,7 @@ public class CourseUserController {
 
     /**
      * Retrieves a list of all courses in the system.
+     *
      * @return A list of all courses.
      */
     public List<Course> getAllCourses() {
@@ -165,6 +178,7 @@ public class CourseUserController {
 
     /**
      * Retrieves a list of all students in the system.
+     *
      * @return A list of all students.
      */
     public List<Student> getAllStudents() {
@@ -173,6 +187,7 @@ public class CourseUserController {
 
     /**
      * Retrieves a list of all instructors in the system.
+     *
      * @return A list of all instructors.
      */
     public List<Instructor> getAllInstructors() {
@@ -181,6 +196,7 @@ public class CourseUserController {
 
     /**
      * Retrieves a list of all admins in the system.
+     *
      * @return A list of all admins.
      */
     public List<Admin> getAllAdmins() {
@@ -189,8 +205,9 @@ public class CourseUserController {
 
     /**
      * Unenrolls a student from a specific course.
+     *
      * @param studentId The ID of the student to unenroll.
-     * @param courseId The ID of the course.
+     * @param courseId  The ID of the course.
      * @return A success message if unenrollment is successful.
      */
     public String unenrollStudentFromCourse(Integer studentId, Integer courseId) throws EntityNotFoundException, BusinessException {
@@ -200,6 +217,7 @@ public class CourseUserController {
 
     /**
      * Retrieves all courses a student is enrolled in.
+     *
      * @param studentId The ID of the student.
      * @return A list of courses the student is enrolled in.
      */
@@ -209,6 +227,7 @@ public class CourseUserController {
 
     /**
      * Retrieves all courses an instructor teaches.
+     *
      * @param instructorId The ID of the instructor.
      * @return A list of courses the instructor teaches.
      */
@@ -218,6 +237,7 @@ public class CourseUserController {
 
     /**
      * Retrieves detailed information about a specific course.
+     *
      * @param courseId The ID of the course.
      * @return The course object containing detailed information.
      */
@@ -227,6 +247,7 @@ public class CourseUserController {
 
     /**
      * Retrieves detailed information about a specific student.
+     *
      * @param studentId The ID of the student.
      * @return The student object containing detailed information.
      */
@@ -236,6 +257,7 @@ public class CourseUserController {
 
     /**
      * Retrieves detailed information about a specific instructor.
+     *
      * @param instructorId The ID of the instructor.
      * @return The instructor object containing detailed information.
      */
@@ -245,6 +267,7 @@ public class CourseUserController {
 
     /**
      * Updates information for an existing student.
+     *
      * @param student The student object with updated information.
      * @return A success message if the update is successful.
      */
@@ -258,7 +281,7 @@ public class CourseUserController {
     }
 
 
-    public String updateCourse(Course course)throws EntityNotFoundException {
+    public String updateCourse(Course course) throws EntityNotFoundException {
         try {
             service.updateCourse(course);
             return "Course updated successfully.";
@@ -269,6 +292,7 @@ public class CourseUserController {
 
     /**
      * Updates information for an existing instructor.
+     *
      * @param instructor The instructor object with updated information.
      * @return A success message if the update is successful.
      */
@@ -283,6 +307,7 @@ public class CourseUserController {
 
     /**
      * Retrieves the instructor assigned to a specific course.
+     *
      * @param courseId The ID of the course.
      * @return The instructor assigned to the course.
      */
@@ -330,5 +355,15 @@ public class CourseUserController {
         return service.getInstructorsSortedByEnrollment();
     }
 
+    /**
+     * Allows the instructors to give feedback on specific assignments.
+     *
+     * @param assignmentId id of the assignment.
+     * @param studentId    id of the student that completed the assignment.
+     * @param instructorId id of the instructor that corrected the assignment.
+     */
+    public void giveAssignmentFeedback(Integer assignmentId, Integer studentId, Integer instructorId) {
+        service.giveAssignmentFeedback(assignmentId, studentId, instructorId);
+    }
 
 }

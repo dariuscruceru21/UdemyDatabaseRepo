@@ -24,6 +24,7 @@ public class CoursesUserService {
     private final IRepository<Instructor> instructorIRepository;
     private final IRepository<Admin> adminIRepository;
     private final IRepository<Enrolled> enrolledIRepository;
+    private final IRepository<Message> messageIRepository;
 
 
     /**
@@ -36,12 +37,13 @@ public class CoursesUserService {
      * @param instructorIRepository The repository interface for instructor data, used to fetch and manage instructor-related information.
      * @param adminIRepository      The repository interface for admin data, used to fetch and manage admin-related information.
      */
-    public CoursesUserService(IRepository<Course> courseIRepository, IRepository<Student> studentIRepository, IRepository<Instructor> instructorIRepository, IRepository<Admin> adminIRepository, IRepository<Enrolled> enrolledIRepository) {
+    public CoursesUserService(IRepository<Course> courseIRepository, IRepository<Student> studentIRepository, IRepository<Instructor> instructorIRepository, IRepository<Admin> adminIRepository, IRepository<Enrolled> enrolledIRepository, IRepository<Message> messageIRepository) {
         this.courseIRepository = courseIRepository;
         this.studentIRepository = studentIRepository;
         this.instructorIRepository = instructorIRepository;
         this.adminIRepository = adminIRepository;
         this.enrolledIRepository = enrolledIRepository;
+        this.messageIRepository = messageIRepository;
     }
 
     public CoursesUserService(String storageMethod) {
@@ -52,6 +54,7 @@ public class CoursesUserService {
                 this.instructorIRepository = new InMemoryRepo<>();
                 this.adminIRepository = new InMemoryRepo<>();
                 this.enrolledIRepository = new InMemoryRepo<>();
+                this.messageIRepository = new InMemoryRepo<>();
                 break;
             case "file":
                 this.courseIRepository = new FileRepository<>("course.csv");
@@ -59,6 +62,7 @@ public class CoursesUserService {
                 this.instructorIRepository = new FileRepository<>("instructor.csv");
                 this.adminIRepository = new FileRepository<>("admin.csv");
                 this.enrolledIRepository = new FileRepository<>("enrolled.csv");
+                this.messageIRepository = new FileRepository<>("message.csv");
                 break;
             case "db":
                 this.courseIRepository = new DataBaseRepository<>("course", Course.class, utils.getCourseParameters());
@@ -66,16 +70,27 @@ public class CoursesUserService {
                 this.instructorIRepository = new DataBaseRepository<>("instructor", Instructor.class, utils.getUsersParameters());
                 this.adminIRepository = new DataBaseRepository<>("admin", Admin.class, utils.getUsersParameters());
                 this.enrolledIRepository = new DataBaseRepository<>("studentcourse", Enrolled.class, utils.getEnrolledParameters());
+                this.messageIRepository = new DataBaseRepository<>("message", Message.class, utils.getMessageParamteres());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown storage method: " + storageMethod);
         }
     }
 
-
-    public void giveAssignmentFeedback(){
-
+    /**
+     * Allows the instructors to give feedback on specific assignments.
+     *
+     * @param assignmentId id of the assignment.
+     * @param studentId id of the student that completed the assignment.
+     * @param instructorId id of the instructor that corrected the assignment.
+     */
+    public void giveAssignmentFeedback(Integer assignmentId, Integer studentId, Integer instructorId){
+        Message turnedInAssignment = messageIRepository.get(assignmentId);
+        System.out.println(turnedInAssignment.getMessage());
     }
+
+
+
     /**
      * Retrieves a list of all students enrolled in a specific course.
      *
