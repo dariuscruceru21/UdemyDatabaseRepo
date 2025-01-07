@@ -483,17 +483,15 @@ public class AssignmentService {
                 // If correct, inform the user and increment the score
                 System.out.println("Correct!\n");
                 assignment.setScore(assignment.getScore() + 1);  // Update score
-                return;  // Exit after one correct answer (can be changed based on behavior)
             } else {
                 // If wrong, inform the user and reveal the correct answer
                 System.out.println("Wrong answer! The answer was " + quiz.getCorrectAnswer() + "\n");
-                return;  // Exit after one wrong answer (can be changed based on behavior)
             }
 
         }
 
         // Print the user's total score at the end of the quiz
-        System.out.println("You scored " + assignment.getScore());
+        System.out.println("You scored " + (assignment.getScore() * 20) + "%");
 
         // Close the scanner object after use (good practice)
         scanner.close();

@@ -165,14 +165,38 @@ public class Ui {
         assignmentController.addModule(new Module(201, "Introduction to Java", "Java basics and setup"));
         assignmentController.addModule(new Module(202, "Advanced Java", "Multithreading and streams"));
 
+        //Adding modules to courses
+        assignmentController.addModuleToCourse(101, 201);
+        assignmentController.addModuleToCourse(102, 202);
+
         // Adding Assignments
         assignmentController.addAssignment(new Assignment(301, "Complete Java Project", "2025-03-01", 100));
         assignmentController.addAssignment(new Assignment(302, "Database Query Exercise", "2025-04-01", 50));
 
-        // Adding Quizzes
-        assignmentController.addQuiz(new Quiz(401, "Java Basics Quiz", "Multiple choice questions on Java basics", 3));
-        assignmentController.addQuiz(new Quiz(402, "Database Fundamentals", "SQL queries and relational design questions", 2));
+        //Adding assignments to modules
+        assignmentController.addAssignmentToModule(201, 301);
+        assignmentController.addAssignmentToModule(202, 302);
 
+        String q1 = "What is the correct syntax for the main method in Java?\n1. public static void main(String[] args)\n2. public void main(String[] args)\n3. static void main(String args[])\n4. public static void main()";
+        String q2 = "What is the size of an int in Java?\n1. 4 bytes\n2. 8 bytes\n3. 2 bytes\n4. 16 bytes";
+        String q3 = "Which keyword is used to inherit a class in Java?\n1. implements\n2. extends\n3. inherits\n4. override";
+        String q4 = "Which of these is a valid for-loop in Java?\n1. for(int i = 0; i < 5; i++)\n2. for(i=0, i<5; i+)\n3. foreach(int i : 5)\n4. loop(i=0 to 5)";
+        String q5 = "Which of these is part of the Java Collections Framework?\n1. Array\n2. HashMap\n3. Enumeration\n4. Vector";
+
+        // Adding Quizzes
+        assignmentController.addQuiz(new Quiz(401, "Java Basics Quiz", q1, 1));
+        assignmentController.addQuiz(new Quiz(402, "Java Data Types Quiz", q2, 1));
+        assignmentController.addQuiz(new Quiz(403, "Java OOP Quiz", q3, 2));
+        assignmentController.addQuiz(new Quiz(404, "Java Loops Quiz", q4, 1));
+        assignmentController.addQuiz(new Quiz(405, "Java Collections Quiz", q5, 2));
+
+
+        //Adding Quizzes to an Assignment
+        assignmentController.addQuizToAssignment(301,401);
+        assignmentController.addQuizToAssignment(301,402);
+        assignmentController.addQuizToAssignment(301,403);
+        assignmentController.addQuizToAssignment(301,404);
+        assignmentController.addQuizToAssignment(301,405);
 
     }
 

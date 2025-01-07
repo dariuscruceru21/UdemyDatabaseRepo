@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+
 import Utils.Utils;
 
 
@@ -60,17 +61,21 @@ public class CoursesUserService {
                 this.enrolledIRepository = new FileRepository<>("enrolled.csv");
                 break;
             case "db":
-                this.courseIRepository = new DataBaseRepository<>("course",Course.class,utils.getCourseParameters());
-                this.studentIRepository = new DataBaseRepository<>("student",Student.class,utils.getUsersParameters());
-                this.instructorIRepository = new DataBaseRepository<>("instructor",Instructor.class,utils.getUsersParameters());
-                this.adminIRepository = new DataBaseRepository<>("admin",Admin.class,utils.getUsersParameters());
-                this.enrolledIRepository = new DataBaseRepository<>("studentcourse",Enrolled.class,utils.getEnrolledParameters());
+                this.courseIRepository = new DataBaseRepository<>("course", Course.class, utils.getCourseParameters());
+                this.studentIRepository = new DataBaseRepository<>("student", Student.class, utils.getUsersParameters());
+                this.instructorIRepository = new DataBaseRepository<>("instructor", Instructor.class, utils.getUsersParameters());
+                this.adminIRepository = new DataBaseRepository<>("admin", Admin.class, utils.getUsersParameters());
+                this.enrolledIRepository = new DataBaseRepository<>("studentcourse", Enrolled.class, utils.getEnrolledParameters());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown storage method: " + storageMethod);
         }
     }
 
+
+    public void giveAssignmentFeedback(){
+
+    }
     /**
      * Retrieves a list of all students enrolled in a specific course.
      *
@@ -92,7 +97,7 @@ public class CoursesUserService {
 
         //Fetch student objects for each student
         List<Student> enrolledStudents = new ArrayList<>();
-        for(Integer studentId : enrolledStudentIds){
+        for (Integer studentId : enrolledStudentIds) {
             Student student = studentIRepository.get(studentId);
             if (student != null)
                 enrolledStudents.add(student);
@@ -109,10 +114,10 @@ public class CoursesUserService {
      * @param courseId The ID of the course.
      * @return A list of students enrolled in the specified course.
      */
-    public Instructor getAssignedInstructor(Integer courseId)throws EntityNotFoundException {
+    public Instructor getAssignedInstructor(Integer courseId) throws EntityNotFoundException {
         Course course = courseIRepository.get(courseId);
         Instructor instructor;
-        if(course == null)
+        if (course == null)
             throw new EntityNotFoundException(courseId);
         instructor = instructorIRepository.get(course.getInstructorId());
         return instructor;
@@ -124,13 +129,13 @@ public class CoursesUserService {
      * @param studId   The ID of the student to enroll.
      * @param courseId The ID of the course.
      */
-    public void enroll(Integer studId, Integer courseId)throws EntityNotFoundException, BusinessException {
+    public void enroll(Integer studId, Integer courseId) throws EntityNotFoundException, BusinessException {
         Student student = studentIRepository.get(studId);
-        if(student == null)
+        if (student == null)
             throw new EntityNotFoundException(studId);
 
         Course course = courseIRepository.get(courseId);
-        if(course == null)
+        if (course == null)
             throw new EntityNotFoundException(courseId);
 
         if (course.getAvailableSpots() <= getEnrolledStudents(courseId).size())
@@ -144,7 +149,7 @@ public class CoursesUserService {
             throw new IllegalArgumentException("Student is already enrolled");
 
         //create new enrollment
-        Enrolled newEnrollment = new Enrolled(studId,courseId);
+        Enrolled newEnrollment = new Enrolled(studId, courseId);
         enrolledIRepository.create(newEnrollment);
 
         //update course availability
@@ -170,7 +175,7 @@ public class CoursesUserService {
      * @param instructorId The ID of the student to enroll.
      * @param courseId     The ID of the course.
      */
-    public void assignInstructor(Integer instructorId, Integer courseId)throws EntityNotFoundException,BusinessException {
+    public void assignInstructor(Integer instructorId, Integer courseId) throws EntityNotFoundException, BusinessException {
         // Fetch the instructor from the repository
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
@@ -207,7 +212,7 @@ public class CoursesUserService {
      * @param instructorId The ID of the student to enroll.
      * @param courseId     The ID of the course.
      */
-    public void unAssignInstructor(Integer instructorId, Integer courseId)throws EntityNotFoundException,BusinessException {
+    public void unAssignInstructor(Integer instructorId, Integer courseId) throws EntityNotFoundException, BusinessException {
         // Fetch the instructor from the repository
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
@@ -244,14 +249,14 @@ public class CoursesUserService {
      * @param course The course to add.
      */
     public void addCourse(Course course) throws ValidationException {
-            try{
-                ValidationException.validateId(course.getId());
+        try {
+            ValidationException.validateId(course.getId());
 
-                courseIRepository.create(course);
+            courseIRepository.create(course);
 
-            }catch (ValidationException e) {
-                System.err.println("Failed to add course: " + e.getMessage());
-            }
+        } catch (ValidationException e) {
+            System.err.println("Failed to add course: " + e.getMessage());
+        }
 
     }
 
@@ -261,11 +266,11 @@ public class CoursesUserService {
      * @param student The student to add.
      */
     public void addStudent(Student student) {
-        try{
+        try {
             ValidationException.validateId(student.getId());
             ValidationException.validateEmail(student.getEmail());
             studentIRepository.create(student);
-        }catch (ValidationException e) {
+        } catch (ValidationException e) {
             System.err.println("Failed to add student: " + e.getMessage());
         }
 
@@ -277,11 +282,11 @@ public class CoursesUserService {
      * @param instructor The instructor to add.
      */
     public void addInstructor(Instructor instructor) {
-        try{
+        try {
             ValidationException.validateId(instructor.getId());
             ValidationException.validateEmail(instructor.getEmail());
             instructorIRepository.create(instructor);
-        }catch (ValidationException e) {
+        } catch (ValidationException e) {
             System.err.println("Failed to add instructor: " + e.getMessage());
         }
 
@@ -293,19 +298,19 @@ public class CoursesUserService {
      * @param admin The instructor to add.
      */
     public void addAdmin(Admin admin) {
-       try{
-           ValidationException.validateId(admin.getId());
-           ValidationException.validateEmail(admin.getEmail());
-           adminIRepository.create(admin);
-       }catch (ValidationException e) {
-           System.err.println("Failed to add admin: " + e.getMessage());
-       }
+        try {
+            ValidationException.validateId(admin.getId());
+            ValidationException.validateEmail(admin.getEmail());
+            adminIRepository.create(admin);
+        } catch (ValidationException e) {
+            System.err.println("Failed to add admin: " + e.getMessage());
+        }
 
     }
 
     /**
      * Removes a course from the system.
-     *
+     * <p>
      * Before removing the course, the following steps are performed:
      * - Unassign the instructor from the course (if any).
      * - Unenroll all students from the course.
@@ -363,7 +368,7 @@ public class CoursesUserService {
 
     /**
      * Removes an instructor from the system.
-     *
+     * <p>
      * Before removing the instructor, the following steps are performed:
      * - Unassign the instructor from any courses they are teaching.
      * - Remove the instructor from any courses that they are teaching.
@@ -380,8 +385,8 @@ public class CoursesUserService {
 
 
         List<Course> courses = courseIRepository.getAll();
-        for(Course c : courses)
-            if(c.getInstructorId() == instructorId){
+        for (Course c : courses)
+            if (c.getInstructorId() == instructorId) {
                 c.setInstructorId(null);
                 courseIRepository.update(c);
 
@@ -394,7 +399,7 @@ public class CoursesUserService {
 
     /**
      * Removes a student from the system.
-     *
+     * <p>
      * Before removing the student, the following steps are performed:
      * - Unenroll the student from all courses they are enrolled in.
      * - Remove the student from any course's list of enrolled students.
@@ -459,7 +464,7 @@ public class CoursesUserService {
      *
      * @return a list of all courses.
      */
-    public List<Course> getAllCourses(){
+    public List<Course> getAllCourses() {
         return courseIRepository.getAll();
     }
 
@@ -468,7 +473,7 @@ public class CoursesUserService {
      *
      * @return a list of all students.
      */
-    public  List<Student> getAllStudents(){
+    public List<Student> getAllStudents() {
         return studentIRepository.getAll();
     }
 
@@ -478,7 +483,7 @@ public class CoursesUserService {
      *
      * @return a list of all instructors.
      */
-    public List<Instructor> getAllInstructors(){
+    public List<Instructor> getAllInstructors() {
         return instructorIRepository.getAll();
     }
 
@@ -487,19 +492,19 @@ public class CoursesUserService {
      *
      * @return a list of all admins.
      */
-    public List<Admin> getAllAdmins(){
+    public List<Admin> getAllAdmins() {
         return adminIRepository.getAll();
     }
 
     /**
      * Unenrolls a student from a course.
      *
-     * @param studId the ID of the student to unenroll.
+     * @param studId   the ID of the student to unenroll.
      * @param courseId the ID of the course the student is unenrolling from.
      * @throws EntityNotFoundException if the student or course does not exist.
-     * @throws BusinessException if the student is not enrolled in the specified course.
+     * @throws BusinessException       if the student is not enrolled in the specified course.
      */
-    public void unenroll(Integer studId, Integer courseId) throws EntityNotFoundException,BusinessException {
+    public void unenroll(Integer studId, Integer courseId) throws EntityNotFoundException, BusinessException {
 
         Student student = studentIRepository.get(studId);
         if (student == null)
@@ -517,8 +522,8 @@ public class CoursesUserService {
         if (!isEnrolled)
             throw new BusinessException("Student is not enrolled in this course");
 
-        List<Enrolled>enrollmentsThatDonMatch  = new ArrayList<>();
-        for(Enrolled enrollment : enrollments)
+        List<Enrolled> enrollmentsThatDonMatch = new ArrayList<>();
+        for (Enrolled enrollment : enrollments)
             if (enrollment.getId() == studId && enrollment.getCourseId() != courseId)
                 enrollmentsThatDonMatch.add(enrollment);
 
@@ -531,7 +536,7 @@ public class CoursesUserService {
             }
         }
 
-        for(Enrolled enrollment : enrollmentsThatDonMatch)
+        for (Enrolled enrollment : enrollmentsThatDonMatch)
             enrolledIRepository.create(enrollment);
 
         // Update course availability
@@ -557,11 +562,11 @@ public class CoursesUserService {
      * Removes the assigned Instructo
      *
      * @param instructorId the ID of the instructor to remove.
-     * @param courseId the ID of the course the instructor is assigned to.
+     * @param courseId     the ID of the course the instructor is assigned to.
      * @throws EntityNotFoundException if the instructor or course does not exist.
-     * @throws BusinessException if the instructor was already unassigned.
+     * @throws BusinessException       if the instructor was already unassigned.
      */
-    public void removeAssignedInstructor(Integer instructorId, Integer courseId) throws EntityNotFoundException,BusinessException {
+    public void removeAssignedInstructor(Integer instructorId, Integer courseId) throws EntityNotFoundException, BusinessException {
         //fetch the instructor
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
@@ -573,7 +578,7 @@ public class CoursesUserService {
             throw new EntityNotFoundException(courseId);
 
         //check if the instructor is assigned to a course
-        if(course.getInstructorId() == null)
+        if (course.getInstructorId() == null)
             throw new BusinessException("Course already been unassigned");
 
         //remove the course from the instructor list
@@ -601,7 +606,7 @@ public class CoursesUserService {
      */
     public List<Course> getCoursesAStudentEnrolledIn(Integer studentId) throws EntityNotFoundException {
         Student student = studentIRepository.get(studentId);
-        if(student == null)
+        if (student == null)
             throw new EntityNotFoundException(studentId);
 
         List<Enrolled> allEnrollments = enrolledIRepository.getAll();
@@ -616,9 +621,7 @@ public class CoursesUserService {
                 .collect(Collectors.toList());
 
 
-
     }
-
 
 
     /**
@@ -627,13 +630,13 @@ public class CoursesUserService {
      * @param instructorId the ID of the instructor.
      * @return a list of courses the instructor teaches.
      */
-    public List<Course> getCoursesAInstructorTeaches(Integer instructorId){
+    public List<Course> getCoursesAInstructorTeaches(Integer instructorId) {
 
 
-        List<Course>courses = courseIRepository.getAll();
+        List<Course> courses = courseIRepository.getAll();
         List<Course> enrolledCourses = new ArrayList<>();
-        for(Course  course : courses){
-            if(course != null && course.getInstructorId().equals(instructorId))
+        for (Course course : courses) {
+            if (course != null && course.getInstructorId().equals(instructorId))
                 enrolledCourses.add(course);
         }
 
@@ -647,7 +650,7 @@ public class CoursesUserService {
      * @return the course information.
      * @throws EntityNotFoundException if no course is found with the given ID.
      */
-    public Course getCourseInfo(Integer courseId)throws EntityNotFoundException{
+    public Course getCourseInfo(Integer courseId) throws EntityNotFoundException {
         Course course = courseIRepository.get(courseId);
         if (course == null)
             throw new EntityNotFoundException(courseId);
@@ -661,7 +664,7 @@ public class CoursesUserService {
      * @return the student information.
      * @throws EntityNotFoundException if no student is found with the given ID.
      */
-    public Student getStudentInfo(Integer studentId)throws EntityNotFoundException{
+    public Student getStudentInfo(Integer studentId) throws EntityNotFoundException {
         Student student = studentIRepository.get(studentId);
         if (student == null)
             throw new EntityNotFoundException(studentId);
@@ -675,7 +678,7 @@ public class CoursesUserService {
      * @return the instructor information.
      * @throws EntityNotFoundException if no instructor is found with the given ID.
      */
-    public Instructor getInstructorInfo(Integer instructorId)throws EntityNotFoundException{
+    public Instructor getInstructorInfo(Integer instructorId) throws EntityNotFoundException {
         Instructor instructor = instructorIRepository.get(instructorId);
         if (instructor == null)
             throw new EntityNotFoundException(instructorId);
@@ -688,9 +691,9 @@ public class CoursesUserService {
      * @param course the updated course object.
      * @throws EntityNotFoundException if no course is found with the given ID.
      */
-    public void updateCourse(Course course)throws EntityNotFoundException{
+    public void updateCourse(Course course) throws EntityNotFoundException {
 
-        if(courseIRepository.get(course.getId()) == null)
+        if (courseIRepository.get(course.getId()) == null)
             throw new EntityNotFoundException(course.getId());
         courseIRepository.update(course);
     }
@@ -701,7 +704,7 @@ public class CoursesUserService {
      * @param student the updated student object.
      * @throws EntityNotFoundException if no student is found with the given ID.
      */
-    public void updateStudent(Student student)throws EntityNotFoundException{
+    public void updateStudent(Student student) throws EntityNotFoundException {
         if (studentIRepository.get(student.getId()) == null)
             throw new EntityNotFoundException(student.getId());
         studentIRepository.update(student);
@@ -713,7 +716,7 @@ public class CoursesUserService {
      * @param instructor the updated instructor object.
      * @throws EntityNotFoundException if no instructor is found with the given ID.
      */
-    public void updateInstructor(Instructor instructor)throws EntityNotFoundException{
+    public void updateInstructor(Instructor instructor) throws EntityNotFoundException {
         if (instructorIRepository.get(instructor.getId()) == null)
             throw new EntityNotFoundException(instructor.getId());
         instructorIRepository.update(instructor);
@@ -724,11 +727,11 @@ public class CoursesUserService {
      *
      * @return a list of under-occupied courses.
      */
-    public List<Course> getAllUnderOcupiedCourses(){
-        List<Course>courses = courseIRepository.getAll();
+    public List<Course> getAllUnderOcupiedCourses() {
+        List<Course> courses = courseIRepository.getAll();
         List<Course> underOcupiedCourses = new ArrayList<>();
-        for(Course course : courses){
-            if (course.getEnrolledStudents().size() <= course.getAvailableSpots() * 0.2){
+        for (Course course : courses) {
+            if (course.getEnrolledStudents().size() <= course.getAvailableSpots() * 0.2) {
                 underOcupiedCourses.add(course);
             }
         }
@@ -741,7 +744,7 @@ public class CoursesUserService {
      *
      * @return a sorted list of instructors.
      */
-    public List<Instructor> sortAllInstructorsByNumberOfTeachingCourses(){
+    public List<Instructor> sortAllInstructorsByNumberOfTeachingCourses() {
         List<Instructor> instructors = instructorIRepository.getAll();
         //sort the instructor by number of courses
         instructors.sort((instructor1, instructor2) -> java.lang.Integer.compare(
@@ -757,21 +760,21 @@ public class CoursesUserService {
      * @return a list of courses that end before the specified date.
      * @throws ParseException if the date format is incorrect.
      */
-    public List<Course> getAllCoursesThatEndBeforeADate(String date){
-        List<Course>courses = courseIRepository.getAll();
-        List<Course>coursesThatEndBeforeADate = new ArrayList<>();
+    public List<Course> getAllCoursesThatEndBeforeADate(String date) {
+        List<Course> courses = courseIRepository.getAll();
+        List<Course> coursesThatEndBeforeADate = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try{
+        try {
             Date inputDate = dateFormat.parse(date);
 
-            for(Course course : courses){
+            for (Course course : courses) {
                 try {
                     Date courseEndDate = dateFormat.parse(course.getEndDate());
 
-                    if(courseEndDate.before(inputDate)){
+                    if (courseEndDate.before(inputDate)) {
                         coursesThatEndBeforeADate.add(course);
                     }
-                }catch(ParseException e){
+                } catch (ParseException e) {
                     System.err.println("Invalid end date format for course: " + course.getCourseTitle());
                 }
             }
@@ -808,12 +811,6 @@ public class CoursesUserService {
                         instructorEnrollmentCounts.getOrDefault(i.getId(), 0L)).reversed())
                 .collect(Collectors.toList());
     }
-
-
-
-
-
-
 
 
 }
