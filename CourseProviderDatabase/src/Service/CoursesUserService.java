@@ -747,7 +747,6 @@ public class CoursesUserService {
 
         for (Course course : courses) {
             // Count the number of students enrolled in this course using the `enrolleds` list
-            System.out.println(enrolleds);
             long enrolledCount = enrolleds.stream()
                     .filter(enrollment -> enrollment.getCourseId().equals(course.getId()))
                     .count();
@@ -846,6 +845,11 @@ public class CoursesUserService {
     }
 
 
+    /**
+     * Retrieves a list of messages from a user.
+     *
+     * @return A list of messages.
+     */
     public List<Message> viewMyMessages(Integer studentId) throws EntityNotFoundException {
         Student student = studentIRepository.get(studentId);
         if (student == null)

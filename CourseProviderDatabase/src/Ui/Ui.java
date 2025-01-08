@@ -612,7 +612,7 @@ public class Ui {
                 case 21 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 16);
+        } while (choice != 21);
     }
 
     /**
