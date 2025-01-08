@@ -69,4 +69,14 @@ public class Quiz implements Identifiable, Serializable {
     public void setId(Integer id) {
         this.quizId = id;
     }
+
+    @Override
+    public String toString() {
+        return "Quiz{" +
+                "quizId=" + quizId +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", correctAnswer=" + correctAnswer +
+                '}';
+    }
 }

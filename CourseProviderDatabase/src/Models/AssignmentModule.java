@@ -30,4 +30,12 @@ public class AssignmentModule implements Identifiable, Serializable {
     public void setId(Integer id) {
         this.moduleId = id;
     }
+
+    @Override
+    public String toString() {
+        return "AssignmentModule{" +
+                "moduleId=" + moduleId +
+                ", assignmentId=" + assignmentId +
+                '}';
+    }
 }

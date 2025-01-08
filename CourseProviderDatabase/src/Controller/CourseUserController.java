@@ -3,10 +3,7 @@ package Controller;
 import Exceptions.BusinessException;
 import Exceptions.EntityNotFoundException;
 import Exceptions.ValidationException;
-import Models.Admin;
-import Models.Course;
-import Models.Instructor;
-import Models.Student;
+import Models.*;
 import Service.CoursesUserService;
 
 import java.util.List;
@@ -362,6 +359,10 @@ public class CourseUserController {
      */
     public void giveAssignmentFeedback(Integer assignmentId) {
         service.giveAssignmentFeedback(assignmentId);
+    }
+
+    public List<Message> viewMessages(Integer studentId) throws EntityNotFoundException {
+        return service.viewMyMessages(studentId);
     }
 
 }

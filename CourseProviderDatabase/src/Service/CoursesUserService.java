@@ -742,14 +742,24 @@ public class CoursesUserService {
      */
     public List<Course> getAllUnderOcupiedCourses() {
         List<Course> courses = courseIRepository.getAll();
+        List<Enrolled> enrolleds = enrolledIRepository.getAll();
         List<Course> underOcupiedCourses = new ArrayList<>();
+
         for (Course course : courses) {
-            if (course.getEnrolledStudents().size() <= course.getAvailableSpots() * 0.2) {
+            // Count the number of students enrolled in this course using the `enrolleds` list
+            System.out.println(enrolleds);
+            long enrolledCount = enrolleds.stream()
+                    .filter(enrollment -> enrollment.getCourseId().equals(course.getId()))
+                    .count();
+            // Check if the enrolled count is less than or equal to 20% of available spots
+            if ((int)enrolledCount <= course.getAvailableSpots() * 0.2) {
                 underOcupiedCourses.add(course);
             }
         }
+
         return underOcupiedCourses;
     }
+
 
 
     /**
@@ -758,13 +768,23 @@ public class CoursesUserService {
      * @return a sorted list of instructors.
      */
     public List<Instructor> sortAllInstructorsByNumberOfTeachingCourses() {
-        List<Instructor> instructors = instructorIRepository.getAll();
-        //sort the instructor by number of courses
-        instructors.sort((instructor1, instructor2) -> java.lang.Integer.compare(
-                instructor2.getCourses().size(), instructor1.getCourses().size()
-        ));
+        List<Instructor> instructors = new ArrayList<>(instructorIRepository.getAll());
+        List<Course> courses = courseIRepository.getAll();
+
+        // Map to count the number of courses taught by each instructor
+        Map<Integer, Integer> instructorCourseCount = courses.stream()
+                .collect(Collectors.groupingBy(Course::getInstructorId, Collectors.summingInt(course -> 1)));
+
+        // Sort instructors by the number of courses they are teaching
+        instructors.sort((instructor1, instructor2) -> {
+            int count1 = instructorCourseCount.getOrDefault(instructor1.getId(), 0);
+            int count2 = instructorCourseCount.getOrDefault(instructor2.getId(), 0);
+            return Integer.compare(count2, count1); // Descending order
+        });
+
         return instructors;
     }
+
 
     /**
      * Retrieves all courses that end before a specified date.
@@ -825,5 +845,20 @@ public class CoursesUserService {
                 .collect(Collectors.toList());
     }
 
+
+    public List<Message> viewMyMessages(Integer studentId) throws EntityNotFoundException {
+        Student student = studentIRepository.get(studentId);
+        if (student == null)
+            throw new EntityNotFoundException(studentId);
+        List<Message> messages = messageIRepository.getAll();
+        List<Message> messages1 = new ArrayList<>();
+        for (Message message : messages) {
+            if(message.getReceiver().equals(student.getId()))
+                messages1.add(message);
+        }
+
+        return messages1;
+
+    }
 
 }

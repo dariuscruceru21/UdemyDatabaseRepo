@@ -84,6 +84,7 @@ public class Ui {
 
         if ("inmemory".equalsIgnoreCase(storageMethod)) {
             populateInMemoryRepo();
+
         }
 
 
@@ -118,6 +119,7 @@ public class Ui {
         Scanner scanner = new Scanner(System.in);
         User user = null;
 
+
         while (user == null) {
             System.out.println("Please log in:");
             System.out.print("Username: ");
@@ -141,54 +143,296 @@ public class Ui {
      */
     public void populateInMemoryRepo() throws ValidationException {
         // Adding Students
+        courseUserController.addStudent(new Student(1, "maia", "maiapass", "maia@gmail.com", "student"));
+        courseUserController.addStudent(new Student(2, "johnDoe", "jd123pass", "john.doe@yahoo.com", "student"));
         courseUserController.addStudent(new Student(3, "mikeSmith", "pass789", "mike.smith@example.com", "student"));
+        courseUserController.addStudent(new Student(4, "sarahJones", "sarahJ2023", "sarah.jones@outlook.com", "student"));
+        courseUserController.addStudent(new Student(5, "alexWong", "wongAlex22", "alex.wong@gmail.com", "student"));
+        courseUserController.addStudent(new Student(6, "emilyBrown", "brownEmily1", "emily.brown@hotmail.com", "student"));
+        courseUserController.addStudent(new Student(7, "davidLee", "lee123David", "david.lee@example.com", "student"));
+        courseUserController.addStudent(new Student(8, "lisaChen", "chenLisa99", "lisa.chen@yahoo.com", "student"));
+        courseUserController.addStudent(new Student(9, "ryanTaylor", "taylorRyan21", "ryan.taylor@outlook.com", "student"));
+        courseUserController.addStudent(new Student(10, "oliviaGarcia", "garcia2023", "olivia.garcia@gmail.com", "student"));
+
 
         // Adding Instructors
-        courseUserController.addInstructor(new Instructor(4, "profMiller", "teach123", "miller@example.com", "instructor"));
+        courseUserController.addInstructor(new Instructor(1, "profMiller", "teach123", "miller@example.com", "instructor"));
+        courseUserController.addInstructor(new Instructor(2, "drJohnson", "jPhD2023", "johnson@university.edu", "instructor"));
+        courseUserController.addInstructor(new Instructor(3, "profWilliams", "willTeach22", "williams@college.edu", "instructor"));
+        courseUserController.addInstructor(new Instructor(4, "drBrown", "brownLectures", "brown@institute.edu", "instructor"));
+        courseUserController.addInstructor(new Instructor(5, "profDavis", "davisClass101", "davis@academy.com", "instructor"));
+        courseUserController.addInstructor(new Instructor(6, "drWilson", "wilsonLab2023", "wilson@school.edu", "instructor"));
+        courseUserController.addInstructor(new Instructor(7, "profTaylor", "taylorTeach", "taylor@university.com", "instructor"));
+        courseUserController.addInstructor(new Instructor(8, "drAnderson", "andersonLectures", "anderson@college.edu", "instructor"));
+        courseUserController.addInstructor(new Instructor(9, "profMoore", "mooreMath2023", "moore@institute.com", "instructor"));
+        courseUserController.addInstructor(new Instructor(10, "drLee", "leeScience101", "lee@academy.edu", "instructor"));
 
         // Adding Admins
-        courseUserController.addAdmin(new Admin(5, "adminUser", "adminPass", "admin@example.com", "admin"));
+
+        courseUserController.addAdmin(new Admin(1, "adminUser", "adminPass", "admin@example.com", "admin"));
+        courseUserController.addAdmin(new Admin(2, "sysAdmin", "sysPass123", "sysadmin@university.edu", "admin"));
+        courseUserController.addAdmin(new Admin(3, "techSupport", "techPass456", "techsupport@college.edu", "admin"));
+        courseUserController.addAdmin(new Admin(4, "itManager", "itPass789", "itmanager@institute.edu", "admin"));
+        courseUserController.addAdmin(new Admin(5, "securityAdmin", "securePass", "security@academy.com", "admin"));
+        courseUserController.addAdmin(new Admin(6, "dataAdmin", "dataPass321", "dataadmin@school.edu", "admin"));
+        courseUserController.addAdmin(new Admin(7, "networkAdmin", "netPass654", "network@university.com", "admin"));
+        courseUserController.addAdmin(new Admin(8, "supportAdmin", "suppPass987", "support@college.edu", "admin"));
+        courseUserController.addAdmin(new Admin(9, "maintenanceAdmin", "maintPass", "maintenance@institute.com", "admin"));
+        courseUserController.addAdmin(new Admin(10, "systemManager", "sysManPass", "sysman@academy.edu", "admin"));
+
 
         // Adding Courses
-        try {
-            courseUserController.addCourse(new Course(101, "Java Programming", "Learn Java basics", 30, "2025-01-15", "2025-05-15", 4));
-        } catch (ValidationException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            courseUserController.addCourse(new Course(102, "Database Systems", "Introduction to databases", 25, "2025-02-01", "2025-06-01", 4));
-        } catch (ValidationException e) {
-            throw new RuntimeException(e);
-        }
+
+        courseUserController.addCourse(new Course(101, "Java Programming", "Learn Java basics and object-oriented programming", 5, "2025-01-15", "2025-05-15", 1));
+        courseUserController.addCourse(new Course(102, "Web Development", "Introduction to HTML, CSS, and JavaScript", 25, "2025-02-01", "2025-06-01", 1));
+        courseUserController.addCourse(new Course(103, "Database Management", "SQL and relational database design", 20, "2025-01-20", "2025-05-20", 1));
+        courseUserController.addCourse(new Course(104, "Data Structures", "Fundamental data structures and algorithms", 35, "2025-03-01", "2025-07-01", 1));
+        courseUserController.addCourse(new Course(105, "Mobile App Development", "Building apps for iOS and Android", 28, "2025-02-15", "2025-06-15", 2));
+        courseUserController.addCourse(new Course(106, "Artificial Intelligence", "Introduction to AI concepts and applications", 22, "2025-03-15", "2025-07-15", 3));
+        courseUserController.addCourse(new Course(107, "Network Security", "Fundamentals of cybersecurity and network protection", 18, "2025-04-01", "2025-08-01", 3));
+        courseUserController.addCourse(new Course(108, "Cloud Computing", "Introduction to cloud services and architectures", 26, "2025-02-10", "2025-06-10", 5));
+        courseUserController.addCourse(new Course(109, "Software Engineering", "Software development lifecycle and best practices", 32, "2025-01-25", "2025-05-25", 6));
+        courseUserController.addCourse(new Course(110, "Machine Learning", "Fundamentals of ML algorithms and applications", 24, "2025-03-10", "2025-07-10", 7));
+        courseUserController.addCourse(new Course(111, "Computer Graphics", "2D and 3D graphics programming", 20, "2025-04-15", "2025-08-15", 8));
+        courseUserController.addCourse(new Course(112, "Operating Systems", "OS concepts and system programming", 28, "2025-02-20", "2025-06-20", 9));
+        courseUserController.addCourse(new Course(113, "Blockchain Technology", "Introduction to blockchain and cryptocurrencies", 22, "2025-05-01", "2025-09-01", 10));
+        courseUserController.addCourse(new Course(114, "Big Data Analytics", "Processing and analyzing large datasets", 25, "2025-03-20", "2025-07-20", 5));
+        courseUserController.addCourse(new Course(115, "Internet of Things", "Connecting and programming IoT devices", 30, "2025-04-10", "2025-08-10", 8));
+
+
+        //enroll students
+        courseUserController.enrollStudentInCourse(1,101);
+        courseUserController.enrollStudentInCourse(2,101);
+        courseUserController.enrollStudentInCourse(3,101);
+        courseUserController.enrollStudentInCourse(4,101);
+        courseUserController.enrollStudentInCourse(5,101);
+        courseUserController.enrollStudentInCourse(6,102);
+        courseUserController.enrollStudentInCourse(7,102);
+        courseUserController.enrollStudentInCourse(8,102);
+        courseUserController.enrollStudentInCourse(9,102);
+        courseUserController.enrollStudentInCourse(10,102);
+        courseUserController.enrollStudentInCourse(1,103);
+        courseUserController.enrollStudentInCourse(2,103);
+        courseUserController.enrollStudentInCourse(3,103);
+        courseUserController.enrollStudentInCourse(4,104);
+        courseUserController.enrollStudentInCourse(5,104);
+        courseUserController.enrollStudentInCourse(6,104);
+        courseUserController.enrollStudentInCourse(7,104);
+        courseUserController.enrollStudentInCourse(8,104);
+        courseUserController.enrollStudentInCourse(9,105);
+        courseUserController.enrollStudentInCourse(10,105);
+        courseUserController.enrollStudentInCourse(1,106);
+        courseUserController.enrollStudentInCourse(6,106);
+        courseUserController.enrollStudentInCourse(7,107);
+        courseUserController.enrollStudentInCourse(8,107);
+        courseUserController.enrollStudentInCourse(9,107);
+        courseUserController.enrollStudentInCourse(10,107);
+        courseUserController.enrollStudentInCourse(5,108);
+        courseUserController.enrollStudentInCourse(6,108);
+        courseUserController.enrollStudentInCourse(7,109);
+        courseUserController.enrollStudentInCourse(8,109);
+        courseUserController.enrollStudentInCourse(9,109);
+        courseUserController.enrollStudentInCourse(10,109);
+        courseUserController.enrollStudentInCourse(5,110);
+        courseUserController.enrollStudentInCourse(3,110);
+
+
 
         // Adding Modules
-        assignmentController.addModule(new Module(201, "Introduction to Java", "Java basics and setup"));
-        assignmentController.addModule(new Module(202, "Advanced Java", "Multithreading and streams"));
+        assignmentController.addModule(new Module(201, "Introduction to Programming", "Fundamental concepts and basic syntax"));
+        assignmentController.addModule(new Module(202, "Object-Oriented Programming", "Classes, objects, inheritance, and polymorphism"));
+        assignmentController.addModule(new Module(203, "Data Structures and Algorithms", "Common data structures and algorithm design"));
+        assignmentController.addModule(new Module(204, "Web Development Fundamentals", "HTML, CSS, and JavaScript basics"));
+        assignmentController.addModule(new Module(205, "Database Management Systems", "Relational databases, SQL, and data modeling"));
+        assignmentController.addModule(new Module(206, "Network Fundamentals", "OSI model, TCP/IP, and basic networking concepts"));
+        assignmentController.addModule(new Module(207, "Operating Systems", "Process management, memory allocation, and file systems"));
+        assignmentController.addModule(new Module(208, "Software Engineering Principles", "SDLC, Agile methodologies, and version control"));
+        assignmentController.addModule(new Module(209, "Artificial Intelligence and Machine Learning", "Basic AI concepts and ML algorithms"));
+        assignmentController.addModule(new Module(210, "Cybersecurity Fundamentals", "Security principles, cryptography, and ethical hacking"));
 
         //Adding modules to courses
         assignmentController.addModuleToCourse(101, 201);
-        assignmentController.addModuleToCourse(102, 202);
+        assignmentController.addModuleToCourse(101, 202);
+        assignmentController.addModuleToCourse(102, 204);
+        assignmentController.addModuleToCourse(103, 205);
+        assignmentController.addModuleToCourse(104, 203);
+        assignmentController.addModuleToCourse(105, 201);
+        assignmentController.addModuleToCourse(106, 209);
+        assignmentController.addModuleToCourse(107, 206);
+        assignmentController.addModuleToCourse(108, 206);
+        assignmentController.addModuleToCourse(110, 209);
+        assignmentController.addModuleToCourse(111, 202);
+        assignmentController.addModuleToCourse(112, 207);
+        assignmentController.addModuleToCourse(113, 210);
+        assignmentController.addModuleToCourse(114, 205);
+        assignmentController.addModuleToCourse(105, 206);
 
         // Adding Assignments
-        assignmentController.addAssignment(new Assignment(301, "Complete Java Project", "2025-03-01", 100));
-        assignmentController.addAssignment(new Assignment(302, "Database Query Exercise", "2025-04-01", 50));
+        assignmentController.addAssignment(new Assignment(301, "Basic Programming Concepts Quiz", "2025-02-15", 0));
+        assignmentController.addAssignment(new Assignment(302, "Object-Oriented Design Project", "2025-03-01", 0));
+        assignmentController.addAssignment(new Assignment(303, "Data Structures Implementation", "2025-03-15", 0));
+        assignmentController.addAssignment(new Assignment(304, "Personal Portfolio Website", "2025-04-01", 0));
+        assignmentController.addAssignment(new Assignment(305, "Database Design and SQL Queries", "2025-04-15", 0));
+        assignmentController.addAssignment(new Assignment(306, "Network Protocol Analysis", "2025-05-01", 0));
+        assignmentController.addAssignment(new Assignment(307, "Operating System Simulation", "2025-05-15", 0));
+        assignmentController.addAssignment(new Assignment(308, "Agile Development Group Project", "2025-06-01", 0));
+        assignmentController.addAssignment(new Assignment(309, "Machine Learning Algorithm Implementation", "2025-06-15", 00));
+        assignmentController.addAssignment(new Assignment(310, "Cybersecurity Vulnerability Assessment", "2025-07-01", 0));
+
 
         //Adding assignments to modules
         assignmentController.addAssignmentToModule(201, 301);
         assignmentController.addAssignmentToModule(202, 302);
+        assignmentController.addAssignmentToModule(203, 303);
+        assignmentController.addAssignmentToModule(204, 304);
+        assignmentController.addAssignmentToModule(205, 305);
+        assignmentController.addAssignmentToModule(206, 306);
+        assignmentController.addAssignmentToModule(207, 307);
+        assignmentController.addAssignmentToModule(208, 308);
+        assignmentController.addAssignmentToModule(209, 309);
+        assignmentController.addAssignmentToModule(210, 310);
 
+        //Questions assignment 1
         String q1 = "What is the correct syntax for the main method in Java?\n1. public static void main(String[] args)\n2. public void main(String[] args)\n3. static void main(String args[])\n4. public static void main()";
         String q2 = "What is the size of an int in Java?\n1. 4 bytes\n2. 8 bytes\n3. 2 bytes\n4. 16 bytes";
         String q3 = "Which keyword is used to inherit a class in Java?\n1. implements\n2. extends\n3. inherits\n4. override";
         String q4 = "Which of these is a valid for-loop in Java?\n1. for(int i = 0; i < 5; i++)\n2. for(i=0, i<5; i+)\n3. foreach(int i : 5)\n4. loop(i=0 to 5)";
         String q5 = "Which of these is part of the Java Collections Framework?\n1. Array\n2. HashMap\n3. Enumeration\n4. Vector";
 
-        // Adding Quizzes
-        assignmentController.addQuiz(new Quiz(401, "Java Basics Quiz", q1, 1));
-        assignmentController.addQuiz(new Quiz(402, "Java Data Types Quiz", q2, 1));
-        assignmentController.addQuiz(new Quiz(403, "Java OOP Quiz", q3, 2));
-        assignmentController.addQuiz(new Quiz(404, "Java Loops Quiz", q4, 1));
-        assignmentController.addQuiz(new Quiz(405, "Java Collections Quiz", q5, 2));
+        //questions assignment 2
+        String q6 = "What is encapsulation?\n1. Hiding implementation details\n2. Creating multiple instances of a class\n3. Inheriting from a superclass\n4. Overriding methods";
+        String q7 = "Which keyword is used to prevent a class from being inherited?\n1. static\n2. final\n3. private\n4. abstract";
+        String q8 = "What is polymorphism?\n1. Having multiple constructors\n2. Ability of an object to take many forms\n3. Hiding data within a class\n4. Creating multiple instances of a class";
+        String q9 = "Which of these is not a pillar of OOP?\n1. Encapsulation\n2. Inheritance\n3. Polymorphism\n4. Compilation";
+        String q10 = "What is the purpose of an interface?\n1. To create objects\n2. To define a contract for classes to implement\n3. To provide a default implementation\n4. To store data";
+
+        //questions for assignment 3
+        String q11 = "Which data structure uses LIFO (Last In First Out)?\n1. Queue\n2. Stack\n3. Linked List\n4. Tree";
+        String q12 = "What is the time complexity of searching in a balanced binary search tree?\n1. O(1)\n2. O(n)\n3. O(log n)\n4. O(n^2)";
+        String q13 = "Which of these is not a linear data structure?\n1. Array\n2. Linked List\n3. Stack\n4. Tree";
+        String q14 = "What is the main advantage of a hash table?\n1. Ordered elements\n2. Fast average-case access time\n3. Memory efficiency\n4. Easy to implement";
+        String q15 = "Which sorting algorithm has the best average-case time complexity?\n1. Bubble Sort\n2. Insertion Sort\n3. Quick Sort\n4. Selection Sort";
+
+        //questions for assignment 4
+        String q16 = "Which tag is used to define the main content of an HTML document?\n1. <main>\n2. <body>\n3. <content>\n4. <div>";
+        String q17 = "What does CSS stand for?\n1. Computer Style Sheets\n2. Creative Style Sheets\n3. Cascading Style Sheets\n4. Colorful Style Sheets";
+        String q18 = "Which JavaScript method is used to select an HTML element by its id?\n1. getElementById()\n2. querySelector()\n3. getElementByName()\n4. selectElement()";
+        String q19 = "What is the purpose of the 'viewport' meta tag?\n1. To set the page background\n2. To define the character encoding\n3. To control layout on mobile browsers\n4. To import external stylesheets";
+        String q20 = "Which of these is not a valid way to declare a variable in JavaScript?\n1. var\n2. let\n3. const\n4. variable";
+
+        //questions for assignment 5
+        String q21 = "What does SQL stand for?\n1. Structured Query Language\n2. Simple Question Language\n3. Structured Question Language\n4. Simple Query Language";
+        String q22 = "Which SQL command is used to retrieve data from a database?\n1. GET\n2. EXTRACT\n3. SELECT\n4. FETCH";
+        String q23 = "What is a primary key?\n1. The first column in a table\n2. A unique identifier for a record in a table\n3. A foreign key in another table\n4. The most important data in a table";
+        String q24 = "Which of these is not a type of SQL join?\n1. INNER JOIN\n2. LEFT JOIN\n3. RIGHT JOIN\n4. MIDDLE JOIN";
+        String q25 = "What is the purpose of the GROUP BY clause?\n1. To sort the result set\n2. To filter rows before grouping\n3. To group rows that have the same values\n4. To join multiple tables";
+
+        //questions for assignment 6
+        String q26 = "Which layer of the OSI model is responsible for routing?\n1. Physical Layer\n2. Data Link Layer\n3. Network Layer\n4. Transport Layer";
+        String q27 = "What protocol is used for secure communication over a computer network?\n1. HTTP\n2. FTP\n3. HTTPS\n4. SMTP";
+        String q28 = "Which of these is not a valid IP address?\n1. 192.168.0.1\n2. 256.0.0.1\n3. 10.0.0.1\n4. 172.16.0.1";
+        String q29 = "What is the purpose of DNS?\n1. To assign IP addresses\n2. To encrypt data\n3. To translate domain names to IP addresses\n4. To route network traffic";
+        String q30 = "Which protocol is connectionless?\n1. TCP\n2. UDP\n3. HTTP\n4. FTP";
+
+        //questions for assignment 7
+        String q31 = "What is a process in operating systems?\n1. A program in execution\n2. A type of file system\n3. A network protocol\n4. A hardware component";
+        String q32 = "Which scheduling algorithm gives the shortest job the highest priority?\n1. First-Come, First-Served\n2. Round Robin\n3. Shortest Job First\n4. Priority Scheduling";
+        String q33 = "What is virtual memory?\n1. A type of cache memory\n2. An illusion of more memory than physically available\n3. A faster type of RAM\n4. A backup of the hard drive";
+        String q34 = "Which of these is not a common page replacement algorithm?\n1. FIFO\n2. LRU\n3. Optimal\n4. LIFO";
+        String q35 = "What is the purpose of a semaphore in operating systems?\n1. To encrypt files\n2. To manage shared resources\n3. To allocate CPU time\n4. To defragment memory";
+
+        //questions for assignment 8
+        String q36 = "What is a sprint in Agile methodology?\n1. A bug in the code\n2. A fixed time-boxed iteration\n3. A type of meeting\n4. A coding competition";
+        String q37 = "Which of these is not an Agile framework?\n1. Scrum\n2. Kanban\n3. Waterfall\n4. Extreme Programming (XP)";
+        String q38 = "What is the purpose of a daily stand-up meeting?\n1. To plan the entire project\n2. To review completed work\n3. To synchronize activities and create a plan for the next 24 hours\n4. To assign tasks to team members";
+        String q39 = "What does MVP stand for in Agile?\n1. Most Valuable Player\n2. Minimum Viable Product\n3. Maximum Value Proposition\n4. Multiple Version Program";
+        String q40 = "Which role in Scrum is responsible for removing impediments?\n1. Product Owner\n2. Scrum Master\n3. Team Member\n4. Stakeholder";
+
+        //questions for assignment 9
+        String q41 = "Which of these is not a type of machine learning?\n1. Supervised Learning\n2. Unsupervised Learning\n3. Reinforcement Learning\n4. Prescriptive Learning";
+        String q42 = "What is the purpose of the training set in machine learning?\n1. To evaluate the model's performance\n2. To make predictions on new data\n3. To teach the model patterns in the data\n4. To optimize the learning rate";
+        String q43 = "Which algorithm is commonly used for classification problems?\n1. Linear Regression\n2. K-Means Clustering\n3. Decision Trees\n4. Principal Component Analysis";
+        String q44 = "What does overfitting mean in machine learning?\n1. The model performs well on training data but poorly on new data\n2. The model is too simple to capture the underlying patterns\n3. The model takes too long to train\n4. The model requires too much memory";
+        String q45 = "Which of these is not a common activation function in neural networks?\n1. ReLU\n2. Sigmoid\n3. Tanh\n4. Cosine";
+
+        //questions for assignment 10
+        String q46 = "What is a SQL injection attack?\n1. Inserting malicious SQL code into application queries\n2. Overloading a database with queries\n3. Encrypting database contents\n4. Deleting SQL databases";
+        String q47 = "Which of these is not a common type of malware?\n1. Virus\n2. Trojan\n3. Worm\n4. Firewall";
+        String q48 = "What does HTTPS provide?\n1. Faster internet connection\n2. Ad blocking\n3. Encrypted communication\n4. Anonymous browsing";
+        String q49 = "What is the purpose of a firewall?\n1. To speed up internet connection\n2. To filter network traffic based on security rules\n3. To store sensitive data\n4. To generate encryption keys";
+        String q50 = "Which of these is a best practice for password security?\n1. Using the same password for multiple accounts\n2. Sharing passwords with trusted colleagues\n3. Using multi-factor authentication\n4. Changing passwords every day";
+
+
+
+
+        //adding quizes
+        assignmentController.addQuiz(new Quiz(401, "Basic Programming Concepts Quiz 1", q1, 1));
+        assignmentController.addQuiz(new Quiz(402, "Basic Programming Concepts Quiz 2", q2, 1));
+        assignmentController.addQuiz(new Quiz(403, "Basic Programming Concepts Quiz 3", q3, 2));
+        assignmentController.addQuiz(new Quiz(404, "Basic Programming Concepts Quiz 4", q4, 1));
+        assignmentController.addQuiz(new Quiz(405, "Basic Programming Concepts Quiz 5", q5, 2));
+
+
+        assignmentController.addQuiz(new Quiz(406, "Object-Oriented Design Quiz 1", q6, 1));
+        assignmentController.addQuiz(new Quiz(407, "Object-Oriented Design Quiz 2", q7, 2));
+        assignmentController.addQuiz(new Quiz(408, "Object-Oriented Design Quiz 3", q8, 2));
+        assignmentController.addQuiz(new Quiz(409, "Object-Oriented Design Quiz 4", q9, 4));
+        assignmentController.addQuiz(new Quiz(410, "Object-Oriented Design Quiz 5", q10, 2));
+
+
+        assignmentController.addQuiz(new Quiz(411, "Data Structures Quiz 1", q11, 2));
+        assignmentController.addQuiz(new Quiz(412, "Data Structures Quiz 2", q12, 3));
+        assignmentController.addQuiz(new Quiz(413, "Data Structures Quiz 3", q13, 4));
+        assignmentController.addQuiz(new Quiz(414, "Data Structures Quiz 4", q14, 2));
+        assignmentController.addQuiz(new Quiz(415, "Data Structures Quiz 5", q15, 3));
+
+
+        assignmentController.addQuiz(new Quiz(416, "Web Development Quiz 1", q16, 2));
+        assignmentController.addQuiz(new Quiz(417, "Web Development Quiz 2", q17, 3));
+        assignmentController.addQuiz(new Quiz(418, "Web Development Quiz 3", q18, 1));
+        assignmentController.addQuiz(new Quiz(419, "Web Development Quiz 4", q19, 3));
+        assignmentController.addQuiz(new Quiz(420, "Web Development Quiz 5", q20, 4));
+
+        assignmentController.addQuiz(new Quiz(421, "Database and SQL Quiz 1", q21, 1));
+        assignmentController.addQuiz(new Quiz(422, "Database and SQL Quiz 2", q22, 3));
+        assignmentController.addQuiz(new Quiz(423, "Database and SQL Quiz 3", q23, 2));
+        assignmentController.addQuiz(new Quiz(424, "Database and SQL Quiz 4", q24, 4));
+        assignmentController.addQuiz(new Quiz(425, "Database and SQL Quiz 5", q25, 3));
+
+
+        assignmentController.addQuiz(new Quiz(426, "Network Protocol Quiz 1", q26, 3));
+        assignmentController.addQuiz(new Quiz(427, "Network Protocol Quiz 2", q27, 3));
+        assignmentController.addQuiz(new Quiz(428, "Network Protocol Quiz 3", q28, 2));
+        assignmentController.addQuiz(new Quiz(429, "Network Protocol Quiz 4", q29, 3));
+        assignmentController.addQuiz(new Quiz(430, "Network Protocol Quiz 5", q30, 2));
+
+
+        assignmentController.addQuiz(new Quiz(431, "Operating Systems Quiz 1", q31, 1));
+        assignmentController.addQuiz(new Quiz(432, "Operating Systems Quiz 2", q32, 3));
+        assignmentController.addQuiz(new Quiz(433, "Operating Systems Quiz 3", q33, 2));
+        assignmentController.addQuiz(new Quiz(434, "Operating Systems Quiz 4", q34, 4));
+        assignmentController.addQuiz(new Quiz(435, "Operating Systems Quiz 5", q35, 2));
+
+
+        assignmentController.addQuiz(new Quiz(436, "Agile Development Quiz 1", q36, 2));
+        assignmentController.addQuiz(new Quiz(437, "Agile Development Quiz 2", q37, 3));
+        assignmentController.addQuiz(new Quiz(438, "Agile Development Quiz 3", q38, 3));
+        assignmentController.addQuiz(new Quiz(439, "Agile Development Quiz 4", q39, 2));
+        assignmentController.addQuiz(new Quiz(440, "Agile Development Quiz 5", q40, 2));
+
+
+        assignmentController.addQuiz(new Quiz(441, "Machine Learning Quiz 1", q41, 4));
+        assignmentController.addQuiz(new Quiz(442, "Machine Learning Quiz 2", q42, 3));
+        assignmentController.addQuiz(new Quiz(443, "Machine Learning Quiz 3", q43, 3));
+        assignmentController.addQuiz(new Quiz(444, "Machine Learning Quiz 4", q44, 1));
+        assignmentController.addQuiz(new Quiz(445, "Machine Learning Quiz 5", q45, 4));
+
+
+        assignmentController.addQuiz(new Quiz(446, "Cybersecurity Quiz 1", q46, 1));
+        assignmentController.addQuiz(new Quiz(447, "Cybersecurity Quiz 2", q47, 4));
+        assignmentController.addQuiz(new Quiz(448, "Cybersecurity Quiz 3", q48, 3));
+        assignmentController.addQuiz(new Quiz(449, "Cybersecurity Quiz 4", q49, 2));
+        assignmentController.addQuiz(new Quiz(450, "Cybersecurity Quiz 5", q50, 3));
 
 
         //Adding Quizzes to an Assignment
@@ -197,6 +441,60 @@ public class Ui {
         assignmentController.addQuizToAssignment(301,403);
         assignmentController.addQuizToAssignment(301,404);
         assignmentController.addQuizToAssignment(301,405);
+
+        assignmentController.addQuizToAssignment(302,406);
+        assignmentController.addQuizToAssignment(302,407);
+        assignmentController.addQuizToAssignment(302,408);
+        assignmentController.addQuizToAssignment(302,409);
+        assignmentController.addQuizToAssignment(302,410);
+
+        assignmentController.addQuizToAssignment(303,411);
+        assignmentController.addQuizToAssignment(303,412);
+        assignmentController.addQuizToAssignment(303,413);
+        assignmentController.addQuizToAssignment(303,414);
+        assignmentController.addQuizToAssignment(303,415);
+
+        assignmentController.addQuizToAssignment(304,416);
+        assignmentController.addQuizToAssignment(304,417);
+        assignmentController.addQuizToAssignment(304,418);
+        assignmentController.addQuizToAssignment(304,419);
+        assignmentController.addQuizToAssignment(304,420);
+
+        assignmentController.addQuizToAssignment(305,421);
+        assignmentController.addQuizToAssignment(305,422);
+        assignmentController.addQuizToAssignment(305,423);
+        assignmentController.addQuizToAssignment(305,424);
+        assignmentController.addQuizToAssignment(305,425);
+
+        assignmentController.addQuizToAssignment(306,426);
+        assignmentController.addQuizToAssignment(306,427);
+        assignmentController.addQuizToAssignment(306,428);
+        assignmentController.addQuizToAssignment(306,429);
+        assignmentController.addQuizToAssignment(306,430);
+
+        assignmentController.addQuizToAssignment(307,431);
+        assignmentController.addQuizToAssignment(307,432);
+        assignmentController.addQuizToAssignment(307,433);
+        assignmentController.addQuizToAssignment(307,434);
+        assignmentController.addQuizToAssignment(307,435);
+
+        assignmentController.addQuizToAssignment(308,436);
+        assignmentController.addQuizToAssignment(308,437);
+        assignmentController.addQuizToAssignment(308,438);
+        assignmentController.addQuizToAssignment(308,439);
+        assignmentController.addQuizToAssignment(308,440);
+
+        assignmentController.addQuizToAssignment(309,441);
+        assignmentController.addQuizToAssignment(309,442);
+        assignmentController.addQuizToAssignment(309,443);
+        assignmentController.addQuizToAssignment(309,444);
+        assignmentController.addQuizToAssignment(309,445);
+
+        assignmentController.addQuizToAssignment(310,446);
+        assignmentController.addQuizToAssignment(310,447);
+        assignmentController.addQuizToAssignment(310,448);
+        assignmentController.addQuizToAssignment(310,449);
+        assignmentController.addQuizToAssignment(310,450);
 
     }
 
@@ -227,7 +525,8 @@ public class Ui {
             System.out.println("10. Take quiz from an assignment");
             System.out.println("11. View all courses taught by a instructor");
             System.out.println("12. Get the assigned instructor to a course");
-            System.out.println("13. Logout");
+            System.out.println("13.View my messages");
+            System.out.println("14. Logout");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
             switch (choice) {
@@ -243,11 +542,12 @@ public class Ui {
                 case 10 -> takeAssignmentQuiz();
                 case 11 -> getCoursesByInstructor();
                 case 12 -> getAssignedInstructor();
-                case 13 -> System.out.println("Logging out...");
+                case 13 -> viewMyMessages();
+                case 14 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
 
             }
-        } while (choice != 13);
+        } while (choice != 14);
     }
 
     /**
@@ -371,7 +671,9 @@ public class Ui {
             System.out.println("32. Update Course");
             System.out.println("33. Update Instructor");
             System.out.println("34. Update Student");
-            System.out.println("35. Logout");
+            System.out.println("35. Get all Under Ocupied Courses");
+            System.out.println("36. Get all courses that end before a date(format:yyyy-MM-dd)");
+            System.out.println("37. Logout");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
             scanner.nextLine();
@@ -411,10 +713,12 @@ public class Ui {
                 case 32 -> updateCourse();
                 case 33 -> updateInstructor();
                 case 34 -> updateStudent();
-                case 35 -> System.out.println("Logging out...");
+                case 35 -> getUnderOcupiedCourses();
+                case 36 -> previewCoursesThatEndBeforeADate();
+                case 37 -> System.out.println("Logging out...");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 29);
+        } while (choice != 37);
     }
 
 
@@ -1120,6 +1424,15 @@ public class Ui {
         scanner.nextLine();
         System.out.println(courseUserController.getInstructorInfo(instructorId));
     }
+
+    public void viewMyMessages() throws EntityNotFoundException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter youre id");
+        int userId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(courseUserController.viewMessages(userId));
+    }
+
 
     /**
      * Prompts the user to input a date and retrieves all courses that end before the given date.

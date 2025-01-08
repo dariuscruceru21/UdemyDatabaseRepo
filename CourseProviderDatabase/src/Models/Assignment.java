@@ -82,4 +82,15 @@ public class Assignment implements Identifiable, Serializable {
     public void setId(Integer id) {
         this.assignmentID = id;
     }
+
+    @Override
+    public String toString() {
+        return "Assignment{" +
+                "assignmentID=" + assignmentID +
+                ", description='" + description + '\'' +
+                ", dueDate='" + dueDate + '\'' +
+                ", quizzes=" + quizzes +
+                ", score=" + score +
+                '}';
+    }
 }
