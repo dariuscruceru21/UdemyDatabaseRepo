@@ -72,5 +72,13 @@ public class Module implements Identifiable, Serializable {
         this.moduleID = id;
     }
 
-
+    @Override
+    public String toString() {
+        return "Module{" +
+                "moduleID=" + moduleID +
+                ", moduleTitle='" + moduleTitle + '\'' +
+                ", moduleContent='" + moduleContent + '\'' +
+                ", assignments=" + assignments +
+                '}';
+    }
 }

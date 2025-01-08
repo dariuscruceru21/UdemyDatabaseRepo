@@ -1,7 +1,10 @@
 package Utils;
 
-import Models.Instructor;
-import Models.User;
+import Controller.AssignmentController;
+import Controller.CourseUserController;
+import Exceptions.ValidationException;
+import Models.*;
+import Models.Module;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -21,6 +24,8 @@ public class Utils {
     private final List<String> quizAssignmentParameteres = Arrays.asList("assignmentId", "quizId");
     private final List<String> moduleAssignmentParameteres = Arrays.asList("moduleId", "assignmentId");
     private final List<String> courseModuleParameters = Arrays.asList("moduleId", "courseId");
+    private CourseUserController courseUserController;
+    private AssignmentController assignmentController;
 
 
 
@@ -65,9 +70,8 @@ public class Utils {
         return moduleAssignmentParameteres;
     }
 
-    public List<String> getCourseModuleParameters() {
-        return courseModuleParameters;
-    }
+    public List<String> getCourseModuleParameters() {return courseModuleParameters;}
+
 
 
 }

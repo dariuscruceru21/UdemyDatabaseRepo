@@ -38,7 +38,7 @@ public class AssignmentController {
      */
     public String addModuleToCourse(Integer courseId, Integer moduleId) {
         try {
-            assignmentService.addModuleToCourse(courseId, moduleId);
+            assignmentService.addModuleToCourse(moduleId,courseId);
             return "Module added to course successfully.";
         } catch (IllegalArgumentException e) {
             return "Failed to add module: " + e.getMessage();

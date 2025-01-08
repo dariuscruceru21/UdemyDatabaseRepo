@@ -68,7 +68,7 @@ public class AssignmentService {
                 this.moduleCourseRepo = new DataBaseRepository<>("coursemodule", ModuleCourse.class, utils.getCourseModuleParameters());
                 this.assignmentQuizRepo = new DataBaseRepository<>("assignmentquiz", QuizAssignment.class, utils.getQuizAssignmentParameteres());
                 this.assignmentModuleRepo = new DataBaseRepository<>("moduleassignment", AssignmentModule.class, utils.getModuleAssignmentParameteres());
-                this.messageRepo = new DataBaseRepository<>("messge", Message.class, utils.getMessageParamteres());
+                this.messageRepo = new DataBaseRepository<>("message", Message.class, utils.getMessageParamteres());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown storage method: " + storageMethod);
@@ -85,9 +85,9 @@ public class AssignmentService {
         try{
             ValidationException.validateId(module.getId());
             if (moduleRepo.get(module.getId()) == null) {
-                System.err.println("Module with this Id already exists.");
-            } else {
                 moduleRepo.create(module);
+            } else {
+                System.err.println("Module with this Id already exists.");
             }
         }catch (ValidationException e) {
             System.err.println("Failed to add module: " + e.getMessage());
@@ -140,9 +140,9 @@ public class AssignmentService {
         try{
             ValidationException.validateId(assignment.getId());
             if (assignmentRepo.get(assignment.getId()) == null) {
-                System.err.println("Assignment with this Id already exists.");
-            } else {
                 assignmentRepo.create(assignment);
+            } else {
+                System.err.println("Assignment with this Id already exists.");
             }
         }catch (ValidationException e) {
             System.err.println("Failed to add assignment: " + e.getMessage());
@@ -192,9 +192,9 @@ public class AssignmentService {
         try{
             ValidationException.validateId(quiz.getId());
             if (quizRepo.get(quiz.getId()) == null) {
-                System.err.println("Quiz with this Id already exists.");
-            } else {
                 quizRepo.create(quiz);
+            } else {
+                System.err.println("Quiz with this Id already exists.");
             }
         }catch (ValidationException e) {
             System.err.println("Failed to add quiz: " + e.getMessage());
@@ -473,35 +473,38 @@ public class AssignmentService {
         Scanner scanner = new Scanner(System.in);
         List<Integer> answers = new ArrayList<>();
 
-        // Iterate over each quiz in the assignment
-        for (Integer quizId : assignment.getQuizzes()) {
+        List<QuizAssignment> quizAssignments = assignmentQuizRepo.getAll();
+        System.out.println(quizAssignments);
 
-            // Display the quiz question (contents) to the user
-            Quiz quiz = quizRepo.get(quizId);
-            System.out.println(quiz.getContents());
+        // Iterate over each QuizAssignment linking the assignment and quizzes
+        for (QuizAssignment quizAssignment : quizAssignments) {
+            // Only process the quizzes that are associated with the current assignment
+            if (quizAssignment.getId().equals(assignmentId)) {
+                // Fetch the corresponding quiz by its ID
+                Quiz quiz = quizRepo.get(quizAssignment.getQuizId());
+                System.out.println(quiz.getContents());
 
-            // Prompt the user for their answer to the quiz
-            System.out.println("Your answer:");
-            int answer = scanner.nextInt();  // Capture the user's answer
+                // Prompt the user for their answer to the quiz
+                System.out.println("Your answer:");
+                int answer = scanner.nextInt();  // Capture the user's answer
 
-            // Check if the user's answer is correct
-            if (answer == quiz.getCorrectAnswer()) {
-                // If correct, inform the user and increment the score
-                System.out.println("Correct!\n");
-                assignment.setScore(assignment.getScore() + 1);  // Update score
-            } else {
-                // If wrong, inform the user and reveal the correct answer
-                System.out.println("Wrong answer! The answer was " + quiz.getCorrectAnswer() + "\n");
+                // Check if the user's answer is correct
+                if (answer == quiz.getCorrectAnswer()) {
+                    // If correct, inform the user and increment the score
+                    System.out.println("Correct!\n");
+                    assignment.setScore(assignment.getScore() + 1);  // Update score
+                } else {
+                    // If wrong, inform the user and reveal the correct answer
+                    System.out.println("Wrong answer! The answer was " + quiz.getCorrectAnswer() + "\n");
+                }
+                answers.add(answer);
             }
-            answers.add(answer);
-
         }
 
         // Print the user's total score at the end of the quiz
         System.out.println("You scored " + (assignment.getScore() * 20) + "%");
 
-        // Close the scanner object after use (good practice)
-        scanner.close();
+
 
         String message = "The answers for the assignment with the ID: " + answers;
         Message finalizedAssignmentMessage = new Message(assignmentId, message, studentId, instructorId);
@@ -600,5 +603,8 @@ public class AssignmentService {
         }
         return quizzes;
     }
+
+
+
 
 }
