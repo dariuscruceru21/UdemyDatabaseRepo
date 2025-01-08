@@ -17,3 +17,6 @@
   
 3)Instructor Assignment Grading: Instructors have access to tools for grading submitted assignments. They can view and evaluate student submissions
   and provide personalized feedback efficiently.
+
+
+![Diagrama drawio](https://github.com/user-attachments/assets/625c048a-b166-4898-9c5f-a050dda44c85)
